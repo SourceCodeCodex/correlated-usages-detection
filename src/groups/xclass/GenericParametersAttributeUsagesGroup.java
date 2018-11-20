@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
@@ -21,6 +22,7 @@ import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.core.search.TypeReferenceMatch;
+import org.eclipse.jdt.internal.core.ResolvedSourceField;
 
 import com.salexandru.xcore.utils.interfaces.Group;
 import com.salexandru.xcore.utils.interfaces.IRelationBuilder;
@@ -56,22 +58,26 @@ public class GenericParametersAttributeUsagesGroup implements IRelationBuilder<X
 	public Map<IVariableBinding, List<ITypeBinding>> findUsages(IType type) {
 		final Map<IVariableBinding, List<ITypeBinding>> attributes = new HashMap<>();
 
-		SearchPattern pattern = SearchPattern.createPattern(type,
-				IJavaSearchConstants.FIELD_DECLARATION_TYPE_REFERENCE);
+		SearchPattern pattern = SearchPattern.createPattern(type, IJavaSearchConstants.FIELD_DECLARATION_TYPE_REFERENCE
+				| IJavaSearchConstants.LOCAL_VARIABLE_DECLARATION_TYPE_REFERENCE);
 
 		IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
 		SearchRequestor requestor = new SearchRequestor() {
 			public void acceptSearchMatch(SearchMatch match) {
 
 				TypeReferenceMatch typeMatch = (TypeReferenceMatch) match;
-				IField field = ((IField) typeMatch.getElement());
+				if (typeMatch instanceof IField) {
+					IField field = ((IField) typeMatch.getElement());
 
-				HashSet<IVariableBinding> fields = FieldBindingVisitor.convert(field.getCompilationUnit());
-				Optional<IVariableBinding> maybeField = fields.stream()
-						.filter(f -> f.getJavaElement().getElementName().equals(field.getElementName())).findFirst();
+					HashSet<IVariableBinding> fields = FieldBindingVisitor.convert(field.getCompilationUnit());
+					Optional<IVariableBinding> maybeField = fields.stream()
+							.filter(f -> f.getJavaElement().getElementName().equals(field.getElementName()))
+							.findFirst();
 
-				maybeField.ifPresent(
-						attribute -> attributes.put(attribute, Arrays.asList(attribute.getType().getTypeArguments())));
+					maybeField.ifPresent(attribute -> attributes.put(attribute,
+							Arrays.asList(attribute.getType().getTypeArguments())));
+				} else {
+				}
 			}
 		};
 
