@@ -39,12 +39,6 @@ public class GenericParametersApertureGroup implements IPropertyComputer<Double,
 		allUsages.addAll(hierarchyUsages.getSecond());
 		allUsages.addAll(attributeUsages.getSecond());
 		try {
-			// FIXME all the possible types should be a union between all the classes which
-			// are not generic and extend the
-			// current generic entity(a.k.a. HT := hierarchy type) and the subclasses of the
-			// generic parameters if they
-			// are bounded(a.k.a. PT := parameter types)
-			// HT U PT =:= allPossibleTypes
 			ITypeHierarchy newTypeHierarchy = entity.getUnderlyingObject().newTypeHierarchy(new NullProgressMonitor());
 			// HT
 			List<ITypeBinding> hierarchyPossibleTypes = Arrays
@@ -53,26 +47,9 @@ public class GenericParametersApertureGroup implements IPropertyComputer<Double,
 							.filter(t -> t.getJavaElement().getElementName().equals(type.getElementName())).findFirst()
 							.get())
 					.collect(Collectors.toList());
-			// PT
-			List<IType> allTypes = getTypes(entity.getUnderlyingObject().getJavaProject());
-			List<ITypeBinding> parametersPossibleTypes = entity.genericParametersGroup().getElements().stream()
-					.filter(p -> p.getUnderlyingObject().getTypeBounds().length != 0)
-					.map(p -> allTypes.stream()
-							.filter(t -> t.getElementName()
-									.equals(p.getUnderlyingObject().getSuperclass().getJavaElement().getElementName()))
-							.findFirst()
-							.get())
-					.map(t -> Arrays.asList(newTypeHierarchy.getAllSubtypes(t)).stream()
-							.map(type -> HierarchyBindingVisitor.convert(type.getCompilationUnit()).stream()
-									.filter(t1 -> t1.getJavaElement().getElementName().equals(t.getElementName()))
-									.findFirst()
-									.get())
-							.collect(Collectors.toList()))
-					.flatMap(List::stream).collect(Collectors.toList());
 
 			List<ITypeBinding> possibleTypes = new ArrayList<>();
 			possibleTypes.addAll(hierarchyPossibleTypes);
-			possibleTypes.addAll(parametersPossibleTypes);
 
 			double allTypesCounter = new Double(possibleTypes.size());
 			double usedTypesCounter = new Double(possibleTypes.stream()
