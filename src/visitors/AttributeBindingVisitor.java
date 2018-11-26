@@ -20,7 +20,7 @@ public class AttributeBindingVisitor extends ASTVisitor {
 		IBinding binding = node.resolveBinding();
 		if (binding instanceof IVariableBinding) {
 			IVariableBinding variable = (IVariableBinding) binding;
-			if (!attributeBindings.contains(variable) && variable.isField()) {
+			if (!attributeBindings.contains(variable)) {
 				attributeBindings.add(variable);
 			}
 

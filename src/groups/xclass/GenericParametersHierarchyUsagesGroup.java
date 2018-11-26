@@ -36,7 +36,7 @@ public class GenericParametersHierarchyUsagesGroup implements IRelationBuilder<X
 					.map(t -> HierarchyBindingVisitor.convert(t.getCompilationUnit()).stream()
 							.filter(type -> type.getJavaElement().getElementName().equals(t.getElementName()))
 							.findFirst().map(type -> Arrays.asList(type.getSuperclass().getTypeArguments())).get())
-					.collect(Collectors.toList());
+					.filter(list -> list.size() > 0).collect(Collectors.toList());
 
 			Pair<List<ITypeBinding>, List<List<ITypeBinding>>> pair = new Pair<>(parameters, usages);
 

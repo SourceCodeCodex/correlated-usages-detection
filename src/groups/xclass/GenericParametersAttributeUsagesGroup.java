@@ -1,5 +1,6 @@
 package groups.xclass;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +34,6 @@ import exampletool.metamodel.entity.XPair;
 import exampletool.metamodel.factory.Factory;
 import utils.Pair;
 import visitors.AttributeBindingVisitor;
-import visitors.VariableBindingVisitor;
 
 @RelationBuilder
 public class GenericParametersAttributeUsagesGroup implements IRelationBuilder<XPair, XClass> {
@@ -46,7 +46,6 @@ public class GenericParametersAttributeUsagesGroup implements IRelationBuilder<X
 				.map(e -> e.getUnderlyingObject()).collect(Collectors.toList());
 
 		Map<IVariableBinding, List<ITypeBinding>> usages = findAttributeUsages(entity.getUnderlyingObject());
-		findVariableUsages(entity.getUnderlyingObject());
 		if (usages.entrySet().stream().anyMatch(entry -> entry.getValue().size() == parameters.size())) {
 			Pair<List<ITypeBinding>, List<List<ITypeBinding>>> pair = new Pair<>(parameters,
 					usages.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toList()));
@@ -56,41 +55,9 @@ public class GenericParametersAttributeUsagesGroup implements IRelationBuilder<X
 		return group;
 	}
 
-	private Map<IVariableBinding, List<ITypeBinding>> findVariableUsages(IType type) {
-		final Map<IVariableBinding, List<ITypeBinding>> attributes = new HashMap<>();
-
-		SearchPattern pattern = SearchPattern.createPattern(type,
-				IJavaSearchConstants.LOCAL_VARIABLE_DECLARATION_TYPE_REFERENCE);
-
-		IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
-		SearchRequestor requestor = new SearchRequestor() {
-			public void acceptSearchMatch(SearchMatch match) {
-
-				TypeReferenceMatch typeMatch = (TypeReferenceMatch) match;
-				IMethod method = ((IMethod) typeMatch.getElement());
-				HashSet<IVariableBinding> fields = AttributeBindingVisitor.convert(method.getCompilationUnit());
-				Optional<IVariableBinding> maybeField = fields.stream()
-						.filter(f -> f.getJavaElement().getElementName().equals(method.getElementName())).findFirst();
-
-				maybeField.ifPresent(
-						attribute -> attributes.put(attribute, Arrays.asList(attribute.getType().getTypeArguments())));
-			}
-		};
-
-		SearchEngine searchEngine = new SearchEngine();
-
-		try {
-			searchEngine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
-					requestor, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-
-		return attributes;
-	}
-
 	private Map<IVariableBinding, List<ITypeBinding>> findAttributeUsages(IType type) {
 		final Map<IVariableBinding, List<ITypeBinding>> attributes = new HashMap<>();
+		final List<ICompilationUnit> cache = new ArrayList<>();
 
 		SearchPattern pattern = SearchPattern.createPattern(type, IJavaSearchConstants.FIELD_DECLARATION_TYPE_REFERENCE
 				| IJavaSearchConstants.LOCAL_VARIABLE_DECLARATION_TYPE_REFERENCE);
@@ -107,22 +74,19 @@ public class GenericParametersAttributeUsagesGroup implements IRelationBuilder<X
 					maybeCompilationUnit = Optional.of(((IMethod) typeMatch.getElement()).getCompilationUnit());
 				}
 
-				maybeCompilationUnit.ifPresent(compilationUnit -> {
-					HashSet<IVariableBinding> variables = AttributeBindingVisitor.convert(compilationUnit);
+				maybeCompilationUnit.filter(compilationUnit -> !cache.contains(compilationUnit))
+						.ifPresent(compilationUnit -> {
+							cache.add(compilationUnit);
 
-					variables.forEach(variable -> {
-						if (!attributes.containsKey(variable)) {
-							attributes.put(variable, Arrays.asList(variable.getType().getTypeArguments()));
-						}
-					});
+							HashSet<IVariableBinding> variables = AttributeBindingVisitor.convert(compilationUnit);
 
-					variables = VariableBindingVisitor.convert(compilationUnit);
-					variables.forEach(variable -> {
-						if (!attributes.containsKey(variable)) {
-							attributes.put(variable, Arrays.asList(variable.getType().getTypeArguments()));
-						}
-					});
-				});
+							variables.forEach(variable -> {
+								List<ITypeBinding> types = Arrays.asList(variable.getType().getTypeArguments());
+								if (types.size() > 0) {
+									attributes.put(variable, types);
+								}
+							});
+						});
 			}
 		};
 

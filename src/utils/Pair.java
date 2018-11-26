@@ -28,4 +28,8 @@ public class Pair<F, S> {
 	public <T> Pair<F, T> setSecond(T t) {
 		return new Pair<F, T>(_1, t);
 	}
+
+	public Pair<F, S> clone() {
+		return new Pair<>(_1, _2);
+	}
 }
