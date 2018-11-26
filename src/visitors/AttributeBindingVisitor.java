@@ -12,32 +12,32 @@ import org.eclipse.jdt.core.dom.SimpleName;
 
 import utils.Parser;
 
-public class FieldBindingVisitor extends ASTVisitor {
+public class AttributeBindingVisitor extends ASTVisitor {
 
-	private HashSet<IVariableBinding> variableBindings = new HashSet<>();
+	private HashSet<IVariableBinding> attributeBindings = new HashSet<>();
 
 	public boolean visit(SimpleName node) {
 		IBinding binding = node.resolveBinding();
 		if (binding instanceof IVariableBinding) {
 			IVariableBinding variable = (IVariableBinding) binding;
-			if (!variableBindings.contains(variable) && variable.isField()) {
-				variableBindings.add(variable);
+			if (!attributeBindings.contains(variable) && variable.isField()) {
+				attributeBindings.add(variable);
 			}
 
 		}
 		return super.visit(node);
 	}
 
-	public HashSet<IVariableBinding> getVariableBindings() {
-		return variableBindings;
+	public HashSet<IVariableBinding> getAttributeBindings() {
+		return attributeBindings;
 	}
 
 	public static HashSet<IVariableBinding> convert(ICompilationUnit unit) {
-		FieldBindingVisitor self = new FieldBindingVisitor();
+		AttributeBindingVisitor self = new AttributeBindingVisitor();
 
 		CompilationUnit cUnit = Parser.parse(unit);
 		cUnit.accept(self);
 
-		return self.getVariableBindings();
+		return self.getAttributeBindings();
 	}
 }
