@@ -3,7 +3,6 @@ package upt.se.parameters;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,14 +34,13 @@ public class HierarchyUsages implements IRelationBuilder<MClass, MTypeParameter>
 						.map(p -> p.getSecond()).collect(Collectors.toList());
 
 				final List<ITypeParameter> parameters = Arrays.asList(parentType.getTypeParameters());
-				IntStream index = IntStream.range(0, parameters.size())
-						.filter(i -> parameters.get(i).getElementName().equals(entity.getUnderlyingObject().getJavaElement().getElementName()));
-				index.findFirst()
-				.ifPresent(indexOfCurrentType -> allParametersUsages.stream()
-						.map(l -> l.get(indexOfCurrentType))
-						.collect(Collectors.toList())
-						.forEach(t -> ITypeStore
-								.convert(t).ifPresent(t1 -> group.add(Factory.getInstance().createMClass(t1)))));
+				IntStream.range(0, parameters.size())
+						.filter(i -> parameters.get(i).getElementName()
+								.equals(entity.getUnderlyingObject().getJavaElement().getElementName()))
+						.findFirst().ifPresent(
+								indexOfCurrentType -> allParametersUsages.stream().map(l -> l.get(indexOfCurrentType))
+										.collect(Collectors.toList()).forEach(t -> ITypeStore.convert(t)
+												.ifPresent(t1 -> group.add(Factory.getInstance().createMClass(t1)))));
 			}
 		} catch (JavaModelException e) {
 			e.printStackTrace();
