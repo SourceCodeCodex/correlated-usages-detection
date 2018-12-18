@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="demo.StartUp">
+            class="main.Startup">
       </startup>
    </extension>
 
