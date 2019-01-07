@@ -3,8 +3,9 @@ package upt.se.utils.store;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,9 +22,13 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
 import upt.se.utils.Pair;
+import upt.se.utils.visitors.GenericParameterBindingVisitor;
 import upt.se.utils.visitors.HierarchyBindingVisitor;
 
 public final class ITypeStore {
+	private static Map<IType, Optional<ITypeBinding>> typeCache = new HashMap<>();
+	private static Map<ITypeBinding, Optional<IType>> typeBindingCache = new HashMap<>();
+
 	public static final List<IType> getAllTypes(IJavaProject javaproject) {
 		List<IType> typeList = new ArrayList<IType>();
 		try {
@@ -54,9 +59,32 @@ public final class ITypeStore {
 	}
 
 	public static final Optional<IType> convert(ITypeBinding typeBinding) {
-		return getAllTypes(typeBinding.getSuperclass().getJavaElement().getJavaProject()).stream()
-				.filter(t -> t.getElementName().equals(typeBinding.getJavaElement().getElementName()))
-				.findFirst();
+		if (typeBindingCache.containsKey(typeBinding) && typeBindingCache.get(typeBinding).isPresent()) {
+			return typeBindingCache.get(typeBinding);
+		}
+		typeBindingCache.put(typeBinding, getAllTypes(typeBinding.getSuperclass().getJavaElement().getJavaProject())
+				.stream()
+				.filter(t -> t.getFullyQualifiedName().equals(
+						typeBinding.isParameterizedType() ? typeBinding.getBinaryName() : typeBinding.getQualifiedName()))
+				.findFirst());
+
+		Optional<IType> result = typeBindingCache.get(typeBinding);
+		result.ifPresent(t -> typeCache.put(t, Optional.ofNullable(typeBinding)));
+		
+		return result;
+	}
+
+	public static final Optional<ITypeBinding> convert(IType type) {
+		if (typeCache.containsKey(type) && typeCache.get(type).isPresent()) {
+			return typeCache.get(type);
+		}
+		typeCache.put(type, GenericParameterBindingVisitor.convert(type.getCompilationUnit()).stream()
+				.filter(t -> t.getQualifiedName().equals(type.getFullyQualifiedName())).findFirst());
+
+		Optional<ITypeBinding> result = typeCache.get(type);
+		result.ifPresent(t -> typeBindingCache.put(t, Optional.ofNullable(type)));
+
+		return result;
 	}
 
 	public static final List<Pair<IType, List<ITypeBinding>>> getAllChildrenTypes(IType type) {
@@ -67,7 +95,7 @@ public final class ITypeStore {
 
 			return allSubtypes.stream()
 					.map(t -> HierarchyBindingVisitor.convert(t.getCompilationUnit()).stream()
-							.filter(t1 -> t1.getJavaElement().getElementName().equals(t.getElementName())).findFirst()
+							.filter(t1 -> t1.getQualifiedName().equals(t.getFullyQualifiedName())).findFirst()
 							.map(t1 -> new Pair<>(t, Arrays.asList(t1.getSuperclass().getTypeArguments()))).get())
 					.filter(p -> p.getSecond().size() > 0).collect(Collectors.toList());
 

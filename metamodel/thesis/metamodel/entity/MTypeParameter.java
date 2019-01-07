@@ -9,7 +9,7 @@ public interface MTypeParameter extends ro.lrg.xcore.metametamodel.XEntity {
 	public ro.lrg.xcore.metametamodel.Group<MClass> allSubtypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> hierarchyUsages();
+	public ro.lrg.xcore.metametamodel.Group<MClass> actualParameterTypes();
 
 	org.eclipse.jdt.core.dom.ITypeBinding getUnderlyingObject();
 }

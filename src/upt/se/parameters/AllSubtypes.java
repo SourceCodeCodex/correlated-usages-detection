@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
@@ -23,6 +25,13 @@ public class AllSubtypes implements IRelationBuilder<MClass, MTypeParameter> {
 
 	@Override
 	public Group<MClass> buildGroup(MTypeParameter entity) {
+		Group<MClass> all = new Group<>();
+		if (entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(Object.class.getCanonicalName())) {
+			ITypeStore.convert(entity.getUnderlyingObject())
+					.ifPresent(t -> all.add(Factory.getInstance().createMClass(t)));
+			return all;
+		}
+
 		List<MClass> allSubtypes = ITypeStore.convert(entity.getUnderlyingObject().getSuperclass()).map(t -> {
 			try {
 				List<IType> subTypes = Arrays.asList(t.newTypeHierarchy(new NullProgressMonitor()).getAllSubtypes(t));
@@ -46,7 +55,6 @@ public class AllSubtypes implements IRelationBuilder<MClass, MTypeParameter> {
 						return Collections.<MClass>emptyList();
 					}
 				});
-		Group<MClass> all = new Group<>();
 		all.addAll(allSubtypes);
 
 		return all;

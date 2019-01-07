@@ -3,7 +3,7 @@ package thesis.metamodel.impl;
 import thesis.metamodel.entity.*;
 import upt.se.parameters.ToString;
 import upt.se.parameters.AllSubtypes;
-import upt.se.parameters.HierarchyUsages;
+import upt.se.parameters.ActualParameterTypes;
 
 public class MTypeParameterImpl implements MTypeParameter {
 
@@ -11,7 +11,7 @@ public class MTypeParameterImpl implements MTypeParameter {
 
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final AllSubtypes AllSubtypes_INSTANCE = new AllSubtypes();
-	private static final HierarchyUsages HierarchyUsages_INSTANCE = new HierarchyUsages();
+	private static final ActualParameterTypes ActualParameterTypes_INSTANCE = new ActualParameterTypes();
 
 	public MTypeParameterImpl(org.eclipse.jdt.core.dom.ITypeBinding underlyingObj) {
 		underlyingObj_ = underlyingObj;
@@ -36,8 +36,8 @@ public class MTypeParameterImpl implements MTypeParameter {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> hierarchyUsages() {
-		return HierarchyUsages_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> actualParameterTypes() {
+		return ActualParameterTypes_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {

@@ -20,11 +20,17 @@ import thesis.metamodel.factory.Factory;
 import upt.se.utils.store.ITypeStore;
 
 @RelationBuilder
-public class HierarchyUsages implements IRelationBuilder<MClass, MTypeParameter> {
+public class ActualParameterTypes implements IRelationBuilder<MClass, MTypeParameter> {
 	@Override
 	public Group<MClass> buildGroup(MTypeParameter entity) {
 		Group<MClass> group = new Group<>();
 		try {
+			if (entity.getUnderlyingObject().getSuperclass().getQualifiedName()
+					.equals(Object.class.getName())) {
+
+				return group;
+			}
+
 			Optional<IType> maybeParentType = ITypeStore.convert(entity.getUnderlyingObject().getDeclaringClass());
 			Optional<IType> maybeCurrentType = ITypeStore.convert(entity.getUnderlyingObject().getSuperclass());
 			if (maybeParentType.isPresent() && maybeCurrentType.isPresent()) {

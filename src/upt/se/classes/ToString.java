@@ -9,6 +9,9 @@ public class ToString implements IPropertyComputer<String, MClass> {
 
 	@Override
 	public String compute(MClass entity) {
+		if (entity.getUnderlyingObject().getElementName().equals(Object.class.getSimpleName())) {
+			return "*";
+		}
 		return entity.getUnderlyingObject().getElementName();
 	}
 
