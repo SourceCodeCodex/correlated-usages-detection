@@ -23,8 +23,8 @@ public class ActualParameterTypes implements IRelationBuilder<MTypePair, MTypePa
 		MTypeParameter secondParameter = Factory.getInstance()
 				.createMTypeParameter(entity.getUnderlyingObject().getSecond());
 
-		List<MClass> firstParameterUsages = firstParameter.allSubtypes().getElements();
-		List<MClass> secondParameterUsages = secondParameter.allSubtypes().getElements();
+		List<MClass> firstParameterUsages = firstParameter.actualParameterTypes().getElements();
+		List<MClass> secondParameterUsages = secondParameter.actualParameterTypes().getElements();
 
 		Group<MTypePair> group = new Group<>();
 
