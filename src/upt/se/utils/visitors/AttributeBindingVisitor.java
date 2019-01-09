@@ -1,6 +1,8 @@
 package upt.se.utils.visitors;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -13,6 +15,7 @@ import upt.se.utils.Parser;
 
 public class AttributeBindingVisitor extends ASTVisitor {
 
+	private static Map<ICompilationUnit, HashSet<IVariableBinding>> allVariableBindings = new HashMap<>();
 	private HashSet<IVariableBinding> attributeBindings = new HashSet<>();
 
 	public boolean visit(SimpleName node) {
@@ -32,11 +35,16 @@ public class AttributeBindingVisitor extends ASTVisitor {
 	}
 
 	public static HashSet<IVariableBinding> convert(ICompilationUnit unit) {
+		if (allVariableBindings.containsKey(unit)) {
+			return allVariableBindings.get(unit);
+		}
+
 		AttributeBindingVisitor self = new AttributeBindingVisitor();
 
 		CompilationUnit cUnit = Parser.parse(unit);
 		cUnit.accept(self);
 
-		return self.getAttributeBindings();
+		allVariableBindings.put(unit, self.getAttributeBindings());
+		return allVariableBindings.get(unit);
 	}
 }

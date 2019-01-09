@@ -34,24 +34,47 @@ public class ActualParameterTypes implements IRelationBuilder<MClass, MTypeParam
 			Optional<IType> maybeParentType = ITypeStore.convert(entity.getUnderlyingObject().getDeclaringClass());
 			Optional<IType> maybeCurrentType = ITypeStore.convert(entity.getUnderlyingObject().getSuperclass());
 			if (maybeParentType.isPresent() && maybeCurrentType.isPresent()) {
-				IType parentType = maybeParentType.get();
-
-				final List<List<ITypeBinding>> allParametersUsages = ITypeStore.getAllChildrenTypes(parentType).stream()
-						.map(p -> p.getSecond()).collect(Collectors.toList());
-
-				final List<ITypeParameter> parameters = Arrays.asList(parentType.getTypeParameters());
-				IntStream.range(0, parameters.size())
-						.filter(i -> parameters.get(i).getElementName()
-								.equals(entity.getUnderlyingObject().getJavaElement().getElementName()))
-						.findFirst().ifPresent(
-								indexOfCurrentType -> allParametersUsages.stream().map(l -> l.get(indexOfCurrentType))
-										.collect(Collectors.toList()).forEach(t -> ITypeStore.convert(t)
-												.ifPresent(t1 -> group.add(Factory.getInstance().createMClass(t1)))));
+				inheritanceUsages(entity, group, maybeParentType);
+				attributesUsages(entity, group, maybeParentType);
 			}
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
 		return group;
+	}
+
+	private void inheritanceUsages(MTypeParameter entity, Group<MClass> group, Optional<IType> maybeParentType)
+			throws JavaModelException {
+		IType parentType = maybeParentType.get();
+
+		final List<List<ITypeBinding>> allParametersUsages = ITypeStore.getAllChildrenTypes(parentType).stream()
+				.map(p -> p.getSecond()).collect(Collectors.toList());
+
+		final List<ITypeParameter> parameters = Arrays.asList(parentType.getTypeParameters());
+		IntStream.range(0, parameters.size())
+				.filter(i -> parameters.get(i).getElementName()
+						.equals(entity.getUnderlyingObject().getJavaElement().getElementName()))
+				.findFirst().ifPresent(
+						indexOfCurrentType -> allParametersUsages.stream().map(l -> l.get(indexOfCurrentType))
+								.collect(Collectors.toList()).forEach(t -> ITypeStore.convert(t)
+										.ifPresent(t1 -> group.add(Factory.getInstance().createMClass(t1)))));
+	}
+	
+	private void attributesUsages(MTypeParameter entity, Group<MClass> group, Optional<IType> maybeParentType)
+			throws JavaModelException {
+		IType parentType = maybeParentType.get();
+
+		final List<List<ITypeBinding>> allParametersUsages = ITypeStore.findAttributeUsages(parentType).stream()
+				.map(p -> p.getSecond()).collect(Collectors.toList());
+
+		final List<ITypeParameter> parameters = Arrays.asList(parentType.getTypeParameters());
+		IntStream.range(0, parameters.size())
+				.filter(i -> parameters.get(i).getElementName()
+						.equals(entity.getUnderlyingObject().getJavaElement().getElementName()))
+				.findFirst().ifPresent(
+						indexOfCurrentType -> allParametersUsages.stream().map(l -> l.get(indexOfCurrentType))
+								.collect(Collectors.toList()).forEach(t -> ITypeStore.convert(t)
+										.ifPresent(t1 -> group.add(Factory.getInstance().createMClass(t1)))));
 	}
 
 }

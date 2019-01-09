@@ -32,4 +32,13 @@ public class Pair<F, S> {
 	public Pair<F, S> clone() {
 		return new Pair<>(_1, _2);
 	}
+
+	@SuppressWarnings("unchecked")
+	public boolean equals(Object object) {
+		if (object instanceof Pair) {
+			Pair<F, S> to = (Pair<F, S>) object;
+			return to._1.equals(this._1) && to._2.equals(this._2);
+		}
+		return false;
+	}
 }
