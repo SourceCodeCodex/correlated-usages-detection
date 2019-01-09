@@ -108,6 +108,15 @@ public final class ITypeStore {
 		return result;
 	}
 
+	public static final Optional<List<ITypeBinding>> convert(List<IType> types) {
+		List<Optional<ITypeBinding>> result = types.stream().map(t -> convert(t)).collect(Collectors.toList());
+
+		if (result.stream().anyMatch(o -> !o.isPresent())) {
+			return Optional.empty();
+		}
+		return Optional.of(result.stream().map(o -> o.get()).collect(Collectors.toList()));
+	}
+
 	public static final List<Pair<IType, List<ITypeBinding>>> getAllChildrenTypes(IType type) {
 		try {
 			ITypeHierarchy hierarchy = type.newTypeHierarchy(new NullProgressMonitor());
