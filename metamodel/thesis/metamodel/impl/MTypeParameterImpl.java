@@ -2,7 +2,8 @@ package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
 import upt.se.parameters.ToString;
-import upt.se.parameters.AllSubtypes;
+import upt.se.parameters.Apperture;
+import upt.se.parameters.AllParameterTypes;
 import upt.se.parameters.ActualParameterTypes;
 
 public class MTypeParameterImpl implements MTypeParameter {
@@ -10,7 +11,8 @@ public class MTypeParameterImpl implements MTypeParameter {
 	private org.eclipse.jdt.core.dom.ITypeBinding underlyingObj_;
 
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final AllSubtypes AllSubtypes_INSTANCE = new AllSubtypes();
+	private static final Apperture Apperture_INSTANCE = new Apperture();
+	private static final AllParameterTypes AllParameterTypes_INSTANCE = new AllParameterTypes();
 	private static final ActualParameterTypes ActualParameterTypes_INSTANCE = new ActualParameterTypes();
 
 	public MTypeParameterImpl(org.eclipse.jdt.core.dom.ITypeBinding underlyingObj) {
@@ -29,9 +31,15 @@ public class MTypeParameterImpl implements MTypeParameter {
 	}
 
 	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double apperture() {
+		return Apperture_INSTANCE.compute(this);
+	}
+
+	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allSubtypes() {
-		return AllSubtypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> allParameterTypes() {
+		return AllParameterTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override

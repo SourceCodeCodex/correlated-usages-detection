@@ -5,8 +5,11 @@ public interface MTypeParameter extends ro.lrg.xcore.metametamodel.XEntity {
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
 
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double apperture();
+
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allSubtypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> allParameterTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> actualParameterTypes();

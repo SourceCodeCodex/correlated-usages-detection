@@ -27,9 +27,9 @@ public class AllParameterTypes implements IRelationBuilder<MTypePair, MTypePair>
 		MTypeParameter secondParameter = Factory.getInstance()
 				.createMTypeParameter(entity.getUnderlyingObject().getSecond());
 
-		Optional<List<ITypeBinding>> firstParameterSubtypes = ITypeStore.convert(firstParameter.allSubtypes()
+		Optional<List<ITypeBinding>> firstParameterSubtypes = ITypeStore.convert(firstParameter.allParameterTypes()
 				.getElements().stream().map(c -> c.getUnderlyingObject()).collect(Collectors.toList()));
-		Optional<List<ITypeBinding>> secondParameterSubtypes = ITypeStore.convert(secondParameter.allSubtypes()
+		Optional<List<ITypeBinding>> secondParameterSubtypes = ITypeStore.convert(secondParameter.allParameterTypes()
 				.getElements().stream().map(c -> c.getUnderlyingObject()).collect(Collectors.toList()));
 
 		Group<MTypePair> group = new Group<>();

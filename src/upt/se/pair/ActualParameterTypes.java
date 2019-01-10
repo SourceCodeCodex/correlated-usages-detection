@@ -6,10 +6,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
+
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MTypePair;
 import thesis.metamodel.entity.MTypeParameter;
 import thesis.metamodel.factory.Factory;
@@ -25,23 +27,25 @@ public class ActualParameterTypes implements IRelationBuilder<MTypePair, MTypePa
 				.createMTypeParameter(entity.getUnderlyingObject().getFirst());
 		MTypeParameter secondParameter = Factory.getInstance()
 				.createMTypeParameter(entity.getUnderlyingObject().getSecond());
-
-		List<MClass> firstParameterUsages = firstParameter.actualParameterTypes().getElements();
-		List<MClass> secondParameterUsages = secondParameter.actualParameterTypes().getElements();
-
 		Group<MTypePair> group = new Group<>();
+		try {
+			List<IType> firstParameterUsages = ITypeStore.allUsages(firstParameter);
+			List<IType> secondParameterUsages = ITypeStore.allUsages(secondParameter);
 
-		Set<TypePair> pairs = new HashSet<>();
-		if (firstParameterUsages.size() == secondParameterUsages.size()) {
-			IntStream.range(0, firstParameterUsages.size())
-					.forEach(i -> pairs.add(
-							new TypePair(ITypeStore.convert(firstParameterUsages.get(i).getUnderlyingObject()).get(),
-									ITypeStore.convert(secondParameterUsages.get(i).getUnderlyingObject()).get())));
+			Set<TypePair> pairs = new HashSet<>();
+			if (firstParameterUsages.size() == secondParameterUsages.size()) {
+				IntStream.range(0, firstParameterUsages.size())
+						.forEach(i -> pairs.add(new TypePair(ITypeStore.convert(firstParameterUsages.get(i)).get(),
+								ITypeStore.convert(secondParameterUsages.get(i)).get())));
 
-			group.addAll(
-					pairs.stream().map(Factory.getInstance()::createMTypePair).distinct().collect(Collectors.toSet()));
+				group.addAll(pairs.stream().map(Factory.getInstance()::createMTypePair).distinct()
+						.collect(Collectors.toSet()));
+			}
+			return removeDuplicates(group);
+		} catch (JavaModelException ex) {
+			ex.printStackTrace();
 		}
-		return removeDuplicates(group);
+		return group;
 	}
 
 	private Group<MTypePair> removeDuplicates(Group<MTypePair> group) {

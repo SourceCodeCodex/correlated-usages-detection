@@ -19,7 +19,7 @@ import thesis.metamodel.factory.Factory;
 import upt.se.utils.store.ITypeStore;
 
 @RelationBuilder
-public class AllSubtypes implements IRelationBuilder<MClass, MTypeParameter> {
+public class AllParameterTypes implements IRelationBuilder<MClass, MTypeParameter> {
 
 	@Override
 	public Group<MClass> buildGroup(MTypeParameter entity) {
