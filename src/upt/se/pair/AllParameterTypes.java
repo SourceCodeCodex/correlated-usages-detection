@@ -2,11 +2,10 @@ package upt.se.pair;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.IType;
 
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
@@ -27,22 +26,21 @@ public class AllParameterTypes implements IRelationBuilder<MTypePair, MTypePair>
 		MTypeParameter secondParameter = Factory.getInstance()
 				.createMTypeParameter(entity.getUnderlyingObject().getSecond());
 
-		Optional<List<ITypeBinding>> firstParameterSubtypes = ITypeStore.convert(firstParameter.allParameterTypes()
-				.getElements().stream().map(c -> c.getUnderlyingObject()).collect(Collectors.toList()));
-		Optional<List<ITypeBinding>> secondParameterSubtypes = ITypeStore.convert(secondParameter.allParameterTypes()
-				.getElements().stream().map(c -> c.getUnderlyingObject()).collect(Collectors.toList()));
+		List<IType> firstParameterSubtypes = firstParameter.allParameterTypes().getElements().stream()
+				.map(m -> m.getUnderlyingObject()).collect(Collectors.toList());
+		List<IType> secondParameterSubtypes = secondParameter.allParameterTypes().getElements().stream()
+				.map(m -> m.getUnderlyingObject()).collect(Collectors.toList());
 
 		Group<MTypePair> group = new Group<>();
 
-		if (firstParameterSubtypes.isPresent() && secondParameterSubtypes.isPresent()) {
-			Set<TypePair> pairs = new HashSet<>();
-			for (ITypeBinding first : firstParameterSubtypes.get()) {
-				for (ITypeBinding second : secondParameterSubtypes.get()) {
-					group.add(Factory.getInstance().createMTypePair(new TypePair(first, second)));
-				}
+		Set<TypePair> pairs = new HashSet<>();
+		for (IType first : firstParameterSubtypes) {
+			for (IType second : secondParameterSubtypes) {
+				group.add(Factory.getInstance().createMTypePair(
+						new TypePair(ITypeStore.convert(first).get(), ITypeStore.convert(second).get())));
 			}
-			group.addAll(pairs.stream().map(Factory.getInstance()::createMTypePair).collect(Collectors.toSet()));
 		}
+		group.addAll(pairs.stream().map(Factory.getInstance()::createMTypePair).collect(Collectors.toSet()));
 		return group;
 	}
 

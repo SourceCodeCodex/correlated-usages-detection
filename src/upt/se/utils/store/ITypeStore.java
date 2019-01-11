@@ -104,6 +104,8 @@ public final class ITypeStore {
 		}
 		typeCache.put(type, GenericParameterBindingVisitor.convert(type.getCompilationUnit()).stream()
 				.filter(t -> t.getQualifiedName().equals(type.getFullyQualifiedName())).findFirst());
+		typeCache.put(type, HierarchyBindingVisitor.convert(type.getCompilationUnit()).stream()
+				.filter(t -> t.getQualifiedName().equals(type.getFullyQualifiedName())).findFirst());
 
 		Optional<ITypeBinding> result = typeCache.get(type);
 		result.ifPresent(t -> typeBindingCache.put(t, Optional.ofNullable(type)));
