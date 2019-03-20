@@ -41,7 +41,28 @@ public class AllParameterTypes implements IRelationBuilder<MTypePair, MTypePair>
 			}
 		}
 		group.addAll(pairs.stream().map(Factory.getInstance()::createMTypePair).collect(Collectors.toSet()));
-		return group;
+		return removeDuplicates(group);
+	}
+
+	private Group<MTypePair> removeDuplicates(Group<MTypePair> group) {
+		Group<MTypePair> result = new Group<>();
+		for (MTypePair element : group.getElements()) {
+			if (result.getElements().stream().noneMatch(p -> isEqual(p, element))) {
+				result.add(element);
+			}
+		}
+
+		return result;
+	}
+
+	private boolean isEqual(MTypePair e1, MTypePair e2) {
+		String e1FirstName = e1.getUnderlyingObject().getFirst().getQualifiedName();
+		String e1SecondName = e1.getUnderlyingObject().getSecond().getQualifiedName();
+		String e2FirstName = e2.getUnderlyingObject().getFirst().getQualifiedName();
+		String e2SecondName = e2.getUnderlyingObject().getSecond().getQualifiedName();
+
+		return (e1FirstName.equals(e2FirstName) && e1SecondName.equals(e2SecondName))
+				|| (e1FirstName.equals(e2SecondName) && e1SecondName.equals(e2FirstName));
 	}
 
 }
