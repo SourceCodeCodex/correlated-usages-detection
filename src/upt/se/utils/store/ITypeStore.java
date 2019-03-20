@@ -47,10 +47,6 @@ public final class ITypeStore {
 	private static Map<ITypeBinding, Optional<IType>> typeBindingCache = new HashMap<>();
 
 	public static final List<IType> getAllTypes(IJavaProject javaproject) {
-		if (allTypes.containsKey(javaproject)) {
-			return allTypes.get(javaproject);
-		}
-
 		List<IType> typeList = new ArrayList<IType>();
 		try {
 			IPackageFragmentRoot[] roots = javaproject.getPackageFragmentRoots();
@@ -82,9 +78,6 @@ public final class ITypeStore {
 	}
 
 	public static final Optional<IType> convert(ITypeBinding typeBinding) {
-		if (typeBindingCache.containsKey(typeBinding) && typeBindingCache.get(typeBinding).isPresent()) {
-			return typeBindingCache.get(typeBinding);
-		}
 		typeBindingCache.put(typeBinding,
 				getAllTypes(typeBinding.getSuperclass().getJavaElement().getJavaProject()).stream()
 						.filter(t -> t.getFullyQualifiedName()
@@ -99,9 +92,6 @@ public final class ITypeStore {
 	}
 
 	public static final Optional<ITypeBinding> convert(IType type) {
-		if (typeCache.containsKey(type) && typeCache.get(type).isPresent()) {
-			return typeCache.get(type);
-		}
 		typeCache.put(type, GenericParameterBindingVisitor.convert(type.getCompilationUnit()).stream()
 				.filter(t -> t.getQualifiedName().equals(type.getFullyQualifiedName())).findFirst());
 		typeCache.put(type, HierarchyBindingVisitor.convert(type.getCompilationUnit()).stream()
@@ -188,22 +178,13 @@ public final class ITypeStore {
 	}
 
 	public static List<IType> inheritanceUsages(MTypeParameter entity) throws JavaModelException {
-		List<IType> types = new ArrayList<>();
 		Optional<IType> maybeParentType = convert(entity.getUnderlyingObject().getDeclaringClass());
 		IType parentType = maybeParentType.get();
 
-		final List<List<ITypeBinding>> allParametersUsages = ITypeStore.getAllChildrenTypes(parentType).stream()
-				.map(p -> p.getSecond()).collect(Collectors.toList());
+		final List<IType> allParametersUsages = ITypeStore.getAllChildrenTypes(parentType).stream()
+				.map(p -> p.getFirst()).collect(Collectors.toList());
 
-		final List<ITypeParameter> parameters = Arrays.asList(parentType.getTypeParameters());
-		IntStream.range(0, parameters.size())
-				.filter(i -> parameters
-						.get(i).getElementName().equals(entity.getUnderlyingObject().getJavaElement().getElementName()))
-				.findFirst()
-				.ifPresent(indexOfCurrentType -> allParametersUsages.stream().map(l -> l.get(indexOfCurrentType))
-						.collect(Collectors.toList())
-						.forEach(t -> ITypeStore.convert(t).ifPresent(t1 -> types.add(t1))));
-		return types;
+		return allParametersUsages;
 	}
 
 	public static List<IType> attributesUsages(MTypeParameter entity) throws JavaModelException {
