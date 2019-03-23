@@ -2,8 +2,6 @@ package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
 import upt.se.classes.ToString;
-import classes.AvgNoOfArgumentsInMethods;
-import classes.MethodGroup;
 import upt.se.classes.AllTypeParameters;
 import upt.se.classes.AllTypeParameterPairs;
 import classes.ShowInEditor;
@@ -13,8 +11,6 @@ public class MClassImpl implements MClass {
 	private org.eclipse.jdt.core.IType underlyingObj_;
 
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final AvgNoOfArgumentsInMethods AvgNoOfArgumentsInMethods_INSTANCE = new AvgNoOfArgumentsInMethods();
-	private static final MethodGroup MethodGroup_INSTANCE = new MethodGroup();
 	private static final AllTypeParameters AllTypeParameters_INSTANCE = new AllTypeParameters();
 	private static final AllTypeParameterPairs AllTypeParameterPairs_INSTANCE = new AllTypeParameterPairs();
 	private static final ShowInEditor ShowInEditor_INSTANCE = new ShowInEditor();
@@ -32,18 +28,6 @@ public class MClassImpl implements MClass {
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString() {
 		return ToString_INSTANCE.compute(this);
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double avgNoOfArgumentsInMethods() {
-		return AvgNoOfArgumentsInMethods_INSTANCE.compute(this);
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MMethod> methodGroup() {
-		return MethodGroup_INSTANCE.buildGroup(this);
 	}
 
 	@Override

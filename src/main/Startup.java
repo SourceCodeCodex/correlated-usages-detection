@@ -1,6 +1,5 @@
 package main;
 
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.ui.IStartup;
@@ -19,9 +18,7 @@ public class Startup implements IStartup {
 
 			@Override
 			public XEntity convert(Object element) {
-				if (element instanceof IMethod) {
-					return Factory.getInstance().createMMethod((IMethod) element);
-				} else if (element instanceof IType) {
+				if (element instanceof IType) {
 					return Factory.getInstance().createMClass((IType) element);
 				} else if (element instanceof ITypeBinding) {
 					return Factory.getInstance().createMTypeParameter((ITypeBinding) element);
