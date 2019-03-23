@@ -24,11 +24,6 @@ public class AllParameterTypes implements IRelationBuilder<MClass, MTypeParamete
 	@Override
 	public Group<MClass> buildGroup(MTypeParameter entity) {
 		Group<MClass> all = new Group<>();
-		if (entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(Object.class.getCanonicalName())) {
-			ITypeStore.convert(entity.getUnderlyingObject())
-					.ifPresent(t -> all.add(Factory.getInstance().createMClass(t)));
-			return all;
-		}
 
 		List<MClass> allSubtypes = ITypeStore.convert(entity.getUnderlyingObject().getSuperclass()).map(t -> {
 			try {
@@ -42,17 +37,7 @@ public class AllParameterTypes implements IRelationBuilder<MClass, MTypeParamete
 			}
 			return Collections.<IType>emptyList();
 		}).map(list -> list.stream().map(t -> Factory.getInstance().createMClass(t)).collect(Collectors.toList()))
-				.orElseGet(() -> {
-					if (entity.getUnderlyingObject().getSuperclass().getJavaElement().getElementName()
-							.equals(Object.class.getSimpleName())) {
-						return ITypeStore
-								.getAllTypes(
-										entity.getUnderlyingObject().getSuperclass().getJavaElement().getJavaProject())
-								.stream().map(t -> Factory.getInstance().createMClass(t)).collect(Collectors.toList());
-					} else {
-						return Collections.<MClass>emptyList();
-					}
-				});
+				.orElseGet(() -> Collections.<MClass>emptyList());
 		all.addAll(allSubtypes);
 
 		return all;

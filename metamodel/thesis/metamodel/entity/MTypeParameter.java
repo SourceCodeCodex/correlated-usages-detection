@@ -9,6 +9,9 @@ public interface MTypeParameter extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Double apperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> unusedParameterTypes();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> allParameterTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
