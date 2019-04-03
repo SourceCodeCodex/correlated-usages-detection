@@ -152,7 +152,7 @@ public final class ITypeStore {
                 if (typeMatch.getElement() instanceof IMember) {
                     maybeCompilationUnit = Optional.of(((IMember) typeMatch.getElement()).getCompilationUnit());
                 }
-
+                
                 maybeCompilationUnit.filter(compilationUnit -> !cache.contains(compilationUnit))
                         .ifPresent(compilationUnit -> {
                             cache.add(compilationUnit);
@@ -179,6 +179,20 @@ public final class ITypeStore {
         }
         
         return attributes;
+    }
+    
+    public static List<IType> declaringClassUsages(MTypeParameter entity) throws JavaModelException {
+        Optional<IType> maybeParentType = convert(entity.getUnderlyingObject().getDeclaringClass());
+        
+        if (maybeParentType.isPresent()) {
+            ITypeHierarchy parentHierarchy = maybeParentType.get().newTypeHierarchy(new NullProgressMonitor());
+            
+            List<IType> allHierarchyUsages = Arrays.asList(parentHierarchy.getAllSubtypes(maybeParentType.get()));
+            
+            return allHierarchyUsages;
+        }
+        
+        return Collections.emptyList();
     }
     
     public static List<IType> inheritanceUsages(MTypeParameter entity) throws JavaModelException {
@@ -230,7 +244,12 @@ public final class ITypeStore {
     }
     
     public static List<IType> allUsages(MTypeParameter entity) throws JavaModelException {
-        List<IType> types = inheritanceUsages(entity);
+        List<IType> types = new ArrayList<>();
+        if (entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(Object.class.getCanonicalName())) {
+            types.addAll(declaringClassUsages(entity));
+        } else {
+            types.addAll(inheritanceUsages(entity));
+        }
         types.addAll(attributesUsages(entity));
         
         return types;

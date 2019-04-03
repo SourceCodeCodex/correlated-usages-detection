@@ -18,11 +18,13 @@ public class ActualParameterTypes implements IRelationBuilder<MClass, MTypeParam
     public Group<MClass> buildGroup(MTypeParameter entity) {
         Group<MClass> group = new Group<>();
         try {
-            if (entity.getUnderlyingObject().getSuperclass().getQualifiedName()
-                    .equals(Object.class.getName())) { return group; }
-            
-            group.addAll(ITypeStore.inheritanceUsages(entity).stream().map(Factory.getInstance()::createMClass)
-                    .collect(Collectors.toList()));
+            if (entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(Object.class.getName())) {
+                group.addAll(ITypeStore.declaringClassUsages(entity).stream().map(Factory.getInstance()::createMClass)
+                        .collect(Collectors.toList()));
+            } else {
+                group.addAll(ITypeStore.inheritanceUsages(entity).stream().map(Factory.getInstance()::createMClass)
+                        .collect(Collectors.toList()));
+            }
             group.addAll(ITypeStore.attributesUsages(entity).stream().map(Factory.getInstance()::createMClass)
                     .collect(Collectors.toList()));
             

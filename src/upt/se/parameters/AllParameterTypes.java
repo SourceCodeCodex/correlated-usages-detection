@@ -24,6 +24,10 @@ public class AllParameterTypes implements IRelationBuilder<MClass, MTypeParamete
 	@Override
 	public Group<MClass> buildGroup(MTypeParameter entity) {
 		Group<MClass> all = new Group<>();
+		
+		if(entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(Object.class.getCanonicalName())) {
+		    return all;
+		}
 
 		List<MClass> allSubtypes = ITypeStore.convert(entity.getUnderlyingObject().getSuperclass()).map(t -> {
 			try {
