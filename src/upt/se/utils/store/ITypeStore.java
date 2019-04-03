@@ -152,7 +152,7 @@ public final class ITypeStore {
                 if (typeMatch.getElement() instanceof IMember) {
                     maybeCompilationUnit = Optional.of(((IMember) typeMatch.getElement()).getCompilationUnit());
                 }
-                
+
                 maybeCompilationUnit.filter(compilationUnit -> !cache.contains(compilationUnit))
                         .ifPresent(compilationUnit -> {
                             cache.add(compilationUnit);

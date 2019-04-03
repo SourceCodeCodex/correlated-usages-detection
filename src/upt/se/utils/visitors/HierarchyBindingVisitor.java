@@ -40,7 +40,7 @@ public class HierarchyBindingVisitor extends ASTVisitor {
 
 		HierarchyBindingVisitor self = new HierarchyBindingVisitor();
 
-		CompilationUnit cUnit = Parser.parse(unit);
+		CompilationUnit cUnit = (CompilationUnit) Parser.parse(unit);
 		cUnit.accept(self);
 
 		allTypeBindings.put(unit, self.getTypeBindings());

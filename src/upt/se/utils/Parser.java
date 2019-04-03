@@ -2,18 +2,17 @@ package upt.se.utils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public final class Parser {
-
-	@SuppressWarnings("deprecation")
-	public static CompilationUnit parse(ICompilationUnit unit) {
-		ASTParser parser = ASTParser.newParser(AST.JLS3);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		parser.setSource(unit);
-		parser.setResolveBindings(true);
-		return (CompilationUnit) parser.createAST(null);
-	}
-
+    
+    public static ASTNode parse(ICompilationUnit unit) {
+        ASTParser parser = ASTParser.newParser(AST.JLS10);
+        parser.setKind(ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(unit);
+        parser.setResolveBindings(true);
+        return parser.createAST(null);
+    }
+    
 }

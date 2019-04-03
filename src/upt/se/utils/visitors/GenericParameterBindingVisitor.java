@@ -41,7 +41,7 @@ public class GenericParameterBindingVisitor extends ASTVisitor {
 		
 		GenericParameterBindingVisitor self = new GenericParameterBindingVisitor();
 
-		CompilationUnit cUnit = Parser.parse(unit);
+		CompilationUnit cUnit = (CompilationUnit) Parser.parse(unit);
 		cUnit.accept(self);
 
 		allTypeBindings.put(unit, self.getTypeBindings());
