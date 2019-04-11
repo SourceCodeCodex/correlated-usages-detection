@@ -46,13 +46,13 @@ public class MTypeParameterImpl implements MTypeParameter {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allParameterTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MTypeParameter> allParameterTypes() {
 		return AllParameterTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> actualParameterTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MTypeParameter> actualParameterTypes() {
 		return ActualParameterTypes_INSTANCE.buildGroup(this);
 	}
 

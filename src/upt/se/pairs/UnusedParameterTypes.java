@@ -1,4 +1,4 @@
-package upt.se.pair;
+package upt.se.pairs;
 
 import java.util.List;
 import java.util.stream.Collectors;

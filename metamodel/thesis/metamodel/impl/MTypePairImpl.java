@@ -1,11 +1,11 @@
 package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
-import upt.se.pair.ToString;
-import upt.se.pair.Apperture;
-import upt.se.pair.UnusedParameterTypes;
-import upt.se.pair.AllParameterTypes;
-import upt.se.pair.ActualParameterTypes;
+import upt.se.pairs.ToString;
+import upt.se.pairs.Apperture;
+import upt.se.pairs.UnusedParameterTypes;
+import upt.se.pairs.AllParameterTypes;
+import upt.se.pairs.ActualParameterTypes;
 
 public class MTypePairImpl implements MTypePair {
 

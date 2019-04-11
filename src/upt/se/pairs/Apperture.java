@@ -1,4 +1,4 @@
-package upt.se.pair;
+package upt.se.pairs;
 
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;

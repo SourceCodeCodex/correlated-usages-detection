@@ -1,4 +1,4 @@
-package upt.se.pair;
+package upt.se.pairs;
 
 import java.util.HashSet;
 import java.util.List;

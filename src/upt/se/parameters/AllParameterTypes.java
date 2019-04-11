@@ -1,50 +1,37 @@
 package upt.se.parameters;
 
-import java.util.Arrays;
+import static upt.se.utils.helpers.ClassNames.getFullName;
+import static upt.se.utils.helpers.ClassNames.isObject;
+import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-
+import java.util.logging.Level;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import io.vavr.collection.List;
+import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MTypeParameter;
 import thesis.metamodel.factory.Factory;
-import upt.se.utils.store.ITypeStore;
+import upt.se.utils.builders.GroupBuilder;
+import upt.se.utils.store.ITypeBindingStore;
 
 @RelationBuilder
-public class AllParameterTypes implements IRelationBuilder<MClass, MTypeParameter> {
+public class AllParameterTypes implements IRelationBuilder<MTypeParameter, MTypeParameter> {
 
-	@Override
-	public Group<MClass> buildGroup(MTypeParameter entity) {
-		Group<MClass> all = new Group<>();
-		
-		if(entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(Object.class.getCanonicalName())) {
-		    return all;
-		}
-
-		List<MClass> allSubtypes = ITypeStore.convert(entity.getUnderlyingObject().getSuperclass()).map(t -> {
-			try {
-				List<IType> subTypes = Arrays.asList(t.newTypeHierarchy(new NullProgressMonitor()).getAllSubtypes(t));
-				List<IType> res = new LinkedList<>();
-				res.add(t);
-				res.addAll(subTypes);
-				return res;
-			} catch (JavaModelException e) {
-				e.printStackTrace();
-			}
-			return Collections.<IType>emptyList();
-		}).map(list -> list.stream().map(t -> Factory.getInstance().createMClass(t)).collect(Collectors.toList()))
-				.orElseGet(() -> Collections.<MClass>emptyList());
-		all.addAll(allSubtypes);
-
-		return all;
-	}
+  @Override
+  public Group<MTypeParameter> buildGroup(MTypeParameter entity) {
+    return Try.of(() -> entity.getUnderlyingObject())
+        .filter(type -> isObject(getFullName(type.getSuperclass())))
+        .fold(object -> Try.success(Collections.<ITypeBinding>emptyList()),
+            type -> Try.of(() -> ITypeBindingStore.getAllSubtypes(type))
+                .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred:" + t)))
+        .map(List::ofAll)
+        .map(types -> types.map(Factory.getInstance()::createMTypeParameter))
+        .map(List::toJavaList)
+        .map(GroupBuilder::create)
+        .orElse(() -> Try.success(GroupBuilder.create(Collections.emptyList())))
+        .get();
+  }
 
 }
