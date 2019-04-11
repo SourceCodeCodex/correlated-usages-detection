@@ -25,7 +25,7 @@ public class AllParameterTypes implements IRelationBuilder<MTypeParameter, MType
         .filter(type -> isObject(getFullName(type.getSuperclass())))
         .fold(object -> Try.success(Collections.<ITypeBinding>emptyList()),
             type -> Try.of(() -> ITypeBindingStore.getAllSubtypes(type))
-                .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred:" + t)))
+                .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t)))
         .map(List::ofAll)
         .map(types -> types.map(Factory.getInstance()::createMTypeParameter))
         .map(List::toJavaList)

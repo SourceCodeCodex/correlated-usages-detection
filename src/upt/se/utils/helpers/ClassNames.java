@@ -14,6 +14,10 @@ public class ClassNames {
   public static boolean isObject(String entity) {
     return entity.equals(OBJECT_NAME);
   }
+  
+  public static boolean isEqual(ITypeBinding type1, ITypeBinding type2) {
+    return type1.getQualifiedName().equals(type2.getQualifiedName());
+  }
 
   public static String getName(MClass entity) {
     return entity.getUnderlyingObject().getElementName();

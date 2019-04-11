@@ -35,7 +35,7 @@ import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.core.search.TypeReferenceMatch;
 import thesis.metamodel.entity.MTypeParameter;
 import upt.se.utils.Pair;
-import upt.se.utils.visitors.AttributeBindingVisitor;
+import upt.se.utils.visitors.VariableBindingVisitor;
 import upt.se.utils.visitors.GenericParameterBindingVisitor;
 import upt.se.utils.visitors.HierarchyBindingVisitor;
 
@@ -167,7 +167,7 @@ public final class ITypeStore {
               cache.add(compilationUnit);
 
               HashSet<IVariableBinding> variables =
-                  AttributeBindingVisitor.convert(compilationUnit);
+                  VariableBindingVisitor.convert(compilationUnit);
 
               variables.forEach(variable -> {
                 List<ITypeBinding> types = Arrays.asList(variable.getType().getTypeArguments());

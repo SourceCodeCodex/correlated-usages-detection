@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 
 import upt.se.utils.Parser;
 
-public class AttributeBindingVisitor extends ASTVisitor {
+public class VariableBindingVisitor extends ASTVisitor {
     
     private static Map<ICompilationUnit, HashSet<IVariableBinding>> allVariableBindings = new HashMap<>();
     private HashSet<IVariableBinding>                               attributeBindings   = new HashSet<>();
@@ -36,7 +36,7 @@ public class AttributeBindingVisitor extends ASTVisitor {
     public static HashSet<IVariableBinding> convert(ICompilationUnit unit) {
         if (allVariableBindings.containsKey(unit)) { return allVariableBindings.get(unit); }
         
-        AttributeBindingVisitor self = new AttributeBindingVisitor();
+        VariableBindingVisitor self = new VariableBindingVisitor();
         
         CompilationUnit cUnit = (CompilationUnit) Parser.parse(unit);
         cUnit.accept(self);
