@@ -6,7 +6,7 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.String toString();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypeParameter> allTypeParameters();
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> allTypeParameters();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MTypePair> allTypeParameterPairs();

@@ -2,39 +2,19 @@ package upt.se.utils.store;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeHierarchy;
-import org.eclipse.jdt.core.ITypeParameter;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.core.search.IJavaSearchScope;
-import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.core.search.SearchMatch;
-import org.eclipse.jdt.core.search.SearchParticipant;
-import org.eclipse.jdt.core.search.SearchPattern;
-import org.eclipse.jdt.core.search.SearchRequestor;
-import org.eclipse.jdt.core.search.TypeReferenceMatch;
-import upt.se.utils.Pair;
-import upt.se.utils.visitors.VariableBindingVisitor;
 import upt.se.utils.visitors.GenericParameterBindingVisitor;
 import upt.se.utils.visitors.HierarchyBindingVisitor;
 
@@ -120,75 +100,6 @@ public final class ITypeStore {
       return Optional.empty();
     }
     return Optional.of(result.stream().map(o -> o.get()).collect(Collectors.toList()));
-  }
-
-  public static final List<Pair<IType, List<ITypeBinding>>> getAllChildrenTypes(IType type) {
-    try {
-      ITypeHierarchy hierarchy = type.newTypeHierarchy(new NullProgressMonitor());
-
-      List<IType> allSubtypes = Arrays.asList(hierarchy.getAllSubtypes(type));
-
-      return allSubtypes.stream()
-          .map(t -> HierarchyBindingVisitor.convert(t.getCompilationUnit()).stream()
-              .filter(t1 -> t1.getQualifiedName().equals(t.getFullyQualifiedName())).findFirst()
-              .map(t1 -> new Pair<>(t, Arrays.asList(t1.getSuperclass().getTypeArguments()))).get())
-          .filter(p -> p.getSecond().size() > 0).collect(Collectors.toList());
-
-    } catch (JavaModelException e) {
-      e.printStackTrace();
-    }
-    return Collections.emptyList();
-  }
-
-  public static final List<Pair<IVariableBinding, List<ITypeBinding>>> findAttributeUsages(
-      IType type) {
-    final List<Pair<IVariableBinding, List<ITypeBinding>>> attributes = new ArrayList<>();
-    final List<ICompilationUnit> cache = new ArrayList<>();
-
-    SearchPattern pattern = SearchPattern.createPattern(type,
-        IJavaSearchConstants.FIELD_DECLARATION_TYPE_REFERENCE
-            | IJavaSearchConstants.LOCAL_VARIABLE_DECLARATION_TYPE_REFERENCE
-            | IJavaSearchConstants.CLASS_INSTANCE_CREATION_TYPE_REFERENCE);
-
-    IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
-    SearchRequestor requestor = new SearchRequestor() {
-      public void acceptSearchMatch(SearchMatch match) {
-
-        TypeReferenceMatch typeMatch = (TypeReferenceMatch) match;
-        Optional<ICompilationUnit> maybeCompilationUnit = Optional.empty();
-        if (typeMatch.getElement() instanceof IMember) {
-          maybeCompilationUnit =
-              Optional.of(((IMember) typeMatch.getElement()).getCompilationUnit());
-        }
-
-        maybeCompilationUnit.filter(compilationUnit -> !cache.contains(compilationUnit))
-            .ifPresent(compilationUnit -> {
-              cache.add(compilationUnit);
-
-              HashSet<IVariableBinding> variables =
-                  VariableBindingVisitor.convert(compilationUnit);
-
-              variables.forEach(variable -> {
-                List<ITypeBinding> types = Arrays.asList(variable.getType().getTypeArguments());
-                if (types.size() > 0) {
-                  attributes.add(new Pair<>(variable, types));
-                }
-              });
-            });
-      }
-    };
-
-    SearchEngine searchEngine = new SearchEngine();
-
-    try {
-      searchEngine.search(pattern,
-          new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()}, scope, requestor,
-          null);
-    } catch (CoreException e) {
-      e.printStackTrace();
-    }
-
-    return attributes;
   }
 
 }

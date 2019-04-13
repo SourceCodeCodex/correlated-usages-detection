@@ -32,7 +32,7 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypeParameter> allTypeParameters() {
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> allTypeParameters() {
 		return AllTypeParameters_INSTANCE.buildGroup(this);
 	}
 

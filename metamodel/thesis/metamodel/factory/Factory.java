@@ -21,14 +21,6 @@ public class Factory {
         }
         return (MArgumentType)instance;
     }
-   public MTypeParameter createMTypeParameter(org.eclipse.jdt.core.dom.ITypeBinding obj) {
-       XEntity instance = lruCache_.get(obj);
-        if (null == instance) {
-           instance = new MTypeParameterImpl(obj);
-           lruCache_.put(obj, instance);
-        }
-        return (MTypeParameter)instance;
-    }
    public MClass createMClass(org.eclipse.jdt.core.IType obj) {
        XEntity instance = lruCache_.get(obj);
         if (null == instance) {

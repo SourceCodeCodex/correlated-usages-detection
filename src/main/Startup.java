@@ -21,7 +21,7 @@ public class Startup implements IStartup {
 				if (element instanceof IType) {
 					return Factory.getInstance().createMClass((IType) element);
 				} else if (element instanceof ITypeBinding) {
-					return Factory.getInstance().createMTypeParameter((ITypeBinding) element);
+					return Factory.getInstance().createMArgumentType((ITypeBinding) element);
 				} else if (element instanceof TypePair) {
 					return Factory.getInstance().createMTypePair((TypePair) element);
 				}
