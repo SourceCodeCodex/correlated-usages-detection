@@ -16,7 +16,7 @@ public class AllTypeParameterPairs implements IRelationBuilder<MTypePair, MClass
 
   @Override
   public Group<MTypePair> buildGroup(MClass entity) {
-    return GroupBuilder.create(List.ofAll(entity.allTypeParameters().getElements())
+    return GroupBuilder.wrap(List.ofAll(entity.allTypeParameters().getElements())
         .sliding(2)
         .map(list2 -> Tuple.of(list2.get(0), list2.get(1)))
         .map(tuple -> Tuple.of(tuple._1.getUnderlyingObject(), tuple._2.getUnderlyingObject()))

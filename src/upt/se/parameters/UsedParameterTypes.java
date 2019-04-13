@@ -14,7 +14,7 @@ import upt.se.utils.builders.GroupBuilder;
 import upt.se.utils.store.ITypeBindingStore;
 
 @RelationBuilder
-public class ActualParameterTypes implements IRelationBuilder<MTypeParameter, MTypeParameter> {
+public class UsedParameterTypes implements IRelationBuilder<MTypeParameter, MTypeParameter> {
   @Override
   public Group<MTypeParameter> buildGroup(MTypeParameter entity) {
     return Try.of(() -> entity.getUnderlyingObject())
@@ -26,8 +26,8 @@ public class ActualParameterTypes implements IRelationBuilder<MTypeParameter, MT
         .map(list -> list.appendAll(ITypeBindingStore.usagesInVariables(entity)))
         .map(types -> types.map(Factory.getInstance()::createMTypeParameter))
         .map(List::toJavaList)
-        .map(GroupBuilder::create)
-        .orElse(() -> Try.success(GroupBuilder.create(Collections.emptyList())))
+        .map(GroupBuilder::wrap)
+        .orElse(() -> Try.success(GroupBuilder.wrap(Collections.emptyList())))
         .get();
   }
 

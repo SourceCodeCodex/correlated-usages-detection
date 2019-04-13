@@ -24,7 +24,7 @@ public class AllTypeParameters implements IRelationBuilder<MTypeParameter, MClas
         .map(Set::stream)
         .map(stream -> stream.map(Factory.getInstance()::createMTypeParameter))
         .map(stream -> stream.collect(Collectors.toList()))
-        .map(GroupBuilder::create)
+        .map(GroupBuilder::wrap)
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(new Group<>()))
         .get();

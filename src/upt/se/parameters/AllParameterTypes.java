@@ -29,8 +29,8 @@ public class AllParameterTypes implements IRelationBuilder<MTypeParameter, MType
         .map(List::ofAll)
         .map(types -> types.map(Factory.getInstance()::createMTypeParameter))
         .map(List::toJavaList)
-        .map(GroupBuilder::create)
-        .orElse(() -> Try.success(GroupBuilder.create(Collections.emptyList())))
+        .map(GroupBuilder::wrap)
+        .orElse(() -> Try.success(GroupBuilder.wrap(Collections.emptyList())))
         .get();
   }
 

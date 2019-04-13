@@ -5,23 +5,13 @@ import static upt.se.utils.helpers.ClassNames.isEqual;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.store.ITypeStore.convert;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMember;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeParameter;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
@@ -31,12 +21,9 @@ import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.core.search.TypeReferenceMatch;
 import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import thesis.metamodel.entity.MTypeParameter;
-import upt.se.utils.Pair;
-import upt.se.utils.builders.ListBuilder;
 import upt.se.utils.visitors.VariableBindingVisitor;
 
 public class ITypeBindingStore {
@@ -84,7 +71,7 @@ public class ITypeBindingStore {
     return Try.of(() -> entity.getUnderlyingObject().getDeclaringClass())
         .map(type -> toList(findVariablesArguments(type)))
         .map(variables -> variables.map(arguments -> arguments.get(getParameterNumber(entity))))
-        .map(ListBuilder::toList)
+        .map(list -> list.asJava())
         .onFailure(t -> LOGGER.log(Level.SEVERE, "Could not find parameter in class declaration", t))
         .orElse(() -> Try.success(Collections.emptyList()))
         .get();
@@ -120,8 +107,8 @@ public class ITypeBindingStore {
             .map(compilationUnit -> VariableBindingVisitor.convert(compilationUnit))
             .map(variables -> toList(variables).map(variable -> variable.getType())
                                                 .map(type -> toList(type.getTypeArguments()))
-                                                .map(arguments -> toList(arguments)))
-            .map(ListBuilder::toList)
+                                                .map(arguments -> arguments.asJava()))
+            .map(list -> list.asJava())
             .onSuccess(list -> types.addAll(list));
       }
     };

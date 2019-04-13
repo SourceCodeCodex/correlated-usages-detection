@@ -19,7 +19,7 @@ import upt.se.utils.TypePair;
 import upt.se.utils.store.ITypeStore;
 
 @RelationBuilder
-public class ActualParameterTypes implements IRelationBuilder<MTypePair, MTypePair> {
+public class UsedParameterTypes implements IRelationBuilder<MTypePair, MTypePair> {
 
 	@Override
 	public Group<MTypePair> buildGroup(MTypePair entity) {

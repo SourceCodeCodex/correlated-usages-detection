@@ -12,10 +12,10 @@ public interface MTypePair extends ro.lrg.xcore.metametamodel.XEntity {
 	public ro.lrg.xcore.metametamodel.Group<MTypePair> unusedParameterTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> allParameterTypes();
+	public ro.lrg.xcore.metametamodel.Group<MTypePair> usedParameterTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> actualParameterTypes();
+	public ro.lrg.xcore.metametamodel.Group<MTypePair> allParameterTypes();
 
 	upt.se.utils.TypePair getUnderlyingObject();
 }
