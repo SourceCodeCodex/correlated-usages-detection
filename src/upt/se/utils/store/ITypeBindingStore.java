@@ -23,7 +23,7 @@ import org.eclipse.jdt.core.search.TypeReferenceMatch;
 import io.vavr.Tuple;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-import thesis.metamodel.entity.MTypeParameter;
+import thesis.metamodel.entity.MArgumentType;
 import upt.se.utils.visitors.VariableBindingVisitor;
 
 public class ITypeBindingStore {
@@ -52,11 +52,11 @@ public class ITypeBindingStore {
         .asJava();
   }
 
-  public static List<ITypeBinding> usagesInDeclaringClass(MTypeParameter entity) {
+  public static List<ITypeBinding> usagesInDeclaringClass(MArgumentType entity) {
     return getAllSubtypes(entity.getUnderlyingObject().getDeclaringClass());
   }
 
-  public static List<ITypeBinding> usagesInInheritance(MTypeParameter entity) {
+  public static List<ITypeBinding> usagesInInheritance(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(type -> Tuple.of(type.getDeclaringClass(), type.getSuperclass()))
         .map(tuple -> Tuple.of(getAllSubtypes(tuple._1), getAllSubtypes(tuple._2)))
@@ -67,7 +67,7 @@ public class ITypeBindingStore {
   }
 
 
-  public static List<ITypeBinding> usagesInVariables(MTypeParameter entity) {
+  public static List<ITypeBinding> usagesInVariables(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject().getDeclaringClass())
         .map(type -> toList(findVariablesArguments(type)))
         .map(variables -> variables.map(arguments -> arguments.get(getParameterNumber(entity))))
@@ -77,7 +77,7 @@ public class ITypeBindingStore {
         .get();
   }
 
-  private static int getParameterNumber(MTypeParameter entity) {
+  private static int getParameterNumber(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(type -> Tuple.of(type, toList(type.getDeclaringClass().getTypeArguments())))
         .map(tuple -> tuple._2.zipWithIndex()

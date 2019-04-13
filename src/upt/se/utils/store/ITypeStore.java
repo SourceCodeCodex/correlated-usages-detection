@@ -33,7 +33,6 @@ import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.core.search.TypeReferenceMatch;
-import thesis.metamodel.entity.MTypeParameter;
 import upt.se.utils.Pair;
 import upt.se.utils.visitors.VariableBindingVisitor;
 import upt.se.utils.visitors.GenericParameterBindingVisitor;
@@ -192,82 +191,4 @@ public final class ITypeStore {
     return attributes;
   }
 
-  public static List<IType> declaringClassUsages(MTypeParameter entity) throws JavaModelException {
-    Optional<IType> maybeParentType = convert(entity.getUnderlyingObject().getDeclaringClass());
-
-    if (maybeParentType.isPresent()) {
-      ITypeHierarchy parentHierarchy =
-          maybeParentType.get().newTypeHierarchy(new NullProgressMonitor());
-
-      List<IType> allHierarchyUsages =
-          Arrays.asList(parentHierarchy.getAllSubtypes(maybeParentType.get()));
-
-      return allHierarchyUsages;
-    }
-
-    return Collections.emptyList();
-  }
-
-  public static List<IType> inheritanceUsages(MTypeParameter entity) throws JavaModelException {
-    Optional<IType> maybeParentType = convert(entity.getUnderlyingObject().getDeclaringClass());
-    Optional<IType> type = convert(entity.getUnderlyingObject().getSuperclass());
-    BiFunction<String, List<IType>, Optional<IType>> transform = (name, types) -> types.stream()
-        .filter(t -> t.getFullyQualifiedName().equals(name)).findFirst();
-
-    if (maybeParentType.isPresent() && type.isPresent()) {
-      ITypeHierarchy hierarchy = type.get().newTypeHierarchy(new NullProgressMonitor());
-      ITypeHierarchy parentHierarchy =
-          maybeParentType.get().newTypeHierarchy(new NullProgressMonitor());
-
-      List<IType> allTypes = new ArrayList<>();
-      allTypes.addAll(Arrays.asList(hierarchy.getAllSubtypes(type.get())));
-      allTypes.addAll(getAllTypes(type.get().getJavaProject()));
-      List<IType> allHierarchyUsages =
-          Arrays.asList(parentHierarchy.getAllSubtypes(maybeParentType.get())).stream()
-              .map(t -> convert(t))
-              .map(o -> o.map(t -> Arrays.asList(t.getSuperclass().getTypeArguments())))
-              .map(o -> o.map(l -> l.stream().map(t -> {
-                Optional<IType> maybeType = transform.apply(t.getQualifiedName(), allTypes);
-                System.out.println(t.getQualifiedName() + " -- " + maybeType);
-                return maybeType.get();
-              }).collect(Collectors.toList())).orElse(Collections.emptyList()))
-              .flatMap(List::stream).collect(Collectors.toList());
-
-      return allHierarchyUsages;
-    }
-
-    return Collections.emptyList();
-  }
-
-  public static List<IType> attributesUsages(MTypeParameter entity) throws JavaModelException {
-    List<IType> types = new ArrayList<>();
-    Optional<IType> maybeParentType = convert(entity.getUnderlyingObject().getDeclaringClass());
-    IType parentType = maybeParentType.get();
-
-    final List<List<ITypeBinding>> allParametersUsages = ITypeStore.findAttributeUsages(parentType)
-        .stream().map(p -> p.getSecond()).collect(Collectors.toList());
-
-    final List<ITypeParameter> parameters = Arrays.asList(parentType.getTypeParameters());
-    IntStream.range(0, parameters.size())
-        .filter(i -> parameters.get(i).getElementName()
-            .equals(entity.getUnderlyingObject().getJavaElement().getElementName()))
-        .findFirst()
-        .ifPresent(indexOfCurrentType -> allParametersUsages.stream()
-            .map(l -> l.get(indexOfCurrentType)).collect(Collectors.toList())
-            .forEach(t -> ITypeStore.convert(t).ifPresent(t1 -> types.add(t1))));
-    return types;
-  }
-
-  public static List<IType> allUsages(MTypeParameter entity) throws JavaModelException {
-    List<IType> types = new ArrayList<>();
-    if (entity.getUnderlyingObject().getSuperclass().getQualifiedName()
-        .equals(Object.class.getCanonicalName())) {
-      types.addAll(declaringClassUsages(entity));
-    } else {
-      types.addAll(inheritanceUsages(entity));
-    }
-    types.addAll(attributesUsages(entity));
-
-    return types;
-  }
 }

@@ -3,9 +3,9 @@ package thesis.metamodel.impl;
 import thesis.metamodel.entity.*;
 import upt.se.pairs.ToString;
 import upt.se.pairs.Apperture;
-import upt.se.pairs.UnusedParameterTypes;
-import upt.se.pairs.UsedParameterTypes;
-import upt.se.pairs.AllParameterTypes;
+import upt.se.pairs.UsedArgumentsTypes;
+import upt.se.pairs.UnusedArgumentsTypes;
+import upt.se.pairs.AllArgumentsTypes;
 
 public class MTypePairImpl implements MTypePair {
 
@@ -13,9 +13,9 @@ public class MTypePairImpl implements MTypePair {
 
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final Apperture Apperture_INSTANCE = new Apperture();
-	private static final UnusedParameterTypes UnusedParameterTypes_INSTANCE = new UnusedParameterTypes();
-	private static final UsedParameterTypes UsedParameterTypes_INSTANCE = new UsedParameterTypes();
-	private static final AllParameterTypes AllParameterTypes_INSTANCE = new AllParameterTypes();
+	private static final UsedArgumentsTypes UsedArgumentsTypes_INSTANCE = new UsedArgumentsTypes();
+	private static final UnusedArgumentsTypes UnusedArgumentsTypes_INSTANCE = new UnusedArgumentsTypes();
+	private static final AllArgumentsTypes AllArgumentsTypes_INSTANCE = new AllArgumentsTypes();
 
 	public MTypePairImpl(upt.se.utils.TypePair underlyingObj) {
 		underlyingObj_ = underlyingObj;
@@ -40,20 +40,20 @@ public class MTypePairImpl implements MTypePair {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> unusedParameterTypes() {
-		return UnusedParameterTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MTypePair> usedArgumentsTypes() {
+		return UsedArgumentsTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> usedParameterTypes() {
-		return UsedParameterTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MTypePair> unusedArgumentsTypes() {
+		return UnusedArgumentsTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> allParameterTypes() {
-		return AllParameterTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MTypePair> allArgumentsTypes() {
+		return AllArgumentsTypes_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {

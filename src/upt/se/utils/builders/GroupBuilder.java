@@ -1,10 +1,10 @@
 package upt.se.utils.builders;
 
+import static upt.se.utils.builders.ListBuilder.toList;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.XEntity;
-import thesis.metamodel.entity.MTypeParameter;
-import static upt.se.utils.builders.ListBuilder.*;
-import org.eclipse.jdt.core.dom.ITypeBinding;
+import thesis.metamodel.entity.MArgumentType;
 
 public class GroupBuilder {
 
@@ -15,8 +15,8 @@ public class GroupBuilder {
     return group;
   }
 
-  public static java.util.List<ITypeBinding> unwrap(Group<MTypeParameter> group) {
-    return toList(group.getElements()).map(MTypeParameter::getUnderlyingObject).asJava();
+  public static java.util.List<ITypeBinding> unwrap(Group<MArgumentType> group) {
+    return toList(group.getElements()).map(MArgumentType::getUnderlyingObject).asJava();
   }
   
 }

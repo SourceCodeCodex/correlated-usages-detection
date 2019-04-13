@@ -2,15 +2,15 @@ package upt.se.parameters;
 
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
-import thesis.metamodel.entity.MTypeParameter;
+import thesis.metamodel.entity.MArgumentType;
 
 @PropertyComputer
-public class Apperture implements IPropertyComputer<Double, MTypeParameter> {
+public class Apperture implements IPropertyComputer<Double, MArgumentType> {
 
 	@Override
-	public Double compute(MTypeParameter entity) {
-		return entity.usedParameterTypes().getElements().size() * 100d
-				/ entity.allParameterTypes().getElements().size();
+	public Double compute(MArgumentType entity) {
+		return entity.usedArgumentTypes().getElements().size() * 100d
+				/ entity.allArgumentTypes().getElements().size();
 	}
 
 }
