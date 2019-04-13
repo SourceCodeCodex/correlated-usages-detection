@@ -34,7 +34,6 @@ public class VariableBindingVisitor extends ASTVisitor {
     }
     
     public static HashSet<IVariableBinding> convert(ICompilationUnit unit) {
-        if (allVariableBindings.containsKey(unit)) { return allVariableBindings.get(unit); }
         
         VariableBindingVisitor self = new VariableBindingVisitor();
         

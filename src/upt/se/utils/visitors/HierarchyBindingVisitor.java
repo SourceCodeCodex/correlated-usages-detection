@@ -34,9 +34,6 @@ public class HierarchyBindingVisitor extends ASTVisitor {
 	}
 
 	public static HashSet<ITypeBinding> convert(ICompilationUnit unit) {
-		if (allTypeBindings.containsKey(unit)) {
-			return allTypeBindings.get(unit);
-		}
 
 		HierarchyBindingVisitor self = new HierarchyBindingVisitor();
 

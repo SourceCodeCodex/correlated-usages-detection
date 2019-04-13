@@ -33,9 +33,6 @@ public class GenericParameterBindingVisitor extends ASTVisitor {
   }
 
   public static HashSet<ITypeBinding> convert(ICompilationUnit unit) {
-    if (allTypeBindings.containsKey(unit)) {
-      return allTypeBindings.get(unit);
-    }
 
     GenericParameterBindingVisitor self = new GenericParameterBindingVisitor();
 

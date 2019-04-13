@@ -23,7 +23,7 @@ public class AllArgumentTypes implements IRelationBuilder<MArgumentType, MArgume
   public Group<MArgumentType> buildGroup(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(type -> type.getSuperclass())
-        .filter(type -> isObject(getFullName(type)))
+        .filter(type -> !isObject(getFullName(type)))
         .fold(object -> Try.success(Collections.<ITypeBinding>emptyList()),
             type -> Try.of(() -> ITypeBindingStore.getAllSubtypes(type))
                 .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t)))

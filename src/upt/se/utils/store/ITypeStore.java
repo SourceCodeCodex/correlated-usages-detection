@@ -24,9 +24,6 @@ public final class ITypeStore {
   private static Map<ITypeBinding, Optional<IType>> typeBindingCache = new HashMap<>();
 
   public static final List<IType> getAllTypes(IJavaProject javaproject) {
-    if (allTypes.containsKey(javaproject)) {
-      return allTypes.get(javaproject);
-    }
 
     List<IType> typeList = new ArrayList<IType>();
     try {
@@ -59,13 +56,9 @@ public final class ITypeStore {
   }
 
   public static final Optional<IType> convert(ITypeBinding typeBinding) {
-    if (typeBindingCache.containsKey(typeBinding)
-        && typeBindingCache.get(typeBinding).isPresent()) {
-      return typeBindingCache.get(typeBinding);
-    }
 
     typeBindingCache.put(typeBinding,
-        getAllTypes(typeBinding.getSuperclass().getJavaElement().getJavaProject()).stream()
+        getAllTypes(typeBinding.getJavaElement().getJavaProject()).stream()
             .filter(t -> t.getFullyQualifiedName()
                 .equals(typeBinding.isParameterizedType() ? typeBinding.getBinaryName()
                     : typeBinding.getQualifiedName()))
@@ -78,9 +71,6 @@ public final class ITypeStore {
   }
 
   public static final Optional<ITypeBinding> convert(IType type) {
-    if (typeCache.containsKey(type) && typeCache.get(type).isPresent()) {
-      return typeCache.get(type);
-    }
     typeCache.put(type, GenericParameterBindingVisitor.convert(type.getCompilationUnit()).stream()
         .filter(t -> t.getQualifiedName().equals(type.getFullyQualifiedName())).findFirst());
     typeCache.put(type, HierarchyBindingVisitor.convert(type.getCompilationUnit()).stream()

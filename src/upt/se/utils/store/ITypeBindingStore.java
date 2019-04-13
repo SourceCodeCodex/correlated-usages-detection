@@ -38,7 +38,8 @@ public class ITypeBindingStore {
             .map(Option::toTry).map(Try::get)))
         .map(list -> list.toJavaList())
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
-        .orElse(() -> Try.success(Collections.emptyList())).get();
+        .orElse(() -> Try.success(Collections.emptyList()))
+        .get();
   }
 
   public static List<ITypeBinding> getTypeParameterUsages(List<ITypeBinding> declaringClasses,
