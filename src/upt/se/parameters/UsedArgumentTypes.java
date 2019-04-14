@@ -19,10 +19,9 @@ public class UsedArgumentTypes implements IRelationBuilder<MArgumentType, MArgum
   @Override
   public Group<MArgumentType> buildGroup(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
-        .filter(type -> isObject(getFullName(type.getSuperclass())))
-        .fold(
-            object -> Try.success(ITypeBindingStore.usagesInDeclaringClass(entity)),
-            type -> Try.success(ITypeBindingStore.usagesInInheritance(entity)))
+        .filter(type -> !isObject(getFullName(type.getSuperclass())))
+        .fold(object -> Try.success(ITypeBindingStore.usagesInDeclaringClass(entity)),
+              type -> Try.success(ITypeBindingStore.usagesInInheritance(entity)))
         .map(List::ofAll)
         .map(list -> list.appendAll(ITypeBindingStore.usagesInVariables(entity)))
         .map(types -> types.map(Factory.getInstance()::createMArgumentType))

@@ -24,6 +24,7 @@ import io.vavr.Tuple;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import thesis.metamodel.entity.MArgumentType;
+import upt.se.utils.builders.ListBuilder;
 import upt.se.utils.visitors.VariableBindingVisitor;
 
 public class ITypeBindingStore {
@@ -34,8 +35,10 @@ public class ITypeBindingStore {
         .mapTry(type -> Tuple.of(type, type.newTypeHierarchy(new NullProgressMonitor())))
         .map(tuple -> tuple._2.getAllSubtypes(tuple._1))
         .map(types -> io.vavr.collection.List.of(types))
-        .flatMap(list -> Try.of(() -> list.map(type -> convert(type)).map(Option::ofOptional)
-            .map(Option::toTry).map(Try::get)))
+        .flatMap(list -> Try.of(() -> list.map(type -> convert(type))
+            .map(Option::ofOptional)
+            .map(Option::toTry)
+            .map(Try::get)))
         .map(list -> list.toJavaList())
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(Collections.emptyList()))
@@ -54,7 +57,23 @@ public class ITypeBindingStore {
   }
 
   public static List<ITypeBinding> usagesInDeclaringClass(MArgumentType entity) {
-    return getAllSubtypes(entity.getUnderlyingObject().getDeclaringClass());
+    return Try.of(() -> entity.getUnderlyingObject())
+        .map(type -> Tuple.of(type, toList(getAllSubtypes(type.getDeclaringClass()))))
+        .map(tuple -> tuple.map(type -> toList(type.getDeclaringClass().getTypeParameters())
+                                              .zipWithIndex()
+                                              .filter(parameter -> isEqual(type, parameter._1))
+                                              .head(),
+                                types -> types.map(type -> type.getSuperclass().getTypeArguments())
+                                              .map(ListBuilder::toList)
+                                              .map(list -> list.zipWithIndex())))
+        .map(tuple -> tuple._2.map(arguments -> arguments.filter(argument -> argument._2 == tuple._1._2)
+                                                         .head()))
+        .map(arguments -> arguments.map(argument -> argument._1))
+        .map(arguments -> arguments.distinctBy((p1, p2) -> isEqual(p1, p2) ?  0 : 1))
+        .map(arguments -> arguments.asJava())
+        .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
+        .orElse(() -> Try.success(Collections.emptyList()))
+        .get();
   }
 
   public static List<ITypeBinding> usagesInInheritance(MArgumentType entity) {
