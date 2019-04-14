@@ -21,7 +21,7 @@ import upt.se.utils.builders.ListBuilder;
 
 @RelationBuilder
 public class AllArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair> {
-
+//TODO: There seems to be an issue here when generating all the possible combinations
   @Override
   public Group<MTypePair> buildGroup(MTypePair entity) {
     return Try.of(() -> entity.getUnderlyingObject())

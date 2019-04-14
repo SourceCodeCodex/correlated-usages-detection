@@ -20,6 +20,7 @@ import thesis.metamodel.factory.Factory;
 import upt.se.utils.TypePair;
 import upt.se.utils.builders.GroupBuilder;
 import upt.se.utils.builders.ListBuilder;
+import upt.se.utils.store.ITypeBindingStore;
 
 @RelationBuilder
 public class UsedArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair> {
@@ -68,13 +69,11 @@ public class UsedArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair
       .map(parameters -> Tuple.of(parameters.getFirst(), parameters.getSecond()))
       .filter(tuple -> isEqual(tuple._1.getDeclaringClass(), tuple._2.getDeclaringClass()))
       .map(tuple -> tuple._1.getDeclaringClass())
-      .map(Factory.getInstance()::createMArgumentType)
-      .map(MArgumentType::usedArgumentTypes)
-      .map(GroupBuilder::unwrap)
+      .map(ITypeBindingStore::getAllSubtypes)
       .map(declaringClasses -> toList(declaringClasses)
-                               .map(declaringClass -> toList(declaringClass.getTypeArguments())
-                                                      .zipWithIndex()))
-      .onSuccess(list -> LOGGER.log(Level.INFO, list.toString()));
+                               .map(declaringClass -> declaringClass.getSuperclass())
+                               .map(superClass -> toList(superClass.getTypeArguments())
+                                                      .zipWithIndex()));
   }
 
 }

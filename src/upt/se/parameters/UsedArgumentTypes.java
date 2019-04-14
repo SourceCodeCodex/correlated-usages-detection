@@ -24,6 +24,7 @@ public class UsedArgumentTypes implements IRelationBuilder<MArgumentType, MArgum
               type -> Try.success(ITypeBindingStore.usagesInInheritance(entity)))
         .map(List::ofAll)
         .map(list -> list.appendAll(ITypeBindingStore.usagesInVariables(entity)))
+        .map(list -> list.distinctBy((p1, p2) -> isEqual(p1, p2) ?  0 : 1))
         .map(types -> types.map(Factory.getInstance()::createMArgumentType))
         .map(List::toJavaList)
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
