@@ -22,7 +22,7 @@ public class AllTypeParameters implements IRelationBuilder<MArgumentType, MClass
         .map(GenericParameterBindingVisitor::convert)
         .map(ListBuilder::toList)
         .filter(parameters -> parameters.groupBy(parameter -> parameter.getDeclaringClass().getQualifiedName()).size() == 1)
-        .map(parameters -> parameters.get(0).getDeclaringClass().getTypeParameters())
+        .map(parameters -> parameters.head().getDeclaringClass().getTypeParameters())
         .map(ListBuilder::toList)
         .map(list -> list.map(Factory.getInstance()::createMArgumentType).asJava())
         .map(GroupBuilder::wrap)
