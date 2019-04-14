@@ -41,7 +41,7 @@ public class UsedArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair
     return Try.of(() -> entity.getUnderlyingObject())
       .map(parameters -> Tuple.of(parameters.getFirst(), parameters.getSecond()))
       .filter(tuple -> isEqual(tuple._1.getDeclaringClass(), tuple._2.getDeclaringClass()))
-      .map(tuple -> tuple._1.getDeclaringClass())
+      .map(tuple -> tuple._1)
       .map(Factory.getInstance()::createMArgumentType)
       .map(MArgumentType::usedArgumentTypes)
       .map(GroupBuilder::unwrap)
