@@ -39,7 +39,7 @@ public class ITypeBindingStore {
             .map(Option::ofOptional)
             .map(Option::toTry)
             .map(Try::get)))
-        .map(list -> list.toJavaList())
+        .map(list -> list.prepend(typeBinding).toJavaList())
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(Collections.emptyList()))
         .get();
@@ -51,7 +51,8 @@ public class ITypeBindingStore {
     io.vavr.collection.List<ITypeBinding> subtypes = toList(declaringClasses);
 
     return subtypes
-        .filter(subType -> declaring.exists(declared -> toList(declared.getTypeParameters())
+        .filter(subType -> declaring
+            .exists(declared -> toList(declared.getSuperclass().getTypeArguments())
             .exists(parameter -> isEqual(parameter, subType))))
         .asJava();
   }

@@ -43,7 +43,7 @@ public class AllArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair>
   private Try<Group<MArgumentType>> getAllParameterTypes(ITypeBinding parameter) {
     return Try.of(() -> parameter)
         .map(Factory.getInstance()::createMArgumentType)
-        .map(mTypeParameter -> isObject(mTypeParameter) ? mTypeParameter.allArgumentTypes(): 
+        .map(mTypeParameter -> !isObject(mTypeParameter) ? mTypeParameter.allArgumentTypes(): 
                                                           mTypeParameter.usedArgumentTypes());
   }
 
