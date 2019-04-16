@@ -14,6 +14,7 @@ import ro.lrg.xcore.metametamodel.RelationBuilder;
 import thesis.metamodel.entity.MArgumentType;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.builders.GroupBuilder;
+import upt.se.utils.builders.ListBuilder;
 import upt.se.utils.store.ITypeBindingStore;
 
 @RelationBuilder
@@ -25,11 +26,12 @@ public class AllArgumentTypes implements IRelationBuilder<MArgumentType, MArgume
         .map(type -> type.getSuperclass())
         .filter(type -> !isObject(getFullName(type)))
         .fold(object -> Try.success(Collections.<ITypeBinding>emptyList()),
-            type -> Try.of(() -> ITypeBindingStore.getAllSubtypes(type))
+            type -> Try.of(() -> ListBuilder.toList(ITypeBindingStore.getAllSubtypes(type))
+                                            .prepend(entity.getUnderlyingObject().getSuperclass())
+                                            .asJava())
                 .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t)))
         .map(List::ofAll)
-        .map(types -> types.prepend(entity.getUnderlyingObject())
-                           .map(Factory.getInstance()::createMArgumentType))
+        .map(types -> types.map(Factory.getInstance()::createMArgumentType))
         .map(List::toJavaList)
         .orElse(() -> Try.success(Collections.emptyList()))
         .map(GroupBuilder::wrap)
