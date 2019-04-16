@@ -1,7 +1,7 @@
 package upt.se.utils.store;
 
 import static upt.se.utils.builders.ListBuilder.toList;
-import static upt.se.utils.helpers.ClassNames.isEqual;
+import static upt.se.utils.helpers.ClassNames.*;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.store.ITypeStore.convert;
 import java.util.ArrayList;
@@ -39,22 +39,21 @@ public class ITypeBindingStore {
             .map(Option::ofOptional)
             .map(Option::toTry)
             .map(Try::get)))
-        .map(list -> list.prepend(typeBinding).toJavaList())
+        .map(list -> list.toJavaList())
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(Collections.emptyList()))
         .get();
   }
 
-  public static List<ITypeBinding> getTypeParameterUsages(List<ITypeBinding> declaringClasses,
+  public static List<ITypeBinding> getTypeArguments(List<ITypeBinding> declaringClasses,
       List<ITypeBinding> allSubtypes) {
-    io.vavr.collection.List<ITypeBinding> declaring = toList(allSubtypes);
-    io.vavr.collection.List<ITypeBinding> subtypes = toList(declaringClasses);
+    final io.vavr.collection.List<ITypeBinding> declaring = toList(declaringClasses).map(type -> type.getSuperclass())
+                                                                                    .filter(type -> type.getTypeArguments().length > 0)
+                                                                                    .flatMap(type -> toList(type.getTypeArguments()))
+                                                                                    .distinctBy((p1, p2) -> isEqual(p1, p2) ? 0 : 1);
+    final io.vavr.collection.List<ITypeBinding> subtypes = toList(allSubtypes);
 
-    return subtypes
-        .filter(subType -> declaring
-            .exists(declared -> toList(declared.getSuperclass().getTypeArguments())
-            .exists(parameter -> isEqual(parameter, subType))))
-        .asJava();
+    return subtypes.filter(subType -> declaring.exists(parameter -> isEqual(parameter, subType))).asJava();
   }
 
   public static List<ITypeBinding> usagesInDeclaringClass(MArgumentType entity) {
@@ -81,7 +80,8 @@ public class ITypeBindingStore {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(type -> Tuple.of(type.getDeclaringClass(), type.getSuperclass()))
         .map(tuple -> Tuple.of(getAllSubtypes(tuple._1), getAllSubtypes(tuple._2)))
-        .map(tuple -> getTypeParameterUsages(tuple._1, tuple._2))
+        .map(tuple -> tuple.map2(allSubtypes -> toList(allSubtypes).prepend(entity.getUnderlyingObject()).asJava()))
+        .map(tuple -> getTypeArguments(tuple._1, tuple._2))
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(Collections.emptyList()))
         .get();

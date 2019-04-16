@@ -15,9 +15,17 @@ public class ClassNames {
   public static boolean isObject(MArgumentType entity) {
     return entity.getUnderlyingObject().getQualifiedName().equals(OBJECT_NAME);
   }
+  
+  public static boolean parentExtendsObject(MArgumentType entity) {
+    return entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(OBJECT_NAME);
+  }
 
   public static boolean isObject(String entity) {
     return entity.equals(OBJECT_NAME);
+  }
+
+  public static boolean isObject(ITypeBinding entity) {
+    return entity.getQualifiedName().equals(OBJECT_NAME);
   }
 
   public static boolean isEqual(ITypeBinding type1, ITypeBinding type2) {

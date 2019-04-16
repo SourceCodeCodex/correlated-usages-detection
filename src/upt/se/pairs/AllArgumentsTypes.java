@@ -1,8 +1,8 @@
 package upt.se.pairs;
 
 import static io.vavr.API.For;
+import static upt.se.utils.helpers.ClassNames.parentExtendsObject;
 import static upt.se.utils.helpers.ClassNames.isEqual;
-import static upt.se.utils.helpers.ClassNames.isObject;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -21,7 +21,7 @@ import upt.se.utils.builders.ListBuilder;
 
 @RelationBuilder
 public class AllArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair> {
-//TODO: There seems to be an issue here when generating all the possible combinations
+
   @Override
   public Group<MTypePair> buildGroup(MTypePair entity) {
     return Try.of(() -> entity.getUnderlyingObject())
@@ -31,6 +31,7 @@ public class AllArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair>
                            .map(ListBuilder::toList, ListBuilder::toList))
         .map(tuple -> tuple._1.crossProduct(tuple._2))
         .map(pairs -> pairs.distinctBy((p1, p2) -> isEqual(p1, p2) ?  0 : 1))
+        .map(pairs -> pairs.toList())
         .map(pairs -> pairs.map(pair -> new TypePair(pair._1, pair._2))
                            .map(Factory.getInstance()::createMTypePair))
         .map(pairs -> pairs.toJavaList())
@@ -43,8 +44,8 @@ public class AllArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair>
   private Try<Group<MArgumentType>> getAllParameterTypes(ITypeBinding parameter) {
     return Try.of(() -> parameter)
         .map(Factory.getInstance()::createMArgumentType)
-        .map(mTypeParameter -> !isObject(mTypeParameter) ? mTypeParameter.allArgumentTypes(): 
-                                                          mTypeParameter.usedArgumentTypes());
+        .map(mTypeParameter -> parentExtendsObject(mTypeParameter) ? mTypeParameter.usedArgumentTypes(): 
+                                                                     mTypeParameter.allArgumentTypes());
   }
 
 }
