@@ -80,7 +80,7 @@ public class ITypeBindingStore {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(type -> Tuple.of(type.getDeclaringClass(), type.getSuperclass()))
         .map(tuple -> Tuple.of(getAllSubtypes(tuple._1), getAllSubtypes(tuple._2)))
-        .map(tuple -> tuple.map2(allSubtypes -> toList(allSubtypes).prepend(entity.getUnderlyingObject()).asJava()))
+        .map(tuple -> tuple.map2(allSubtypes -> toList(allSubtypes).prepend(entity.getUnderlyingObject().getSuperclass()).asJava()))
         .map(tuple -> getTypeArguments(tuple._1, tuple._2))
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(Collections.emptyList()))
