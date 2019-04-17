@@ -1,6 +1,6 @@
 package thesis.metamodel.entity;
 
-public interface MTypeParameter extends ro.lrg.xcore.metametamodel.XEntity {
+public interface MArgumentType extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
@@ -9,13 +9,13 @@ public interface MTypeParameter extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Double apperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> unusedParameterTypes();
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> unusedArgumentTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allParameterTypes();
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> allArgumentTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> actualParameterTypes();
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> usedArgumentTypes();
 
 	org.eclipse.jdt.core.dom.ITypeBinding getUnderlyingObject();
 }

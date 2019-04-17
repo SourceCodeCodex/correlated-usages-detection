@@ -1,4 +1,4 @@
-package upt.se.pair;
+package upt.se.pairs;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,12 +9,12 @@ import ro.lrg.xcore.metametamodel.RelationBuilder;
 import thesis.metamodel.entity.MTypePair;
 
 @RelationBuilder
-public class UnusedParameterTypes implements IRelationBuilder<MTypePair, MTypePair> {
+public class UnusedArgumentsTypes implements IRelationBuilder<MTypePair, MTypePair> {
     
     @Override
     public Group<MTypePair> buildGroup(MTypePair entity) {
-        Group<MTypePair> allParameterTypes = entity.allParameterTypes();
-        Group<MTypePair> actualParameterTypes = entity.actualParameterTypes();
+        Group<MTypePair> allParameterTypes = entity.allArgumentsTypes();
+        Group<MTypePair> actualParameterTypes = entity.usedArgumentsTypes();
         
         List<MTypePair> diff = allParameterTypes.getElements().stream().filter(p -> !contains(actualParameterTypes, p))
                 .collect(Collectors.toList());

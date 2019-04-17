@@ -8,5 +8,6 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/vavr-0.10.0.jar" sourcepath="/Users/alexandrustana/.sourceattacher/vavr-0.10.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

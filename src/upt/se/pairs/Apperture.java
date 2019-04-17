@@ -1,4 +1,4 @@
-package upt.se.pair;
+package upt.se.pairs;
 
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
@@ -7,10 +7,10 @@ import thesis.metamodel.entity.MTypePair;
 @PropertyComputer
 public class Apperture implements IPropertyComputer<Double, MTypePair> {
 
-	@Override
-	public Double compute(MTypePair entity) {
-		return entity.actualParameterTypes().getElements().size() * 100d
-				/ entity.allParameterTypes().getElements().size();
-	}
+  @Override
+  public Double compute(MTypePair entity) {
+    return entity.usedArgumentsTypes().getElements().size() * 100d
+        / entity.allArgumentsTypes().getElements().size();
+  }
 
 }

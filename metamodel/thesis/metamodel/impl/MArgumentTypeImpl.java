@@ -3,21 +3,21 @@ package thesis.metamodel.impl;
 import thesis.metamodel.entity.*;
 import upt.se.parameters.ToString;
 import upt.se.parameters.Apperture;
-import upt.se.parameters.UnusedParameterTypes;
-import upt.se.parameters.AllParameterTypes;
-import upt.se.parameters.ActualParameterTypes;
+import upt.se.parameters.UnusedArgumentTypes;
+import upt.se.parameters.AllArgumentTypes;
+import upt.se.parameters.UsedArgumentTypes;
 
-public class MTypeParameterImpl implements MTypeParameter {
+public class MArgumentTypeImpl implements MArgumentType {
 
 	private org.eclipse.jdt.core.dom.ITypeBinding underlyingObj_;
 
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final Apperture Apperture_INSTANCE = new Apperture();
-	private static final UnusedParameterTypes UnusedParameterTypes_INSTANCE = new UnusedParameterTypes();
-	private static final AllParameterTypes AllParameterTypes_INSTANCE = new AllParameterTypes();
-	private static final ActualParameterTypes ActualParameterTypes_INSTANCE = new ActualParameterTypes();
+	private static final UnusedArgumentTypes UnusedArgumentTypes_INSTANCE = new UnusedArgumentTypes();
+	private static final AllArgumentTypes AllArgumentTypes_INSTANCE = new AllArgumentTypes();
+	private static final UsedArgumentTypes UsedArgumentTypes_INSTANCE = new UsedArgumentTypes();
 
-	public MTypeParameterImpl(org.eclipse.jdt.core.dom.ITypeBinding underlyingObj) {
+	public MArgumentTypeImpl(org.eclipse.jdt.core.dom.ITypeBinding underlyingObj) {
 		underlyingObj_ = underlyingObj;
 	}
 
@@ -40,27 +40,27 @@ public class MTypeParameterImpl implements MTypeParameter {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> unusedParameterTypes() {
-		return UnusedParameterTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> unusedArgumentTypes() {
+		return UnusedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allParameterTypes() {
-		return AllParameterTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> allArgumentTypes() {
+		return AllArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> actualParameterTypes() {
-		return ActualParameterTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MArgumentType> usedArgumentTypes() {
+		return UsedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {
-		if (null == obj || !(obj instanceof MTypeParameterImpl)) {
+		if (null == obj || !(obj instanceof MArgumentTypeImpl)) {
 			return false;
 		}
-		MTypeParameterImpl iObj = (MTypeParameterImpl)obj;
+		MArgumentTypeImpl iObj = (MArgumentTypeImpl)obj;
 		return underlyingObj_.equals(iObj.underlyingObj_);
 	}
 

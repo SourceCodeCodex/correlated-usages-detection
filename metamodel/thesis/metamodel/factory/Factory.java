@@ -13,13 +13,13 @@ public class Factory {
        lruCache_.setCapacity(capacity);
    }
    public void clearCache() {lruCache_.clear();}
-   public MTypeParameter createMTypeParameter(org.eclipse.jdt.core.dom.ITypeBinding obj) {
+   public MArgumentType createMArgumentType(org.eclipse.jdt.core.dom.ITypeBinding obj) {
        XEntity instance = lruCache_.get(obj);
         if (null == instance) {
-           instance = new MTypeParameterImpl(obj);
+           instance = new MArgumentTypeImpl(obj);
            lruCache_.put(obj, instance);
         }
-        return (MTypeParameter)instance;
+        return (MArgumentType)instance;
     }
    public MClass createMClass(org.eclipse.jdt.core.IType obj) {
        XEntity instance = lruCache_.get(obj);
