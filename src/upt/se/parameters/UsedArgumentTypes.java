@@ -10,7 +10,7 @@ import ro.lrg.xcore.metametamodel.RelationBuilder;
 import thesis.metamodel.entity.MArgumentType;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.builders.GroupBuilder;
-import upt.se.utils.store.ITypeBindingStore;
+import upt.se.utils.store.ClassBindingStore;
 import static upt.se.utils.helpers.ClassNames.*;
 import static upt.se.utils.helpers.LoggerHelper.*;
 
@@ -20,10 +20,10 @@ public class UsedArgumentTypes implements IRelationBuilder<MArgumentType, MArgum
   public Group<MArgumentType> buildGroup(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .filter(type -> !isObject(getFullName(type.getSuperclass())))
-        .fold(object -> Try.success(ITypeBindingStore.usagesInDeclaringClass(entity)),
-              type -> Try.success(ITypeBindingStore.usagesInInheritance(entity)))
+        .fold(object -> Try.success(ClassBindingStore.usagesInDeclaringClass(entity)),
+              type -> Try.success(ClassBindingStore.usagesInInheritance(entity)))
         .map(List::ofAll)
-        .map(list -> list.appendAll(ITypeBindingStore.usagesInVariables(entity)))
+        .map(list -> list.appendAll(ClassBindingStore.usagesInVariables(entity)))
         .map(list -> list.distinctBy((p1, p2) -> isEqual(p1, p2) ?  0 : 1))
         .map(types -> types.map(Factory.getInstance()::createMArgumentType))
         .map(List::toJavaList)

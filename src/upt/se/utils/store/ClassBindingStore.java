@@ -27,7 +27,7 @@ import thesis.metamodel.entity.MArgumentType;
 import upt.se.utils.builders.ListBuilder;
 import upt.se.utils.visitors.VariableBindingVisitor;
 
-public class ITypeBindingStore {
+public class ClassBindingStore {
 
   public static List<ITypeBinding> getAllSubtypes(ITypeBinding typeBinding) {
     return Try.of(() -> convert(typeBinding))
