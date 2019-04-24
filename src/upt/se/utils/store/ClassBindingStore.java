@@ -100,7 +100,7 @@ public class ClassBindingStore {
 
   private static int getParameterNumber(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
-        .map(type -> Tuple.of(type, toList(type.getDeclaringClass().getTypeArguments())))
+        .map(type -> Tuple.of(type, toList(type.getDeclaringClass().getTypeParameters())))
         .map(tuple -> tuple._2.zipWithIndex()
                               .find(argument -> isEqual(argument._1, tuple._1))
                               .map(argument -> argument._2))
