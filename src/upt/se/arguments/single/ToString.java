@@ -1,4 +1,4 @@
-package upt.se.parameters;
+package upt.se.arguments.single;
 
 import static upt.se.utils.helpers.ClassNames.getName;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;

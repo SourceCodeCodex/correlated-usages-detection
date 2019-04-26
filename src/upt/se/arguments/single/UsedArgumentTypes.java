@@ -1,4 +1,4 @@
-package upt.se.parameters;
+package upt.se.arguments.single;
 
 import java.util.Collections;
 import java.util.logging.Level;
@@ -10,6 +10,7 @@ import ro.lrg.xcore.metametamodel.RelationBuilder;
 import thesis.metamodel.entity.MArgumentType;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.builders.GroupBuilder;
+import upt.se.utils.crawlers.hierarchy.InheritanceArgumentTypes;
 import upt.se.utils.store.ClassBindingStore;
 import static upt.se.utils.helpers.ClassNames.*;
 import static upt.se.utils.helpers.LoggerHelper.*;
@@ -21,7 +22,7 @@ public class UsedArgumentTypes implements IRelationBuilder<MArgumentType, MArgum
     return Try.of(() -> entity.getUnderlyingObject())
         .filter(type -> !isObject(getFullName(type.getSuperclass())))
         .fold(object -> Try.success(ClassBindingStore.usagesInDeclaringClass(entity)),
-              type -> Try.success(ClassBindingStore.usagesInInheritance(entity)))
+              type -> Try.success(InheritanceArgumentTypes.usagesInInheritance(entity)))
         .map(List::ofAll)
         .map(list -> list.appendAll(ClassBindingStore.usagesInVariables(entity)))
         .map(list -> list.distinctBy((p1, p2) -> isEqual(p1, p2) ?  0 : 1))

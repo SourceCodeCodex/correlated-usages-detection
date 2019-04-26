@@ -1,7 +1,7 @@
-package upt.se.parameters;
+package upt.se.arguments.single;
 
 import static io.vavr.API.For;
-import static upt.se.parameters.helpers.AllArgumentTypesHelper.*;
+import static upt.se.arguments.single.helper.AllArgumentTypesHelper.*;
 import static upt.se.utils.helpers.ClassNames.*;
 import java.util.Collections;
 import io.vavr.collection.List;

@@ -1,4 +1,4 @@
-package upt.se.pairs;
+package upt.se.arguments.tuple;
 
 import java.util.List;
 import java.util.stream.Collectors;

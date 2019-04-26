@@ -1,11 +1,11 @@
 package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
-import upt.se.parameters.ToString;
-import upt.se.parameters.Apperture;
-import upt.se.parameters.UnusedArgumentTypes;
-import upt.se.parameters.AllArgumentTypes;
-import upt.se.parameters.UsedArgumentTypes;
+import upt.se.arguments.single.ToString;
+import upt.se.arguments.single.Apperture;
+import upt.se.arguments.single.UnusedArgumentTypes;
+import upt.se.arguments.single.AllArgumentTypes;
+import upt.se.arguments.single.UsedArgumentTypes;
 
 public class MArgumentTypeImpl implements MArgumentType {
 

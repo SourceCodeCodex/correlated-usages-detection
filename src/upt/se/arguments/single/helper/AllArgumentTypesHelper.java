@@ -1,4 +1,4 @@
-package upt.se.parameters.helpers;
+package upt.se.arguments.single.helper;
 
 import static upt.se.utils.builders.ListBuilder.toList;
 import static upt.se.utils.helpers.ClassNames.getFullName;

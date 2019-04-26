@@ -1,4 +1,4 @@
-package upt.se.parameters;
+package upt.se.arguments.single;
 
 import java.util.Collections;
 import java.util.logging.Level;

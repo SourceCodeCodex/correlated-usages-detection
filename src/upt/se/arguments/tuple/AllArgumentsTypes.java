@@ -1,4 +1,4 @@
-package upt.se.pairs;
+package upt.se.arguments.tuple;
 
 import static io.vavr.API.For;
 import static upt.se.utils.helpers.ClassNames.parentExtendsObject;
