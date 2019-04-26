@@ -1,7 +1,7 @@
 package upt.se.utils.store;
 
 import static upt.se.utils.builders.ListBuilder.toList;
-import static upt.se.utils.helpers.ClassNames.*;
+import static upt.se.utils.helpers.ClassNames.isEqual;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.store.ITypeStore.convert;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import thesis.metamodel.entity.MArgumentType;
 import upt.se.utils.builders.ListBuilder;
 import upt.se.utils.visitors.VariableBindingVisitor;
 
-public class ITypeBindingStore {
+public class ClassBindingStore {
 
   public static List<ITypeBinding> getAllSubtypes(ITypeBinding typeBinding) {
     return Try.of(() -> convert(typeBinding))
@@ -100,7 +100,7 @@ public class ITypeBindingStore {
 
   private static int getParameterNumber(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
-        .map(type -> Tuple.of(type, toList(type.getDeclaringClass().getTypeArguments())))
+        .map(type -> Tuple.of(type, toList(type.getDeclaringClass().getTypeParameters())))
         .map(tuple -> tuple._2.zipWithIndex()
                               .find(argument -> isEqual(argument._1, tuple._1))
                               .map(argument -> argument._2))
