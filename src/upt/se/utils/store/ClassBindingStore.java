@@ -1,7 +1,7 @@
 package upt.se.utils.store;
 
 import static upt.se.utils.builders.ListBuilder.toList;
-import static upt.se.utils.helpers.ClassNames.*;
+import static upt.se.utils.helpers.ClassNames.isEqual;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.store.ITypeStore.convert;
 import java.util.ArrayList;

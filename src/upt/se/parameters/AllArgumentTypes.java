@@ -2,6 +2,7 @@ package upt.se.parameters;
 
 import static io.vavr.API.For;
 import static upt.se.parameters.helpers.AllArgumentTypesHelper.*;
+import static upt.se.utils.helpers.ClassNames.*;
 import java.util.Collections;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
@@ -19,8 +20,11 @@ public class AllArgumentTypes implements IRelationBuilder<MArgumentType, MArgume
   public Group<MArgumentType> buildGroup(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .flatMap(type -> For(classArgumentTypes(type), interfaceArgumentTypes(type))
-            .yield((classArguments, interfaceArguments) -> classArguments
-                .appendAll(interfaceArguments)))
+            .yield((classArguments,
+                interfaceArguments) -> isObject(classArguments.head())
+                    && !interfaceArguments.isEmpty()
+                        ? interfaceArguments
+                        : classArguments.appendAll(interfaceArguments)))
         .map(types -> types.map(Factory.getInstance()::createMArgumentType))
         .map(List::toJavaList)
         .orElse(() -> Try.success(Collections.emptyList()))
