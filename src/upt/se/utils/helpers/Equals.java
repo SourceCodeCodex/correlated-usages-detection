@@ -6,7 +6,7 @@ import io.vavr.Tuple2;
 import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MArgumentType;
 
-public class ClassNames {
+public class Equals {
   public static final String OBJECT_NAME = Object.class.getCanonicalName();
 
   public static boolean isObject(MClass entity) {
@@ -14,11 +14,11 @@ public class ClassNames {
   }
 
   public static boolean isObject(MArgumentType entity) {
-    return entity.getUnderlyingObject().getQualifiedName().equals(OBJECT_NAME);
+    return isObject(entity.getUnderlyingObject());
   }
   
   public static boolean parentExtendsObject(MArgumentType entity) {
-    return entity.getUnderlyingObject().getSuperclass().getQualifiedName().equals(OBJECT_NAME);
+    return isObject(entity.getUnderlyingObject().getSuperclass());
   }
 
   public static boolean isObject(String entity) {
@@ -44,15 +44,4 @@ public class ClassNames {
         || isEqual(tuple1._1, tuple2._2) && isEqual(tuple1._2, tuple2._1);
   }
 
-  public static String getName(MClass entity) {
-    return entity.getUnderlyingObject().getElementName();
-  }
-
-  public static String getName(MArgumentType entity) {
-    return entity.getUnderlyingObject().getJavaElement().getElementName();
-  }
-
-  public static String getFullName(ITypeBinding entity) {
-    return entity.getQualifiedName();
-  }
 }

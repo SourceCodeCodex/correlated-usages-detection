@@ -1,6 +1,5 @@
 package upt.se.arguments.single;
 
-import static upt.se.utils.helpers.ClassNames.getName;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
 import thesis.metamodel.entity.MArgumentType;
@@ -10,7 +9,7 @@ public class ToString implements IPropertyComputer<String, MArgumentType> {
 
   @Override
   public String compute(MArgumentType entity) {
-    return getName(entity);
+    return entity.getUnderlyingObject().getJavaElement().getElementName();
   }
 
 }

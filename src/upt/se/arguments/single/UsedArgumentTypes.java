@@ -1,8 +1,7 @@
 package upt.se.arguments.single;
 
-import static upt.se.utils.helpers.ClassNames.isEqual;
+import static upt.se.utils.helpers.Equals.isEqual;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
-import java.util.Collections;
 import java.util.logging.Level;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
@@ -11,9 +10,9 @@ import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
 import thesis.metamodel.entity.MArgumentType;
 import thesis.metamodel.factory.Factory;
-import upt.se.utils.builders.GroupBuilder;
-import upt.se.utils.crawlers.hierarchy.InheritanceArgumentTypes;
-import upt.se.utils.crawlers.variables.VariablesArgumentTypes;
+import upt.se.utils.crawlers.InheritanceArgumentTypes;
+import upt.se.utils.crawlers.VariablesArgumentTypes;
+import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
 public class UsedArgumentTypes implements IRelationBuilder<MArgumentType, MArgumentType> {
@@ -24,9 +23,8 @@ public class UsedArgumentTypes implements IRelationBuilder<MArgumentType, MArgum
         .map(usedTypes -> usedTypes.appendAll(VariablesArgumentTypes.getUsages(entity)))
         .map(list -> list.distinctBy((p1, p2) -> isEqual(p1, p2) ?  0 : 1))
         .map(types -> types.map(Factory.getInstance()::createMArgumentType))
-        .map(List::toJavaList)
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
-        .orElse(() -> Try.success(Collections.emptyList()))
+        .orElse(() -> Try.success(List.empty()))
         .map(GroupBuilder::wrap)
         .get();
   }

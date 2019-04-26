@@ -8,13 +8,12 @@ import ro.lrg.insider.view.ToolRegistration.XEntityConverter;
 import ro.lrg.xcore.metametamodel.XEntity;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.TypePair;
-import upt.se.utils.store.ITypeStore;
+import upt.se.utils.helpers.Converter;
 
 public class Startup implements IStartup {
 
   @Override
   public void earlyStartup() {
-    ITypeStore.getAllTypes();
     ToolRegistration.getInstance().registerXEntityConverter(new XEntityConverter() {
 
       @Override

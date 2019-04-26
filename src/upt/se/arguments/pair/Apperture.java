@@ -1,4 +1,4 @@
-package upt.se.arguments.tuple;
+package upt.se.arguments.pair;
 
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;

@@ -1,6 +1,6 @@
-package upt.se.utils.crawlers.variables;
+package upt.se.utils.crawlers;
 
-import static upt.se.utils.helpers.ClassNames.isEqual;
+import static upt.se.utils.helpers.Equals.isEqual;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.logging.Level;
 import org.eclipse.core.runtime.CoreException;
