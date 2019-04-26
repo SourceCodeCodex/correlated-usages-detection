@@ -1,5 +1,7 @@
 package upt.se.arguments.single;
 
+import static upt.se.utils.helpers.ClassNames.isEqual;
+import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.Collections;
 import java.util.logging.Level;
 import io.vavr.collection.List;
@@ -11,20 +13,15 @@ import thesis.metamodel.entity.MArgumentType;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.builders.GroupBuilder;
 import upt.se.utils.crawlers.hierarchy.InheritanceArgumentTypes;
-import upt.se.utils.store.ClassBindingStore;
-import static upt.se.utils.helpers.ClassNames.*;
-import static upt.se.utils.helpers.LoggerHelper.*;
+import upt.se.utils.crawlers.variables.VariablesArgumentTypes;
 
 @RelationBuilder
 public class UsedArgumentTypes implements IRelationBuilder<MArgumentType, MArgumentType> {
   @Override
   public Group<MArgumentType> buildGroup(MArgumentType entity) {
-    return Try.of(() -> entity.getUnderlyingObject())
-        .filter(type -> !isObject(getFullName(type.getSuperclass())))
-        .fold(object -> Try.success(ClassBindingStore.usagesInDeclaringClass(entity)),
-              type -> Try.success(InheritanceArgumentTypes.usagesInInheritance(entity)))
+    return Try.of(() -> InheritanceArgumentTypes.getUsages(entity))
         .map(List::ofAll)
-        .map(list -> list.appendAll(ClassBindingStore.usagesInVariables(entity)))
+        .map(usedTypes -> usedTypes.appendAll(VariablesArgumentTypes.getUsages(entity)))
         .map(list -> list.distinctBy((p1, p2) -> isEqual(p1, p2) ?  0 : 1))
         .map(types -> types.map(Factory.getInstance()::createMArgumentType))
         .map(List::toJavaList)

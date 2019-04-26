@@ -1,13 +1,7 @@
 package upt.se.utils.store;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import static upt.se.utils.helpers.ClassNames.*;
+import static java.util.function.Function.identity;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -18,19 +12,51 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import io.vavr.Lazy;
+import io.vavr.Tuple;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import io.vavr.control.Try;
-import upt.se.utils.builders.ListBuilder;
 import upt.se.utils.visitors.GenericParameterBindingVisitor;
 import upt.se.utils.visitors.HierarchyBindingVisitor;
 
 public final class ITypeStore {
-  private static List<IType> allTypes;
-  private static Map<IType, Optional<ITypeBinding>> typeCache = new HashMap<>();
-  private static Map<ITypeBinding, Optional<IType>> typeBindingCache = new HashMap<>();
+  private static Lazy<List<IType>> allTypes =
+      Lazy.of(() -> List.of(ResourcesPlugin.getWorkspace().getRoot().getProjects())
+          .flatMap(project -> Try.of(() -> JavaCore.create(project))
+              .mapTry(javaProject -> javaProject.getPackageFragments())
+              .map(packages -> List.of(packages))
+              .map(packages -> packages
+                  .flatMap(singlePackage -> Try
+                      .of(() -> List.of(singlePackage.getOrdinaryClassFiles())
+                          .map(classFile -> classFile.getType()))
+                      .orElse(() -> Try.success(List.empty()))
+                      .get()))
+              .orElse(() -> Try.success(List.empty()))
+              .get()));
+
+  {
+        Lazy.of(() -> List.of(ResourcesPlugin.getWorkspace().getRoot().getProjects())
+            .flatMap(project -> Try.of(() -> JavaCore.create(project))
+                .mapTry(javaProject -> javaProject.getPackageFragments())
+                .map(packages -> List.of(packages))
+                .map(packages -> packages
+                    .flatMap(singlePackage -> Try
+                        .of(() -> List.of(singlePackage.getOrdinaryClassFiles())
+                            .map(classFile -> classFile.getType())
+                            .map(type -> Tuple.of(type.getFullyQualifiedName(), type)))
+                        .orElse(() -> Try.success(List.empty()))
+                        .get()))
+                .orElse(() -> Try.success(List.empty()))
+                .get())
+            .toMap(identity()));
+  }
+
 
   public static final List<IType> getAllTypes(IJavaProject javaproject) {
 
-    List<IType> typeList = new ArrayList<IType>();
+    List<IType> typeList = List.empty();
     try {
       IPackageFragmentRoot[] roots = javaproject.getPackageFragmentRoots();
       for (int i = 0; i < roots.length; i++) {
@@ -44,7 +70,7 @@ public final class ITypeStore {
             for (int k = 0; k < compilationUnits.length; k++) {
               ICompilationUnit unit = compilationUnits[k];
               if (unit.isStructureKnown()) {
-                typeList.addAll(Arrays.asList(unit.getTypes()));
+                typeList.appendAll(List.of(unit.getTypes()));
               }
             }
           }
@@ -58,61 +84,23 @@ public final class ITypeStore {
   }
 
   public static List<IType> getAllTypes() {
-    if (allTypes == null) {
-      allTypes = ListBuilder.toList(ResourcesPlugin.getWorkspace().getRoot().getProjects())
-          .flatMap(project -> Try.of(() -> JavaCore.create(project))
-              .mapTry(javaProject -> javaProject.getPackageFragments())
-              .map(packages -> ListBuilder.toList(packages))
-              .map(packages -> packages
-                  .flatMap(singlePackage -> Try
-                      .of(() -> ListBuilder.toList(singlePackage.getOrdinaryClassFiles())
-                          .map(classFile -> classFile.getType()))
-                      .map(list -> list.asJava())
-                      .orElse(() -> Try.success(Collections.emptyList()))
-                      .get()))
-              .map(list -> list.asJava())
-              .orElse(() -> Try.success(Collections.emptyList()))
-              .get())
-          .asJava();
-    }
-    return allTypes;
+    return allTypes.get();
   }
 
-  public static final Optional<IType> convert(ITypeBinding typeBinding) {
-
-    typeBindingCache.put(typeBinding,
-        getAllTypes(typeBinding.getJavaElement().getJavaProject()).stream()
-            .filter(t -> t.getFullyQualifiedName()
-                .equals(typeBinding.isParameterizedType() ? typeBinding.getBinaryName()
-                    : typeBinding.getQualifiedName()))
-            .findFirst());
-
-    Optional<IType> result = typeBindingCache.get(typeBinding);
-    result.ifPresent(t -> typeCache.put(t, Optional.ofNullable(typeBinding)));
-
-    return result;
+  public static final Option<IType> convert(ITypeBinding typeBinding) {
+    return getAllTypes().find(type -> isEqual(type, typeBinding));
   }
 
-  public static final Optional<ITypeBinding> convert(IType type) {
-    typeCache.put(type, GenericParameterBindingVisitor.convert(type.getCompilationUnit()).stream()
-        .filter(t -> t.getQualifiedName().equals(type.getFullyQualifiedName())).findFirst());
-    typeCache.put(type, HierarchyBindingVisitor.convert(type.getCompilationUnit()).stream()
-        .filter(t -> t.getQualifiedName().equals(type.getFullyQualifiedName())).findFirst());
-
-    Optional<ITypeBinding> result = typeCache.get(type);
-    result.ifPresent(t -> typeBindingCache.put(t, Optional.ofNullable(type)));
-
-    return result;
+  public static final Option<ITypeBinding> convert(IType type) {
+    return List.ofAll(GenericParameterBindingVisitor.convert(type.getCompilationUnit()))
+        .find(typeBinding -> isEqual(type, typeBinding))
+        .orElse(List.ofAll(HierarchyBindingVisitor.convert(type.getCompilationUnit()))
+            .find(typeBinding -> isEqual(type, typeBinding)));
   }
 
-  public static final Optional<List<ITypeBinding>> convert(List<IType> types) {
-    List<Optional<ITypeBinding>> result =
-        types.stream().map(t -> convert(t)).collect(Collectors.toList());
-
-    if (result.stream().anyMatch(o -> !o.isPresent())) {
-      return Optional.empty();
-    }
-    return Optional.of(result.stream().map(o -> o.get()).collect(Collectors.toList()));
+  public static final Option<List<ITypeBinding>> convert(List<IType> types) {
+    return types.foldLeft(Option.some(List.empty()),
+        (res, type) -> convert(type).map(typeBinding -> res.get().append(typeBinding)));
   }
 
 }
