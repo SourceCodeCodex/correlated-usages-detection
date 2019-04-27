@@ -28,7 +28,7 @@ public class UnusedArgumentTypes implements IRelationBuilder<MArgumentType, MArg
         .map(GroupBuilder::wrap)
         .get();
   }
-  
+
   private List<ITypeBinding> diff(List<ITypeBinding> l1, List<ITypeBinding> l2) {
     return l1.toSet().diff(l2.toSet()).toList();
   }

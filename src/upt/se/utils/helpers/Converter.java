@@ -43,6 +43,15 @@ public final class Converter {
                   classList = classList
                       .put(Tuple.of(myClass.getType().getFullyQualifiedName(), myClass.getType()));
                 }
+
+                ICompilationUnit[] compilationUnits = myPackage.getCompilationUnits();
+
+                for (ICompilationUnit compilationUnit : compilationUnits) {
+                  IType[] types = compilationUnit.getTypes();
+                  for (IType type : types) {
+                    classList = classList.put(Tuple.of(type.getFullyQualifiedName(), type));
+                  }
+                }
               } catch (JavaModelException ex) {
                 System.out.println("getOrdinaryClassFiles");
               }
@@ -56,44 +65,7 @@ public final class Converter {
       });
 
   public static Map<String, IType> getAllTypes() {
-    Map<String, IType> classList = HashMap.empty();
-
-    IWorkspace workspace = ResourcesPlugin.getWorkspace();
-    IWorkspaceRoot root = workspace.getRoot();
-    IProject[] projects = root.getProjects();
-
-    for (IProject project : projects) {
-      IJavaProject javaProject = JavaCore.create(project);
-      try {
-        IPackageFragment[] packages = javaProject.getPackageFragments();
-
-        for (IPackageFragment myPackage : packages) {
-          try {
-            IOrdinaryClassFile[] classes = myPackage.getOrdinaryClassFiles();
-
-            for (IOrdinaryClassFile myClass : classes) {
-              classList = classList
-                  .put(Tuple.of(myClass.getType().getFullyQualifiedName(), myClass.getType()));
-            }
-
-            ICompilationUnit[] compilationUnits = myPackage.getCompilationUnits();
-
-            for (ICompilationUnit compilationUnit : compilationUnits) {
-              IType[] types = compilationUnit.getTypes();
-              for (IType type : types) {
-                classList = classList.put(Tuple.of(type.getFullyQualifiedName(), type));
-              }
-            }
-          } catch (JavaModelException ex) {
-            System.out.println("getOrdinaryClassFiles");
-          }
-        }
-      } catch (JavaModelException ex) {
-        System.out.println("getPackageFragments");
-      }
-    }
-
-    return classList;
+    return allTypes.get();
   }
 
   public static final Option<IType> convert(ITypeBinding typeBinding) {

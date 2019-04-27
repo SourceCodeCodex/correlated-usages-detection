@@ -1,2 +1,2 @@
-bindings=MArgumentType,org.eclipse.jdt.core.dom.ITypeBinding,ro.lrg.xcore.metametamodel.XEntity;MMethod,org.eclipse.jdt.core.IMethod,ro.lrg.xcore.metametamodel.XEntity;MClass,org.eclipse.jdt.core.IType,ro.lrg.xcore.metametamodel.XEntity;MTypePair,upt.se.utils.TypePair,ro.lrg.xcore.metametamodel.XEntity;
+bindings=MArgumentType,org.eclipse.jdt.core.dom.ITypeBinding,ro.lrg.xcore.metametamodel.XEntity;MClass,org.eclipse.jdt.core.IType,ro.lrg.xcore.metametamodel.XEntity;MTypePair,upt.se.utils.TypePair,ro.lrg.xcore.metametamodel.XEntity;
 eclipse.preferences.version=1
