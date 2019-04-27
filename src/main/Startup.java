@@ -7,8 +7,8 @@ import ro.lrg.insider.view.ToolRegistration;
 import ro.lrg.insider.view.ToolRegistration.XEntityConverter;
 import ro.lrg.xcore.metametamodel.XEntity;
 import thesis.metamodel.factory.Factory;
-import upt.se.utils.TypePair;
-import upt.se.utils.helpers.Converter;
+import upt.se.utils.ArgumentPair;
+import upt.se.utils.ParameterPair;
 
 public class Startup implements IStartup {
 
@@ -19,11 +19,13 @@ public class Startup implements IStartup {
       @Override
       public XEntity convert(Object element) {
         if (element instanceof IType) {
-          return Factory.getInstance().createMClass((IType) element);
+          return Factory.getInstance().createMArgument((IType) element);
         } else if (element instanceof ITypeBinding) {
-          return Factory.getInstance().createMArgumentType((ITypeBinding) element);
-        } else if (element instanceof TypePair) {
-          return Factory.getInstance().createMTypePair((TypePair) element);
+          return Factory.getInstance().createMParameter((ITypeBinding) element);
+        } else if (element instanceof ParameterPair) {
+          return Factory.getInstance().createMParameterPair((ParameterPair) element);
+        } else if (element instanceof ArgumentPair) {
+          return Factory.getInstance().createMArgumentPair((ArgumentPair) element);
         }
         return null;
       }

@@ -20,12 +20,12 @@ import io.vavr.Tuple;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-import thesis.metamodel.entity.MArgumentType;
+import thesis.metamodel.entity.MParameter;
 import upt.se.utils.visitors.VariableBindingVisitor;
 
 public class VariablesArgumentTypes {
 
-  public static List<ITypeBinding> getUsages(MArgumentType entity) {
+  public static List<ITypeBinding> getUsages(MParameter entity) {
     return Try.of(() -> entity.getUnderlyingObject().getDeclaringClass())
         .map(type -> findVariablesArguments(type))
         .map(variables -> variables.map(arguments -> arguments.get(getParameterNumber(entity))))
@@ -36,7 +36,7 @@ public class VariablesArgumentTypes {
         .get();
   }
 
-  private static int getParameterNumber(MArgumentType entity) {
+  private static int getParameterNumber(MParameter entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(type -> Tuple.of(type, List.of(type.getDeclaringClass().getTypeParameters())))
         .map(tuple -> tuple._2.zipWithIndex()

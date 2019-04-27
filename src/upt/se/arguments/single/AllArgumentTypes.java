@@ -1,6 +1,6 @@
 package upt.se.arguments.single;
 
-import static upt.se.utils.helpers.Equals.*;
+import static upt.se.utils.helpers.Equals.isObject;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import java.util.logging.Level;
@@ -12,21 +12,21 @@ import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MArgumentType;
-import thesis.metamodel.entity.MClass;
+import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MParameter;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllArgumentTypes implements IRelationBuilder<MClass, MArgumentType> {
+public class AllArgumentTypes implements IRelationBuilder<MArgument, MParameter> {
 
   @Override
-  public Group<MClass> buildGroup(MArgumentType entity) {
+  public Group<MArgument> buildGroup(MParameter entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(parameter -> Tuple.of(List.of(parameter.getInterfaces()), parameter.getSuperclass()))
         .map(superTypes -> superTypes
             .apply((interfaces, superClass) -> getAllSubtypes(interfaces, superClass)))
-        .map(allTypes -> allTypes.map(Factory.getInstance()::createMClass))
+        .map(allTypes -> allTypes.map(Factory.getInstance()::createMArgument))
         .map(GroupBuilder::wrap)
         .get();
   }

@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import io.vavr.Tuple;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
-import thesis.metamodel.entity.MArgumentType;
+import thesis.metamodel.entity.MParameter;
 
 public class InheritanceArgumentTypes {
 
@@ -25,7 +25,7 @@ public class InheritanceArgumentTypes {
         .get();
   }
 
-  public static List<ITypeBinding> getUsages(MArgumentType entity) {
+  public static List<ITypeBinding> getUsages(MParameter entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(parameter -> parameter.getDeclaringClass())
         .map(declaringClass -> getAllSubtypes(declaringClass))

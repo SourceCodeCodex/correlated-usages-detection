@@ -1,6 +1,6 @@
 package thesis.metamodel.entity;
 
-public interface MTypePair extends ro.lrg.xcore.metametamodel.XEntity {
+public interface MParameterPair extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
@@ -9,13 +9,13 @@ public interface MTypePair extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Double apperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> usedArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> usedArgumentsTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> unusedArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> unusedArgumentsTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> allArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> allArgumentsTypes();
 
-	upt.se.utils.TypePair getUnderlyingObject();
+	upt.se.utils.ParameterPair getUnderlyingObject();
 }

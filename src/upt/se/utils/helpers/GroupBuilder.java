@@ -5,10 +5,12 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import io.vavr.collection.List;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.XEntity;
-import thesis.metamodel.entity.MArgumentType;
-import thesis.metamodel.entity.MClass;
-import thesis.metamodel.entity.MTypePair;
-import upt.se.utils.TypePair;
+import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MArgumentPair;
+import thesis.metamodel.entity.MParameter;
+import thesis.metamodel.entity.MParameterPair;
+import upt.se.utils.ArgumentPair;
+import upt.se.utils.ParameterPair;
 
 public class GroupBuilder {
 
@@ -19,15 +21,19 @@ public class GroupBuilder {
     return group;
   }
 
-  public static List<ITypeBinding> unwrapArguments(Group<MArgumentType> group) {
-    return List.ofAll(group.getElements()).map(MArgumentType::getUnderlyingObject);
+  public static List<ITypeBinding> unwrapParameters(Group<MParameter> group) {
+    return List.ofAll(group.getElements()).map(MParameter::getUnderlyingObject);
   }
 
-  public static List<IType> unwrapClass(Group<MClass> group) {
-    return List.ofAll(group.getElements()).map(MClass::getUnderlyingObject);
+  public static List<IType> unwrapArguments(Group<MArgument> group) {
+    return List.ofAll(group.getElements()).map(MArgument::getUnderlyingObject);
   }
   
-  public static List<TypePair> unwrapTypePairs(Group<MTypePair> group) {
-    return List.ofAll(group.getElements()).map(MTypePair::getUnderlyingObject);
+  public static List<ParameterPair> unwrapParameterPairs(Group<MParameterPair> group) {
+    return List.ofAll(group.getElements()).map(MParameterPair::getUnderlyingObject);
+  }
+  
+  public static List<ArgumentPair> unwrapArgumentsPairs(Group<MArgumentPair> group) {
+    return List.ofAll(group.getElements()).map(MArgumentPair::getUnderlyingObject);
   }
 }

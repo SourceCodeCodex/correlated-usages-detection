@@ -13,28 +13,36 @@ public class Factory {
        lruCache_.setCapacity(capacity);
    }
    public void clearCache() {lruCache_.clear();}
-   public MArgumentType createMArgumentType(org.eclipse.jdt.core.dom.ITypeBinding obj) {
+   public MParameterPair createMParameterPair(upt.se.utils.ParameterPair obj) {
        XEntity instance = lruCache_.get(obj);
         if (null == instance) {
-           instance = new MArgumentTypeImpl(obj);
+           instance = new MParameterPairImpl(obj);
            lruCache_.put(obj, instance);
         }
-        return (MArgumentType)instance;
+        return (MParameterPair)instance;
     }
-   public MClass createMClass(org.eclipse.jdt.core.IType obj) {
+   public MArgumentPair createMArgumentPair(upt.se.utils.ArgumentPair obj) {
        XEntity instance = lruCache_.get(obj);
         if (null == instance) {
-           instance = new MClassImpl(obj);
+           instance = new MArgumentPairImpl(obj);
            lruCache_.put(obj, instance);
         }
-        return (MClass)instance;
+        return (MArgumentPair)instance;
     }
-   public MTypePair createMTypePair(upt.se.utils.TypePair obj) {
+   public MArgument createMArgument(org.eclipse.jdt.core.IType obj) {
        XEntity instance = lruCache_.get(obj);
         if (null == instance) {
-           instance = new MTypePairImpl(obj);
+           instance = new MArgumentImpl(obj);
            lruCache_.put(obj, instance);
         }
-        return (MTypePair)instance;
+        return (MArgument)instance;
+    }
+   public MParameter createMParameter(org.eclipse.jdt.core.dom.ITypeBinding obj) {
+       XEntity instance = lruCache_.get(obj);
+        if (null == instance) {
+           instance = new MParameterImpl(obj);
+           lruCache_.put(obj, instance);
+        }
+        return (MParameter)instance;
     }
 }

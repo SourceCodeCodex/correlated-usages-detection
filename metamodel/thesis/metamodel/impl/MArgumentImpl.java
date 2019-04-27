@@ -1,12 +1,12 @@
 package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
-import upt.se.classes.ToString;
-import upt.se.classes.AllTypeParameters;
-import upt.se.classes.AllTypeParameterPairs;
+import upt.se.arguments.single.ToString;
+import upt.se.parameters.single.AllTypeParameters;
+import upt.se.parameters.pair.AllTypeParameterPairs;
 import classes.ShowInEditor;
 
-public class MClassImpl implements MClass {
+public class MArgumentImpl implements MArgument {
 
 	private org.eclipse.jdt.core.IType underlyingObj_;
 
@@ -15,7 +15,7 @@ public class MClassImpl implements MClass {
 	private static final AllTypeParameterPairs AllTypeParameterPairs_INSTANCE = new AllTypeParameterPairs();
 	private static final ShowInEditor ShowInEditor_INSTANCE = new ShowInEditor();
 
-	public MClassImpl(org.eclipse.jdt.core.IType underlyingObj) {
+	public MArgumentImpl(org.eclipse.jdt.core.IType underlyingObj) {
 		underlyingObj_ = underlyingObj;
 	}
 
@@ -32,13 +32,13 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentType> allTypeParameters() {
+	public ro.lrg.xcore.metametamodel.Group<MParameter> allTypeParameters() {
 		return AllTypeParameters_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MTypePair> allTypeParameterPairs() {
+	public ro.lrg.xcore.metametamodel.Group<MParameterPair> allTypeParameterPairs() {
 		return AllTypeParameterPairs_INSTANCE.buildGroup(this);
 	}
 
@@ -49,10 +49,10 @@ public class MClassImpl implements MClass {
 	}
 
 	public boolean equals(Object obj) {
-		if (null == obj || !(obj instanceof MClassImpl)) {
+		if (null == obj || !(obj instanceof MArgumentImpl)) {
 			return false;
 		}
-		MClassImpl iObj = (MClassImpl)obj;
+		MArgumentImpl iObj = (MArgumentImpl)obj;
 		return underlyingObj_.equals(iObj.underlyingObj_);
 	}
 

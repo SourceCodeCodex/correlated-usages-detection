@@ -1,13 +1,13 @@
 package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
-import upt.se.arguments.single.ToString;
+import upt.se.parameters.single.ToString;
 import upt.se.arguments.single.Apperture;
 import upt.se.arguments.single.UnusedArgumentTypes;
 import upt.se.arguments.single.AllArgumentTypes;
 import upt.se.arguments.single.UsedArgumentTypes;
 
-public class MArgumentTypeImpl implements MArgumentType {
+public class MParameterImpl implements MParameter {
 
 	private org.eclipse.jdt.core.dom.ITypeBinding underlyingObj_;
 
@@ -17,7 +17,7 @@ public class MArgumentTypeImpl implements MArgumentType {
 	private static final AllArgumentTypes AllArgumentTypes_INSTANCE = new AllArgumentTypes();
 	private static final UsedArgumentTypes UsedArgumentTypes_INSTANCE = new UsedArgumentTypes();
 
-	public MArgumentTypeImpl(org.eclipse.jdt.core.dom.ITypeBinding underlyingObj) {
+	public MParameterImpl(org.eclipse.jdt.core.dom.ITypeBinding underlyingObj) {
 		underlyingObj_ = underlyingObj;
 	}
 
@@ -40,27 +40,27 @@ public class MArgumentTypeImpl implements MArgumentType {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> unusedArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MArgument> unusedArgumentTypes() {
 		return UnusedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MArgument> allArgumentTypes() {
 		return AllArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MArgument> usedArgumentTypes() {
 		return UsedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {
-		if (null == obj || !(obj instanceof MArgumentTypeImpl)) {
+		if (null == obj || !(obj instanceof MParameterImpl)) {
 			return false;
 		}
-		MArgumentTypeImpl iObj = (MArgumentTypeImpl)obj;
+		MParameterImpl iObj = (MParameterImpl)obj;
 		return underlyingObj_.equals(iObj.underlyingObj_);
 	}
 
