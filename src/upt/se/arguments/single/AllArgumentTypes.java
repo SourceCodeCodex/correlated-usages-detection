@@ -23,15 +23,32 @@ public class AllArgumentTypes implements IRelationBuilder<MClass, MArgumentType>
   @Override
   public Group<MClass> buildGroup(MArgumentType entity) {
     return Try.of(() -> entity.getUnderlyingObject())
-        .map(parameter -> List.of(parameter.getInterfaces()).append(parameter.getSuperclass()))
-        .map(superTypes -> isObject(superTypes.head())
-            ? superTypes
-            : superTypes.filter(type -> !isObject(type)))
-        .map(superTypes -> superTypes.flatMap(this::getAllSubtypes))
+        .map(parameter -> Tuple.of(List.of(parameter.getInterfaces()), parameter.getSuperclass()))
+        .map(superTypes -> superTypes
+            .apply((interfaces, superClass) -> getAllSubtypes(interfaces, superClass)))
         .map(allTypes -> allTypes.map(Factory.getInstance()::createMClass))
         .map(GroupBuilder::wrap)
         .get();
   }
+
+
+
+  private List<IType> getAllSubtypes(List<ITypeBinding> interfaces, ITypeBinding superClass) {
+    if (interfaces.isEmpty()) {
+      return getAllSubtypes(superClass);
+    } else {
+      List<IType> interfaceSubtypes = interfaces.flatMap(type -> getAllSubtypes(type));
+      if (!isObject(superClass)) {
+        List<IType> classSubtypes = getAllSubtypes(superClass);
+
+        return interfaceSubtypes.toSet().intersect(classSubtypes.toSet()).toList();
+      }
+
+      return interfaceSubtypes;
+    }
+  }
+
+
 
   public List<IType> getAllSubtypes(ITypeBinding type) {
     return Try.of(() -> type)
