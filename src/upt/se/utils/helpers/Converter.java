@@ -1,5 +1,7 @@
 package upt.se.utils.helpers;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -82,4 +84,9 @@ public final class Converter {
         (res, type) -> convert(type).map(typeBinding -> res.get().append(typeBinding)));
   }
 
+  public static double round(double value, int places) {
+    BigDecimal bd = new BigDecimal(value);
+    bd = bd.setScale(places, RoundingMode.HALF_UP);
+    return bd.doubleValue();
+  }
 }

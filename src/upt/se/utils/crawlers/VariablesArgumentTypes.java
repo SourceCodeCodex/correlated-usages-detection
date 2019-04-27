@@ -2,6 +2,7 @@ package upt.se.utils.crawlers;
 
 import static upt.se.utils.helpers.Equals.isEqual;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -47,7 +48,7 @@ public class VariablesArgumentTypes {
   }
 
   private static final List<List<ITypeBinding>> findVariablesArguments(ITypeBinding type) {
-    List<List<ITypeBinding>> types = List.empty();
+    java.util.List<java.util.List<ITypeBinding>> types = new ArrayList<>();
 
     SearchPattern pattern = SearchPattern.createPattern(type.getJavaElement(),
         IJavaSearchConstants.FIELD_DECLARATION_TYPE_REFERENCE
@@ -65,8 +66,8 @@ public class VariablesArgumentTypes {
             .map(compilationUnit -> VariableBindingVisitor.convert(compilationUnit))
             .map(variables -> List.ofAll(variables)
                 .map(variable -> variable.getType())
-                .map(type -> List.of(type.getTypeArguments())))
-            .onSuccess(list -> types.appendAll(list));
+                .map(type -> List.of(type.getTypeArguments()).asJava()).asJava())
+            .onSuccess(list -> types.addAll(list));
       }
     };
 
@@ -80,7 +81,7 @@ public class VariablesArgumentTypes {
       LOGGER.log(Level.SEVERE, "An error has occurred while searching", e);
     }
 
-    return types;
+    return List.ofAll(types).map(List::ofAll);
   }
 
 }

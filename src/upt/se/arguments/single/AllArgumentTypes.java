@@ -31,8 +31,6 @@ public class AllArgumentTypes implements IRelationBuilder<MClass, MArgumentType>
         .get();
   }
 
-
-
   private List<IType> getAllSubtypes(List<ITypeBinding> interfaces, ITypeBinding superClass) {
     if (interfaces.isEmpty()) {
       return getAllSubtypes(superClass);
@@ -48,9 +46,7 @@ public class AllArgumentTypes implements IRelationBuilder<MClass, MArgumentType>
     }
   }
 
-
-
-  public List<IType> getAllSubtypes(ITypeBinding type) {
+  private List<IType> getAllSubtypes(ITypeBinding type) {
     return Try.of(() -> type)
         .map(superType -> (IType) superType.getJavaElement())
         .mapTry(superType -> Tuple.of(superType,

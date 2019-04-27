@@ -6,7 +6,7 @@ public interface MArgumentType extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.String toString();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double apperture();
+	public java.lang.String apperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> unusedArgumentTypes();

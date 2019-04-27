@@ -34,7 +34,7 @@ public class MArgumentTypeImpl implements MArgumentType {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double apperture() {
+	public java.lang.String apperture() {
 		return Apperture_INSTANCE.compute(this);
 	}
 
