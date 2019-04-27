@@ -37,6 +37,13 @@ public class AllArgumentTypes implements IRelationBuilder<MArgumentType, MArgume
   private Try<List<ITypeBinding>> classArgumentTypes(ITypeBinding entity) {
     return Try.of(() -> entity)
         .map(type -> type.getSuperclass())
+        .map(type -> InheritanceArgumentTypes.getAllSubtypes(type))
+        .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t));
+  }
+  
+  private Try<List<ITypeBinding>> classArgumentTypes1(ITypeBinding entity) {
+    return Try.of(() -> entity)
+        .map(type -> type.getSuperclass())
         .filter(type -> !isObject(type))
         .fold(object -> Try.success(List.of(entity.getSuperclass())),
             type -> Try.of(() -> InheritanceArgumentTypes.getAllSubtypes(type)
