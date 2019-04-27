@@ -37,12 +37,14 @@ public class PairArgumentTypes {
   }
 
   private static Try<List<ITypeBinding>> getAllParameterTypes(ITypeBinding parameter) {
-    return Try.of(() -> parameter)
-        .map(Factory.getInstance()::createMArgumentType)
-        .map(mTypeParameter -> parentExtendsObject(mTypeParameter)
-            ? mTypeParameter.usedArgumentTypes()
-            : mTypeParameter.allArgumentTypes())
-        .map(GroupBuilder::unwrapArguments);
+//    return Try.of(() -> parameter)
+//        .map(Factory.getInstance()::createMArgumentType)
+//        .map(mTypeParameter -> parentExtendsObject(mTypeParameter)
+//            ? mTypeParameter.usedArgumentTypes()
+//            : mTypeParameter.allArgumentTypes())
+//        .map(GroupBuilder::unwrapArguments);
+//    
+    return null;
   }
   
   public static Group<MTypePair> usedArgumentTypes(MTypePair entity) {

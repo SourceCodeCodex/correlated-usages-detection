@@ -9,13 +9,13 @@ public interface MArgumentType extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Double apperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentType> unusedArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> unusedArgumentTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentType> allArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> allArgumentTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentType> usedArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes();
 
 	org.eclipse.jdt.core.dom.ITypeBinding getUnderlyingObject();
 }

@@ -40,19 +40,19 @@ public class MArgumentTypeImpl implements MArgumentType {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentType> unusedArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MClass> unusedArgumentTypes() {
 		return UnusedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentType> allArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MClass> allArgumentTypes() {
 		return AllArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentType> usedArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes() {
 		return UsedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 

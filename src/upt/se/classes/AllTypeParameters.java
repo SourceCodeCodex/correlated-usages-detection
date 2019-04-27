@@ -18,6 +18,7 @@ public class AllTypeParameters implements IRelationBuilder<MArgumentType, MClass
 
   @Override
   public Group<MArgumentType> buildGroup(MClass entity) {
+
     return Try.of(() -> entity.getUnderlyingObject())
         .flatMap(type -> convert(type).toTry())
         .map(type -> type.getTypeParameters())
