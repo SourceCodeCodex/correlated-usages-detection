@@ -22,6 +22,7 @@ public class AllTypeParameterPairs implements IRelationBuilder<MParameterPair, M
             .map(pair -> Tuple.of(pair.head(), pair.tail().head()))
             .toList().append(Tuple.of(parameters._2.head(), parameters._2.reverse().head())))
         .map(pairs -> GroupBuilder.wrap(pairs
+            .distinctBy(pair -> pair)
             .map(pair -> new ParameterPair(pair._1, pair._2))
             .map(Factory.getInstance()::createMParameterPair)))
         ._1();

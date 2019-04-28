@@ -25,7 +25,6 @@ public class UsedArgumentTypes implements IRelationBuilder<MArgument, MParameter
         .map(usedTypes -> usedTypes.appendAll(VariablesArgumentTypes.getUsages(entity)))
         .map(list -> list.distinctBy((p1, p2) -> isEqual(p1, p2) ? 0 : 1))
         .map(typeBindings -> typeBindings.map(typeBinding -> (IType) typeBinding.getJavaElement()))
-        .map(types -> types.sortBy(subType -> subType.getFullyQualifiedName()))
         .map(types -> types.map(Factory.getInstance()::createMArgument))
         .onFailure(exception -> LOGGER.log(Level.SEVERE,
             "An error occurred while trying to get all the parameters for: "
