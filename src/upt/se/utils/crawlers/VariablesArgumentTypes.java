@@ -27,9 +27,8 @@ public class VariablesArgumentTypes {
 
   public static List<ITypeBinding> getUsages(MParameter entity) {
     return Try.of(() -> entity.getUnderlyingObject().getDeclaringClass())
-        .map(type -> findVariablesArguments(type))
-        .map(variables -> variables.map(arguments -> arguments.get(getParameterNumber(entity))))
-        .map(list -> list)
+        .map(type -> Tuple.of(getParameterNumber(entity), findVariablesArguments(type)))
+        .map(pair -> pair.apply((argumentPos, variables) -> variables.map(argument -> argument.get(argumentPos))))
         .onFailure(
             t -> LOGGER.log(Level.SEVERE, "Could not find parameter in class declaration", t))
         .orElse(() -> Try.success(List.empty()))
@@ -63,7 +62,7 @@ public class VariablesArgumentTypes {
             .map(TypeReferenceMatch::getElement)
             .filter(element -> element instanceof IMember)
             .map(element -> ((IMember) element).getCompilationUnit())
-            .map(compilationUnit -> VariableBindingVisitor.convert(compilationUnit))
+            .map(compilationUnit -> VariableBindingVisitor.convert(compilationUnit, type))
             .map(variables -> List.ofAll(variables)
                 .map(variable -> variable.getType())
                 .map(type -> List.of(type.getTypeArguments()).asJava()).asJava())

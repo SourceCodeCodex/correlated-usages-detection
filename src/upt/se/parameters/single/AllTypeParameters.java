@@ -30,3 +30,4 @@ public class AllTypeParameters implements IRelationBuilder<MParameter, MArgument
   }
 
 }
+

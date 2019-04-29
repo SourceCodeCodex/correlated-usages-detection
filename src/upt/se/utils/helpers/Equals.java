@@ -38,7 +38,7 @@ public class Equals {
   }
 
   public static boolean isEqual(IType type1, ITypeBinding type2) {
-    return type1.getFullyQualifiedName().equals(type2.getQualifiedName());
+    return type1.getFullyQualifiedName().equals(type2.getBinaryName());
   }
   
   public static boolean isEqual(Tuple2<IType, IType> tuple1,
