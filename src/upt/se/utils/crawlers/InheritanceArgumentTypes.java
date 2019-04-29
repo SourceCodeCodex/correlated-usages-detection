@@ -1,7 +1,7 @@
 package upt.se.utils.crawlers;
 
 import static upt.se.utils.helpers.Converter.convert;
-import static upt.se.utils.helpers.Equals.isEqual;
+import static upt.se.utils.helpers.Equals.*;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import java.util.logging.Level;
@@ -17,7 +17,7 @@ public class InheritanceArgumentTypes {
   public static List<ITypeBinding> getAllSubtypes(ITypeBinding typeBinding) {
     return Try.of(() -> (IType) typeBinding.getJavaElement())
         .mapTry(type -> type.newTypeHierarchy(NULL_PROGRESS_MONITOR)
-            .getAllSubtypes(type))
+            .getSubtypes(type))
         .map(List::of)
         .flatMap(subTypes -> convert(subTypes).toTry())
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
@@ -38,11 +38,13 @@ public class InheritanceArgumentTypes {
   private static List<ITypeBinding> getTypeArguments(List<ITypeBinding> declaringClasses,
       ITypeBinding parameter) {
     return Tuple.of(getParameterNumber(parameter),
-        List.ofAll(declaringClasses).map(declaringClass -> declaringClass.getSuperclass())
+        List.ofAll(declaringClasses)
+            .map(declaringClass -> getSuperclass(declaringClass, parameter.getDeclaringClass()))
             .map(superClass -> superClass.getTypeArguments())
             .map(typeArguments -> List.of(typeArguments)))
         .map((parameterPos, declaringClass) -> Tuple.of(parameterPos,
-            declaringClass.map(typeArguments -> typeArguments.get(parameterPos))))
+            declaringClass.filter(list -> !list.isEmpty())
+                .map(typeArguments -> typeArguments.get(parameterPos))))
         ._2();
   }
 
@@ -52,5 +54,17 @@ public class InheritanceArgumentTypes {
         .filter(parameter -> isEqual(parameter._1, actualParameter))
         .map(parameter -> parameter._2)
         .head();
+  }
+
+  private static ITypeBinding getSuperclass(ITypeBinding declaringClass,
+      ITypeBinding searchedClass) {
+    return Try.of(() -> declaringClass)
+        .filter(unit -> isObject(declaringClass.getSuperclass())
+            && isEqual(declaringClass.getSuperclass().getErasure(), searchedClass.getErasure()))
+        .fold(notEqual -> List.of(declaringClass.getInterfaces())
+            .filter(interfaceType -> isEqual(interfaceType.getErasure(), searchedClass))
+            .headOption()
+            .fold(() -> declaringClass.getSuperclass(), foundInterface -> foundInterface),
+            unit -> declaringClass.getSuperclass());
   }
 }

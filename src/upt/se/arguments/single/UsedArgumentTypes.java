@@ -1,6 +1,5 @@
 package upt.se.arguments.single;
 
-import static upt.se.utils.helpers.Equals.isEqual;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.logging.Level;
 import org.eclipse.jdt.core.IType;
@@ -18,13 +17,15 @@ import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
 public class UsedArgumentTypes implements IRelationBuilder<MArgument, MParameter> {
-  
+
   @Override
   public Group<MArgument> buildGroup(MParameter entity) {
     return Try.of(() -> InheritanceArgumentTypes.getUsages(entity))
         .map(usedTypes -> usedTypes.appendAll(VariablesArgumentTypes.getUsages(entity)))
-        .map(list -> list.distinctBy((p1, p2) -> isEqual(p1, p2) ? 0 : 1))
-        .map(typeBindings -> typeBindings.map(typeBinding -> (IType) typeBinding.getJavaElement()))
+        .map(usedTypes -> usedTypes.distinctBy(type -> type.getQualifiedName()))
+        .map(typeBindings -> typeBindings
+            .map(typeBinding -> (IType) typeBinding.getErasure().getJavaElement()))
+        .map(types -> types.distinctBy(type -> type.getFullyQualifiedName()))
         .map(types -> types.map(Factory.getInstance()::createMArgument))
         .onFailure(exception -> LOGGER.log(Level.SEVERE,
             "An error occurred while trying to get all the parameters for: "

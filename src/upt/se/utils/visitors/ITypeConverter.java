@@ -22,9 +22,8 @@ public class ITypeConverter extends ASTVisitor {
     IBinding binding = node.resolveBinding();
     if (binding instanceof ITypeBinding) {
       ITypeBinding type = (ITypeBinding) binding;
-      if (isEqual(searchedType, type)) {
+      if (isEqual(searchedType, type) && !type.isRawType()) {
         typeBinding = type;
-        return false;
       }
     }
     return super.visit(node);
