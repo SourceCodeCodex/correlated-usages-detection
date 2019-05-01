@@ -3,6 +3,7 @@ package upt.se.utils.helpers;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import io.vavr.Tuple2;
+import io.vavr.control.Try;
 import thesis.metamodel.entity.MArgument;
 import thesis.metamodel.entity.MParameter;
 
@@ -16,7 +17,7 @@ public class Equals {
   public static boolean isObject(MParameter entity) {
     return isObject(entity.getUnderlyingObject());
   }
-  
+
   public static boolean parentExtendsObject(MParameter entity) {
     return isObject(entity.getUnderlyingObject().getSuperclass());
   }
@@ -33,14 +34,16 @@ public class Equals {
     return type1.getQualifiedName().equals(type2.getQualifiedName());
   }
 
-  public static  boolean isEqual(IType type1, IType type2) {
+  public static boolean isEqual(IType type1, IType type2) {
     return type1.getFullyQualifiedName().equals(type2.getFullyQualifiedName());
   }
 
   public static boolean isEqual(IType type1, ITypeBinding type2) {
-    return type1.getFullyQualifiedName().equals(type2.getBinaryName());
+    return Try.of(() -> type1.equals((IType) type2.getJavaElement()))
+        .orElse(() -> Try.of(() -> type1.getFullyQualifiedName().equals(type2.getBinaryName())))
+        .get();
   }
-  
+
   public static boolean isEqual(Tuple2<IType, IType> tuple1,
       Tuple2<IType, IType> tuple2) {
     return isEqual(tuple1._1, tuple2._1) && isEqual(tuple1._2, tuple2._2)
