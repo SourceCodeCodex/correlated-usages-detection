@@ -17,7 +17,6 @@ public final class Converter {
   }
 
   public static final Option<List<ITypeBinding>> convert(List<IType> types) {
-    System.out.println(types.filter(type -> type.getCompilationUnit() == null).mkString("\n"));
     return types.foldLeft(Option.some(List.empty()),
         (res, type) -> convert(type).onEmpty(() -> LOGGER.log(Level.SEVERE,
             "An error occurred while trying to get all the parameters for: "

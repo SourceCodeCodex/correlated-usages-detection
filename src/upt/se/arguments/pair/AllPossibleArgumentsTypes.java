@@ -23,12 +23,15 @@ public class AllPossibleArgumentsTypes implements IRelationBuilder<MClassPair, M
   public Group<MClassPair> buildGroup(MParameterPair entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(parameterPair -> Tuple.of(parameterPair.getFirst(), parameterPair.getSecond()))
-        .map(parameterPair -> parameterPair.map(Factory.getInstance()::createMParameter,
-            Factory.getInstance()::createMParameter))
-        .map(mParameterPair -> mParameterPair.map(MParameter::allPossibleArgumentTypes,
-            MParameter::allPossibleArgumentTypes))
-        .map(allArgumentTypesPair -> allArgumentTypesPair.map(GroupBuilder::unwrapArguments,
-            GroupBuilder::unwrapArguments))
+        .map(parameterPair -> parameterPair
+            .map(Factory.getInstance()::createMParameter,
+                Factory.getInstance()::createMParameter))
+        .map(mParameterPair -> mParameterPair
+            .map(MParameter::allPossibleArgumentTypes,
+                MParameter::allPossibleArgumentTypes))
+        .map(allArgumentTypesPair -> allArgumentTypesPair
+            .map(GroupBuilder::unwrapArguments,
+                GroupBuilder::unwrapArguments))
         .map(allArgumentTypesPair -> allArgumentTypesPair.map(List::ofAll, List::ofAll))
         .map(allArgumentTypesPair -> allArgumentTypesPair
             .apply((firstSubtypes, secondSubtypes) -> firstSubtypes.crossProduct(secondSubtypes)))

@@ -17,7 +17,7 @@ public class InheritanceArgumentTypes {
   public static List<ITypeBinding> getAllSubtypes(ITypeBinding typeBinding) {
     return Try.of(() -> (IType) typeBinding.getJavaElement())
         .mapTry(type -> type.newTypeHierarchy(NULL_PROGRESS_MONITOR)
-            .getSubtypes(type))
+            .getAllSubtypes(type))
         .map(List::of)
         .flatMap(subTypes -> convert(subTypes).toTry())
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))

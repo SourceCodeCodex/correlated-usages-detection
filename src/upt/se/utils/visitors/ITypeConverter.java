@@ -22,8 +22,9 @@ public class ITypeConverter extends ASTVisitor {
     IBinding binding = node.resolveBinding();
     if (binding instanceof ITypeBinding) {
       ITypeBinding type = (ITypeBinding) binding;
-      if (isEqual(searchedType, type) && !type.isRawType() && type.isGenericType()) {
+      if (isEqual(searchedType, type) && !type.isRawType()) {
         typeBinding = type;
+        throw new TypeFound();
       }
     }
     return super.visit(node);
@@ -36,9 +37,16 @@ public class ITypeConverter extends ASTVisitor {
   public static Option<ITypeBinding> convert(IType type) {
     ITypeConverter self = new ITypeConverter(type);
 
-    CompilationUnit cUnit = (CompilationUnit) Parser.parse(type.getCompilationUnit());
-    cUnit.accept(self);
+    try {
+      CompilationUnit cUnit = (CompilationUnit) Parser.parse(type.getCompilationUnit());
+      cUnit.accept(self);
+    } catch (TypeFound e) {
+      return self.getTypeBinding();
+    }
+    return Option.none();
+  }
 
-    return self.getTypeBinding();
+  @SuppressWarnings("serial")
+  class TypeFound extends RuntimeException {
   }
 }
