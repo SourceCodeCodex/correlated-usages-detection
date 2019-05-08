@@ -9,13 +9,13 @@ public interface MParameterPair extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Double apperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> usedArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClassPair> usedArgumentsTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> unusedArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClassPair> unusedArgumentsTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> allPossibleArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClassPair> allPossibleArgumentsTypes();
 
 	upt.se.utils.ParameterPair getUnderlyingObject();
 }

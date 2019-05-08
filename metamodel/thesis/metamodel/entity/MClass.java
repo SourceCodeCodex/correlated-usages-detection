@@ -1,6 +1,6 @@
 package thesis.metamodel.entity;
 
-public interface MArgument extends ro.lrg.xcore.metametamodel.XEntity {
+public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();

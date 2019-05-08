@@ -1,2 +1,2 @@
-bindings=MParameterPair,upt.se.utils.ParameterPair,ro.lrg.xcore.metametamodel.XEntity;MArgumentPair,upt.se.utils.ArgumentPair,ro.lrg.xcore.metametamodel.XEntity;MArgument,org.eclipse.jdt.core.IType,ro.lrg.xcore.metametamodel.XEntity;MParameter,org.eclipse.jdt.core.dom.ITypeBinding,ro.lrg.xcore.metametamodel.XEntity;
+bindings=MParameterPair,upt.se.utils.ParameterPair,ro.lrg.xcore.metametamodel.XEntity;MArgument,java.lang.Object,ro.lrg.xcore.metametamodel.XEntity;MClassPair,upt.se.utils.ArgumentPair,ro.lrg.xcore.metametamodel.XEntity;MParameter,org.eclipse.jdt.core.dom.ITypeBinding,ro.lrg.xcore.metametamodel.XEntity;MClass,org.eclipse.jdt.core.IType,ro.lrg.xcore.metametamodel.XEntity;
 eclipse.preferences.version=1

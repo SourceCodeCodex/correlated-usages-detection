@@ -6,21 +6,21 @@ import io.vavr.collection.List;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MArgumentPair;
+import thesis.metamodel.entity.MClassPair;
 import thesis.metamodel.entity.MParameterPair;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.ArgumentPair;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class UnusedArgumentsTypes implements IRelationBuilder<MArgumentPair, MParameterPair> {
+public class UnusedArgumentsTypes implements IRelationBuilder<MClassPair, MParameterPair> {
 
   @Override
-  public Group<MArgumentPair> buildGroup(MParameterPair entity) {
+  public Group<MClassPair> buildGroup(MParameterPair entity) {
     return Tuple.of(entity.allPossibleArgumentsTypes(), entity.usedArgumentsTypes())
         .map(GroupBuilder::unwrapArgumentsPairs, GroupBuilder::unwrapArgumentsPairs)
         .apply((allTypes, usedTypes) -> allTypes.filter(type -> !contains(usedTypes, type)))
-        .map(Factory.getInstance()::createMArgumentPair)
+        .map(Factory.getInstance()::createMClassPair)
         .transform(GroupBuilder::wrap);
   }
 

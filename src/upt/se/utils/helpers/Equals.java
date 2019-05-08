@@ -4,13 +4,13 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import io.vavr.Tuple2;
 import io.vavr.control.Try;
-import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameter;
 
 public class Equals {
   public static final String OBJECT_NAME = Object.class.getCanonicalName();
 
-  public static boolean isObject(MArgument entity) {
+  public static boolean isObject(MClass entity) {
     return entity.getUnderlyingObject().getFullyQualifiedName().equals(OBJECT_NAME);
   }
 

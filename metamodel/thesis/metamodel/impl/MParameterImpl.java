@@ -40,19 +40,19 @@ public class MParameterImpl implements MParameter {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgument> unusedArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MClass> unusedArgumentTypes() {
 		return UnusedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgument> usedArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes() {
 		return UsedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgument> allPossibleArgumentTypes() {
+	public ro.lrg.xcore.metametamodel.Group<MClass> allPossibleArgumentTypes() {
 		return AllPossibleArgumentTypes_INSTANCE.buildGroup(this);
 	}
 

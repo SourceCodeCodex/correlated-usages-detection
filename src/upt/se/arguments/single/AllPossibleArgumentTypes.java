@@ -12,21 +12,21 @@ import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameter;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllPossibleArgumentTypes implements IRelationBuilder<MArgument, MParameter> {
+public class AllPossibleArgumentTypes implements IRelationBuilder<MClass, MParameter> {
 
   @Override
-  public Group<MArgument> buildGroup(MParameter entity) {
+  public Group<MClass> buildGroup(MParameter entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .map(parameter -> Tuple.of(List.of(parameter.getInterfaces()), parameter.getSuperclass()))
         .map(superTypes -> superTypes
             .apply((interfaces, superClass) -> getAllSubtypes(interfaces, superClass)))
-        .map(allTypes -> allTypes.map(Factory.getInstance()::createMArgument))
+        .map(allTypes -> allTypes.map(Factory.getInstance()::createMClass))
         .map(GroupBuilder::wrap)
         .get();
   }

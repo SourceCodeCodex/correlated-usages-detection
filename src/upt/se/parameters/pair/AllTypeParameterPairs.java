@@ -4,17 +4,17 @@ import io.vavr.Tuple;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameterPair;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.ParameterPair;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllTypeParameterPairs implements IRelationBuilder<MParameterPair, MArgument> {
+public class AllTypeParameterPairs implements IRelationBuilder<MParameterPair, MClass> {
 
   @Override
-  public Group<MParameterPair> buildGroup(MArgument entity) {
+  public Group<MParameterPair> buildGroup(MClass entity) {
     return Tuple.of(GroupBuilder.unwrapParameters(entity.allTypeParameters()))
         .map(parameters -> Tuple.of(parameters, parameters))
         .map(parameters -> parameters._1()
