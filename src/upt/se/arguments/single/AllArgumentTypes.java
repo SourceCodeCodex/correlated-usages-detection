@@ -50,7 +50,7 @@ public class AllArgumentTypes implements IRelationBuilder<MArgument, MParameter>
     return Try.of(() -> type)
         .map(superType -> (IType) superType.getJavaElement())
         .mapTry(superType -> Tuple.of(superType,
-            List.of(superType.newTypeHierarchy(NULL_PROGRESS_MONITOR).getAllSubtypes(superType))))
+            List.of(superType.newTypeHierarchy(NULL_PROGRESS_MONITOR).getSubtypes(superType))))
         .map(types -> types.apply((rootType, subTypes) -> subTypes.prepend(rootType)))
         .map(types -> types.sortBy(subType -> subType.getFullyQualifiedName()))
         .onFailure(exception -> LOGGER.log(Level.SEVERE,
