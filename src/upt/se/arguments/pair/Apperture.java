@@ -10,7 +10,7 @@ public class Apperture implements IPropertyComputer<Double, MParameterPair> {
   @Override
   public Double compute(MParameterPair entity) {
     return entity.usedArgumentsTypes().getElements().size() * 100d
-        / entity.allArgumentsTypes().getElements().size();
+        / entity.allPossibleArgumentsTypes().getElements().size();
   }
 
 }

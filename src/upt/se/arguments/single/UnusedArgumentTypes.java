@@ -20,7 +20,7 @@ public class UnusedArgumentTypes implements IRelationBuilder<MArgument, MParamet
   @Override
   public Group<MArgument> buildGroup(MParameter entity) {
     return Try.of(() -> entity)
-        .map(type -> Tuple.of(type.allArgumentTypes(), type.usedArgumentTypes()))
+        .map(type -> Tuple.of(type.allPossibleArgumentTypes(), type.usedArgumentTypes()))
         .map(tuple -> tuple.map(GroupBuilder::unwrapArguments, GroupBuilder::unwrapArguments))
         .map(tuple -> diff(tuple._1, tuple._2))
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))

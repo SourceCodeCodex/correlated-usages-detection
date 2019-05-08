@@ -5,7 +5,7 @@ import upt.se.parameters.pair.ToString;
 import upt.se.arguments.pair.Apperture;
 import upt.se.arguments.pair.UsedArgumentsTypes;
 import upt.se.arguments.pair.UnusedArgumentsTypes;
-import upt.se.arguments.pair.AllArgumentsTypes;
+import upt.se.arguments.pair.AllPossibleArgumentsTypes;
 
 public class MParameterPairImpl implements MParameterPair {
 
@@ -15,7 +15,7 @@ public class MParameterPairImpl implements MParameterPair {
 	private static final Apperture Apperture_INSTANCE = new Apperture();
 	private static final UsedArgumentsTypes UsedArgumentsTypes_INSTANCE = new UsedArgumentsTypes();
 	private static final UnusedArgumentsTypes UnusedArgumentsTypes_INSTANCE = new UnusedArgumentsTypes();
-	private static final AllArgumentsTypes AllArgumentsTypes_INSTANCE = new AllArgumentsTypes();
+	private static final AllPossibleArgumentsTypes AllPossibleArgumentsTypes_INSTANCE = new AllPossibleArgumentsTypes();
 
 	public MParameterPairImpl(upt.se.utils.ParameterPair underlyingObj) {
 		underlyingObj_ = underlyingObj;
@@ -52,8 +52,8 @@ public class MParameterPairImpl implements MParameterPair {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> allArgumentsTypes() {
-		return AllArgumentsTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MArgumentPair> allPossibleArgumentsTypes() {
+		return AllPossibleArgumentsTypes_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {

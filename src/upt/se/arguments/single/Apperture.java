@@ -11,7 +11,7 @@ public class Apperture implements IPropertyComputer<String, MParameter> {
   @Override
   public String compute(MParameter entity) {
     double apperture = entity.usedArgumentTypes().getElements().size() * 100d
-        / entity.allArgumentTypes().getElements().size();
+        / entity.allPossibleArgumentTypes().getElements().size();
 
     return round(apperture, 2) + " %";
   }

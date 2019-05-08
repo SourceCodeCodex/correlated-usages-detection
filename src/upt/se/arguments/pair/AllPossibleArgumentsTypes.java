@@ -17,7 +17,7 @@ import upt.se.utils.ArgumentPair;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllArgumentsTypes implements IRelationBuilder<MArgumentPair, MParameterPair> {
+public class AllPossibleArgumentsTypes implements IRelationBuilder<MArgumentPair, MParameterPair> {
 
   @Override
   public Group<MArgumentPair> buildGroup(MParameterPair entity) {
@@ -25,8 +25,8 @@ public class AllArgumentsTypes implements IRelationBuilder<MArgumentPair, MParam
         .map(parameterPair -> Tuple.of(parameterPair.getFirst(), parameterPair.getSecond()))
         .map(parameterPair -> parameterPair.map(Factory.getInstance()::createMParameter,
             Factory.getInstance()::createMParameter))
-        .map(mParameterPair -> mParameterPair.map(MParameter::allArgumentTypes,
-            MParameter::allArgumentTypes))
+        .map(mParameterPair -> mParameterPair.map(MParameter::allPossibleArgumentTypes,
+            MParameter::allPossibleArgumentTypes))
         .map(allArgumentTypesPair -> allArgumentTypesPair.map(GroupBuilder::unwrapArguments,
             GroupBuilder::unwrapArguments))
         .map(allArgumentTypesPair -> allArgumentTypesPair.map(List::ofAll, List::ofAll))

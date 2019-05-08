@@ -18,7 +18,7 @@ import thesis.metamodel.factory.Factory;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllArgumentTypes implements IRelationBuilder<MArgument, MParameter> {
+public class AllPossibleArgumentTypes implements IRelationBuilder<MArgument, MParameter> {
 
   @Override
   public Group<MArgument> buildGroup(MParameter entity) {
