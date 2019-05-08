@@ -9,13 +9,13 @@ public interface MParameter extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.String apperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgument> unusedArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> unusedArgumentTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgument> usedArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MArgument> allPossibleArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> allPossibleArgumentTypes();
 
 	org.eclipse.jdt.core.dom.ITypeBinding getUnderlyingObject();
 }

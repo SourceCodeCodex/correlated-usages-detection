@@ -19,13 +19,13 @@ public class Startup implements IStartup {
       @Override
       public XEntity convert(Object element) {
         if (element instanceof IType) {
-          return Factory.getInstance().createMArgument((IType) element);
+          return Factory.getInstance().createMClass((IType) element);
         } else if (element instanceof ITypeBinding) {
           return Factory.getInstance().createMParameter((ITypeBinding) element);
         } else if (element instanceof ParameterPair) {
           return Factory.getInstance().createMParameterPair((ParameterPair) element);
         } else if (element instanceof ArgumentPair) {
-          return Factory.getInstance().createMArgumentPair((ArgumentPair) element);
+          return Factory.getInstance().createMClassPair((ArgumentPair) element);
         }
         return null;
       }

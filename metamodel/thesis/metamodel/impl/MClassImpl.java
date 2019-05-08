@@ -6,7 +6,7 @@ import upt.se.parameters.single.AllTypeParameters;
 import upt.se.parameters.pair.AllTypeParameterPairs;
 import classes.ShowInEditor;
 
-public class MArgumentImpl implements MArgument {
+public class MClassImpl implements MClass {
 
 	private org.eclipse.jdt.core.IType underlyingObj_;
 
@@ -15,7 +15,7 @@ public class MArgumentImpl implements MArgument {
 	private static final AllTypeParameterPairs AllTypeParameterPairs_INSTANCE = new AllTypeParameterPairs();
 	private static final ShowInEditor ShowInEditor_INSTANCE = new ShowInEditor();
 
-	public MArgumentImpl(org.eclipse.jdt.core.IType underlyingObj) {
+	public MClassImpl(org.eclipse.jdt.core.IType underlyingObj) {
 		underlyingObj_ = underlyingObj;
 	}
 
@@ -49,10 +49,10 @@ public class MArgumentImpl implements MArgument {
 	}
 
 	public boolean equals(Object obj) {
-		if (null == obj || !(obj instanceof MArgumentImpl)) {
+		if (null == obj || !(obj instanceof MClassImpl)) {
 			return false;
 		}
-		MArgumentImpl iObj = (MArgumentImpl)obj;
+		MClassImpl iObj = (MClassImpl)obj;
 		return underlyingObj_.equals(iObj.underlyingObj_);
 	}
 

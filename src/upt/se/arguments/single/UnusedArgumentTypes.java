@@ -9,23 +9,23 @@ import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameter;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class UnusedArgumentTypes implements IRelationBuilder<MArgument, MParameter> {
+public class UnusedArgumentTypes implements IRelationBuilder<MClass, MParameter> {
 
   @Override
-  public Group<MArgument> buildGroup(MParameter entity) {
+  public Group<MClass> buildGroup(MParameter entity) {
     return Try.of(() -> entity)
         .map(type -> Tuple.of(type.allPossibleArgumentTypes(), type.usedArgumentTypes()))
         .map(tuple -> tuple.map(GroupBuilder::unwrapArguments, GroupBuilder::unwrapArguments))
         .map(tuple -> diff(tuple._1, tuple._2))
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(List.empty()))
-        .map(types -> types.map(Factory.getInstance()::createMArgument))
+        .map(types -> types.map(Factory.getInstance()::createMClass))
         .map(GroupBuilder::wrap)
         .get();
   }

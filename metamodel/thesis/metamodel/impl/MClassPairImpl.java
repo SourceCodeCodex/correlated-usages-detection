@@ -3,13 +3,13 @@ package thesis.metamodel.impl;
 import thesis.metamodel.entity.*;
 import upt.se.arguments.pair.ToString;
 
-public class MArgumentPairImpl implements MArgumentPair {
+public class MClassPairImpl implements MClassPair {
 
 	private upt.se.utils.ArgumentPair underlyingObj_;
 
 	private static final ToString ToString_INSTANCE = new ToString();
 
-	public MArgumentPairImpl(upt.se.utils.ArgumentPair underlyingObj) {
+	public MClassPairImpl(upt.se.utils.ArgumentPair underlyingObj) {
 		underlyingObj_ = underlyingObj;
 	}
 
@@ -25,10 +25,10 @@ public class MArgumentPairImpl implements MArgumentPair {
 	}
 
 	public boolean equals(Object obj) {
-		if (null == obj || !(obj instanceof MArgumentPairImpl)) {
+		if (null == obj || !(obj instanceof MClassPairImpl)) {
 			return false;
 		}
-		MArgumentPairImpl iObj = (MArgumentPairImpl)obj;
+		MClassPairImpl iObj = (MClassPairImpl)obj;
 		return underlyingObj_.equals(iObj.underlyingObj_);
 	}
 

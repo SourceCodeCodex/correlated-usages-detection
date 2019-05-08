@@ -8,16 +8,16 @@ import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameter;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllTypeParameters implements IRelationBuilder<MParameter, MArgument> {
+public class AllTypeParameters implements IRelationBuilder<MParameter, MClass> {
 
   @Override
-  public Group<MParameter> buildGroup(MArgument entity) {
+  public Group<MParameter> buildGroup(MClass entity) {
     return Try.of(() -> entity.getUnderlyingObject())
         .flatMap(type -> convert(type).toTry())
         .map(type -> type.getTypeParameters())

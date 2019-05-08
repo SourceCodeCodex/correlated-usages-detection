@@ -8,7 +8,7 @@ import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameter;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.crawlers.InheritanceArgumentTypes;
@@ -16,17 +16,17 @@ import upt.se.utils.crawlers.VariablesArgumentTypes;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class UsedArgumentTypes implements IRelationBuilder<MArgument, MParameter> {
+public class UsedArgumentTypes implements IRelationBuilder<MClass, MParameter> {
 
   @Override
-  public Group<MArgument> buildGroup(MParameter entity) {
+  public Group<MClass> buildGroup(MParameter entity) {
     return Try.of(() -> InheritanceArgumentTypes.getUsages(entity))
         .map(usedTypes -> usedTypes.appendAll(VariablesArgumentTypes.getUsages(entity)))
         .map(usedTypes -> usedTypes.distinctBy(type -> type.getQualifiedName()))
         .map(typeBindings -> typeBindings
             .map(typeBinding -> (IType) typeBinding.getErasure().getJavaElement()))
         .map(types -> types.distinctBy(type -> type.getFullyQualifiedName()))
-        .map(types -> types.map(Factory.getInstance()::createMArgument))
+        .map(types -> types.map(Factory.getInstance()::createMClass))
         .onFailure(exception -> LOGGER.log(Level.SEVERE,
             "An error occurred while trying to get all the parameters for: "
                 + entity.getUnderlyingObject().getQualifiedName(),

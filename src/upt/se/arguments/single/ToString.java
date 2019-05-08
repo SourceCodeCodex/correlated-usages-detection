@@ -2,13 +2,13 @@ package upt.se.arguments.single;
 
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
-import thesis.metamodel.entity.MArgument;
+import thesis.metamodel.entity.MClass;
 
 @PropertyComputer
-public class ToString implements IPropertyComputer<String, MArgument> {
+public class ToString implements IPropertyComputer<String, MClass> {
 
   @Override
-  public String compute(MArgument entity) {
+  public String compute(MClass entity) {
     return entity.getUnderlyingObject().getFullyQualifiedName();
   }
 

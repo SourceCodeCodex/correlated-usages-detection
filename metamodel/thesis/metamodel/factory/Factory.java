@@ -21,21 +21,13 @@ public class Factory {
         }
         return (MParameterPair)instance;
     }
-   public MArgumentPair createMArgumentPair(upt.se.utils.ArgumentPair obj) {
+   public MClassPair createMClassPair(upt.se.utils.ArgumentPair obj) {
        XEntity instance = lruCache_.get(obj);
         if (null == instance) {
-           instance = new MArgumentPairImpl(obj);
+           instance = new MClassPairImpl(obj);
            lruCache_.put(obj, instance);
         }
-        return (MArgumentPair)instance;
-    }
-   public MArgument createMArgument(org.eclipse.jdt.core.IType obj) {
-       XEntity instance = lruCache_.get(obj);
-        if (null == instance) {
-           instance = new MArgumentImpl(obj);
-           lruCache_.put(obj, instance);
-        }
-        return (MArgument)instance;
+        return (MClassPair)instance;
     }
    public MParameter createMParameter(org.eclipse.jdt.core.dom.ITypeBinding obj) {
        XEntity instance = lruCache_.get(obj);
@@ -44,5 +36,13 @@ public class Factory {
            lruCache_.put(obj, instance);
         }
         return (MParameter)instance;
+    }
+   public MClass createMClass(org.eclipse.jdt.core.IType obj) {
+       XEntity instance = lruCache_.get(obj);
+        if (null == instance) {
+           instance = new MClassImpl(obj);
+           lruCache_.put(obj, instance);
+        }
+        return (MClass)instance;
     }
 }
