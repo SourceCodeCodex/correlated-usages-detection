@@ -1,5 +1,8 @@
 package upt.se.utils;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
+
 public class Pair<F, S> {
 	private final F _1;
 	private final S _2;
@@ -17,16 +20,8 @@ public class Pair<F, S> {
 		return _2;
 	}
 
-	public Pair<S, F> swap() {
-		return new Pair<S, F>(_2, _1);
-	}
-
-	public <T> Pair<T, S> setFirst(T t) {
-		return new Pair<T, S>(t, _2);
-	}
-
-	public <T> Pair<F, T> setSecond(T t) {
-		return new Pair<F, T>(_1, t);
+	public Tuple2<F,S> toTuple() {
+	  return Tuple.of(_1, _2);
 	}
 
 	public Pair<F, S> clone() {
