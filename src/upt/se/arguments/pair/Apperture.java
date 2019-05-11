@@ -13,6 +13,8 @@ public class Apperture implements IPropertyComputer<Double, MParameterPair> {
   public Double compute(MParameterPair entity) {
     List<MClassPair> usedTypes = entity.usedArgumentsTypes().getElements();
     List<MClassPair> allTypes = entity.allPossibleArgumentsTypes().getElements();
+    
+    
     return usedTypes.size() * 100d
         / allTypes.size();
   }
