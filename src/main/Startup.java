@@ -1,5 +1,6 @@
 package main;
 
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.ui.IStartup;
@@ -26,6 +27,8 @@ public class Startup implements IStartup {
           return Factory.getInstance().createMParameterPair((ParameterPair) element);
         } else if (element instanceof ArgumentPair) {
           return Factory.getInstance().createMClassPair((ArgumentPair) element);
+        } else if (element instanceof IJavaProject) {
+          return Factory.getInstance().createMProject((IJavaProject) element);
         }
         return null;
       }

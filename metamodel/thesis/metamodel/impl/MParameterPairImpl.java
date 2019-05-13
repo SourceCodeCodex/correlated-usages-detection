@@ -28,7 +28,7 @@ public class MParameterPairImpl implements MParameterPair {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.String aperture() {
+	public java.lang.Double aperture() {
 		return Aperture_INSTANCE.compute(this);
 	}
 

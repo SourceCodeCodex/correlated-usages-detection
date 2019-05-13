@@ -45,4 +45,12 @@ public class Factory {
         }
         return (MClass)instance;
     }
+   public MProject createMProject(org.eclipse.jdt.core.IJavaProject obj) {
+       XEntity instance = lruCache_.get(obj);
+        if (null == instance) {
+           instance = new MProjectImpl(obj);
+           lruCache_.put(obj, instance);
+        }
+        return (MProject)instance;
+    }
 }

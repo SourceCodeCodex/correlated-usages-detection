@@ -1,5 +1,6 @@
 package upt.se.arguments.single;
 
+import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
 import thesis.metamodel.entity.MClass;
@@ -9,7 +10,9 @@ public class ToString implements IPropertyComputer<String, MClass> {
 
   @Override
   public String compute(MClass entity) {
-    return entity.getUnderlyingObject().getFullyQualifiedName();
+    return Try.of(() -> entity.getUnderlyingObject().getFullyQualifiedParameterizedName())
+        .orElse(Try.success(entity.getUnderlyingObject().getFullyQualifiedName()))
+        .get();
   }
 
 }

@@ -9,10 +9,10 @@ import ro.lrg.xcore.metametamodel.PropertyComputer;
 import thesis.metamodel.entity.MParameterPair;
 
 @PropertyComputer
-public class Aperture implements IPropertyComputer<String, MParameterPair> {
+public class Aperture implements IPropertyComputer<Double, MParameterPair> {
 
   @Override
-  public String compute(MParameterPair entity) {
+  public Double compute(MParameterPair entity) {
     int usedTypesCount = List.ofAll(entity.usedArgumentsTypes().getElements())
         .map(pair -> pair.getUnderlyingObject())
         .map(pair -> pair.toTuple())
@@ -33,7 +33,7 @@ public class Aperture implements IPropertyComputer<String, MParameterPair> {
     double apperture = usedTypesCount * 100d
         / entity.allPossibleArgumentsTypes().getElements().size();
 
-    return round(apperture, 2) + " %";
+    return round(apperture, 2);
   }
 
 }
