@@ -21,6 +21,12 @@ public interface MProject extends ro.lrg.xcore.metametamodel.XEntity {
 	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedMultipleParameterTypesWithLowAperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> allSingleParameterTypesWithLowAperture();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedSingleParameterTypesWithLowAperture();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> allSingleParameterTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder

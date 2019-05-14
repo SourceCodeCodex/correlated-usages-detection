@@ -7,6 +7,8 @@ import upt.se.project.multiple.unbounded.AllMultipleParameterTypes;
 import upt.se.project.AllGenericTypes;
 import upt.se.project.single.bounded.AllBoundedSingleParameterTypes;
 import upt.se.project.multiple.bounded.AllBoundedMultipleParameterTypesWithLowAperture;
+import upt.se.project.single.unbounded.AllSingleParameterTypesWithLowAperture;
+import upt.se.project.single.bounded.AllBoundedSingleParameterTypesWithLowAperture;
 import upt.se.project.single.unbounded.AllSingleParameterTypes;
 import upt.se.project.AllBoundedGenericTypes;
 import upt.se.project.multiple.bounded.AllBoundedMultipleParameterTypes;
@@ -21,6 +23,8 @@ public class MProjectImpl implements MProject {
 	private static final AllGenericTypes AllGenericTypes_INSTANCE = new AllGenericTypes();
 	private static final AllBoundedSingleParameterTypes AllBoundedSingleParameterTypes_INSTANCE = new AllBoundedSingleParameterTypes();
 	private static final AllBoundedMultipleParameterTypesWithLowAperture AllBoundedMultipleParameterTypesWithLowAperture_INSTANCE = new AllBoundedMultipleParameterTypesWithLowAperture();
+	private static final AllSingleParameterTypesWithLowAperture AllSingleParameterTypesWithLowAperture_INSTANCE = new AllSingleParameterTypesWithLowAperture();
+	private static final AllBoundedSingleParameterTypesWithLowAperture AllBoundedSingleParameterTypesWithLowAperture_INSTANCE = new AllBoundedSingleParameterTypesWithLowAperture();
 	private static final AllSingleParameterTypes AllSingleParameterTypes_INSTANCE = new AllSingleParameterTypes();
 	private static final AllBoundedGenericTypes AllBoundedGenericTypes_INSTANCE = new AllBoundedGenericTypes();
 	private static final AllBoundedMultipleParameterTypes AllBoundedMultipleParameterTypes_INSTANCE = new AllBoundedMultipleParameterTypes();
@@ -68,6 +72,18 @@ public class MProjectImpl implements MProject {
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedMultipleParameterTypesWithLowAperture() {
 		return AllBoundedMultipleParameterTypesWithLowAperture_INSTANCE.buildGroup(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> allSingleParameterTypesWithLowAperture() {
+		return AllSingleParameterTypesWithLowAperture_INSTANCE.buildGroup(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedSingleParameterTypesWithLowAperture() {
+		return AllBoundedSingleParameterTypesWithLowAperture_INSTANCE.buildGroup(this);
 	}
 
 	@Override
