@@ -11,8 +11,7 @@ public class ToString implements IPropertyComputer<String, MClass> {
   @Override
   public String compute(MClass entity) {
     return Try.of(() -> entity.getUnderlyingObject().getFullyQualifiedParameterizedName())
-        .orElse(Try.success(entity.getUnderlyingObject().getFullyQualifiedName()))
-        .get();
+        .getOrElse(entity.getUnderlyingObject().getFullyQualifiedName());
   }
 
 }

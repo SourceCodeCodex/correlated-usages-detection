@@ -25,9 +25,9 @@ public class InheritanceArgumentTypes {
         .get();
   }
 
-  public static List<ITypeBinding> getUsages(MParameter entity) {
+  public static List<ITypeBinding> getUsages(MParameter entity) {//class MyClass<X extends ???, Y extends ???>
     return Try.of(() -> entity.getUnderlyingObject())
-        .map(parameter -> parameter.getDeclaringClass())
+        .map(parameter -> parameter.getDeclaringClass())//class MySecondClass<A extends X, B extends Y> extends MyClass<A, B>
         .map(declaringClass -> getAllSubtypes(declaringClass))
         .map(usages -> getTypeArguments(usages, entity.getUnderlyingObject()))
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))

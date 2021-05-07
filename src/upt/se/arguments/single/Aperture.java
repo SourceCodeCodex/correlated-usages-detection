@@ -1,6 +1,5 @@
 package upt.se.arguments.single;
 
-import static java.util.function.Function.identity;
 import static upt.se.utils.helpers.Converter.round;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import io.vavr.collection.List;
@@ -16,12 +15,13 @@ public class Aperture implements IPropertyComputer<Double, MParameter> {
   public Double compute(MParameter entity) {
     int usedTypesCount = List.ofAll(entity.usedArgumentTypes().getElements())
         .map(type -> type.getUnderlyingObject())
-        .map(type -> Try.of(() -> type.newTypeHierarchy(NULL_PROGRESS_MONITOR))
-            .map(hierarchy -> hierarchy.getAllSubtypes(type))
-            .map(List::of)
-            .orElse(Try.success(List.empty()))
-            .get().prepend(type))
-        .flatMap(identity())
+        .flatMap(type -> 
+			    	Try.of(() -> type.newTypeHierarchy(NULL_PROGRESS_MONITOR))
+			            .map(hierarchy -> hierarchy.getAllSubtypes(type))
+			            .map(List::of)
+			            .getOrElse(List.empty())
+			            .prepend(type)
+	            )
         .distinctBy(type -> type.getFullyQualifiedName())
         .size();
 

@@ -10,9 +10,9 @@ Require-Bundle: org.eclipse.ui,
  ro.lrg.insider;bundle-version="2.3.1",
  org.eclipse.jdt.ui;bundle-version="3.13.100",
  org.eclipse.core.resources;bundle-version="3.12.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: thesis
 Bundle-ActivationPolicy: lazy
 Import-Package: ro.lrg.xcore.metametamodel
-Bundle-ClassPath: lib/vavr-0.10.0.jar,
- .
+Bundle-ClassPath: .,
+ lib/vavr-0.10.3.jar
