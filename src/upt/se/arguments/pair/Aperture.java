@@ -1,5 +1,6 @@
 package upt.se.arguments.pair;
 
+import static upt.se.utils.helpers.Helper.isAbstract;
 import static upt.se.utils.helpers.Converter.round;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import io.vavr.collection.List;
@@ -18,14 +19,14 @@ public class Aperture implements IPropertyComputer<Double, MParameterPair> {
 
 	@Override
 	public Double compute(MParameterPair entity) {
-		int usedTypesCount = List.ofAll(entity.usedArgumentsTypes().getElements())
+		double usedTypesCount = List.ofAll(entity.usedArgumentsTypes().getElements())
 				.map(pair -> pair.getUnderlyingObject())
 				.flatMap(pair -> getAllConcreteTypes(pair.getFirst()).crossProduct(getAllConcreteTypes(pair.getSecond())))
 				.distinctBy(pair -> Try.of(() -> pair._1.getFullyQualifiedParameterizedName()).getOrElse("") + ","
 						+ Try.of(() -> pair._2.getFullyQualifiedParameterizedName()).getOrElse(""))
 				.size();
-
-		double apperture = usedTypesCount * 100d / entity.allPossibleArgumentsTypes().getElements().size();
+		
+		double apperture = usedTypesCount * 1d / entity.allPossibleArgumentsTypes().getElements().size();
 
 		return round(apperture, 2);
 	}
@@ -34,15 +35,7 @@ public class Aperture implements IPropertyComputer<Double, MParameterPair> {
 	private List<IType> getAllConcreteTypes(IType type) {
 		return Try.of(() -> type.newTypeHierarchy(NULL_PROGRESS_MONITOR))
 				.map(hierarchy -> List.of(hierarchy.getAllSubtypes(type)).append(type))
-				.map(con -> con.filter(elem -> {
-					try {
-						boolean isAbstract = Flags.isAbstract(type.getFlags());
-						return !elem.isInterface() && !isAbstract;
-					} catch (JavaModelException e) {
-						e.printStackTrace();
-					}
-					return false;
-				})).getOrElse(List.of(type));
+				.map(types -> types.filter(tpe -> !isAbstract(tpe))).getOrElse(List.of(type));
 	}
 
 }

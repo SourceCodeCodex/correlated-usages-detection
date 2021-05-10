@@ -1,10 +1,12 @@
 package upt.se.arguments.single;
 
+import static upt.se.utils.helpers.Helper.isAbstract;
 import static upt.se.utils.helpers.Equals.isObject;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import java.util.logging.Level;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import io.vavr.collection.*;
 import io.vavr.control.Try;
@@ -33,7 +35,7 @@ public class AllPossibleArgumentTypes implements IRelationBuilder<MClass, MParam
 			return Try.of(() -> (IType) type.getJavaElement())
 					.mapTry(superType -> List
 							.of(superType.newTypeHierarchy(NULL_PROGRESS_MONITOR).getAllSubtypes(superType))
-							.append(superType).toSet())
+							.append(superType).toSet().filter(tpe -> !isAbstract(tpe)))
 					.onFailure(exception -> LOGGER.log(Level.SEVERE,
 							"An error occurred while trying to get all the parameters for: " + type.getQualifiedName(),
 							exception))
