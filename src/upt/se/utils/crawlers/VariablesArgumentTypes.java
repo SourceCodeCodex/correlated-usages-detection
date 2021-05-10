@@ -52,7 +52,8 @@ public class VariablesArgumentTypes {
     SearchPattern pattern = SearchPattern.createPattern(type.getJavaElement(),
         IJavaSearchConstants.FIELD_DECLARATION_TYPE_REFERENCE
             | IJavaSearchConstants.LOCAL_VARIABLE_DECLARATION_TYPE_REFERENCE
-            | IJavaSearchConstants.CLASS_INSTANCE_CREATION_TYPE_REFERENCE);
+            | IJavaSearchConstants.CLASS_INSTANCE_CREATION_TYPE_REFERENCE
+            | IJavaSearchConstants.PARAMETER_DECLARATION_TYPE_REFERENCE);
 
     IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
 
