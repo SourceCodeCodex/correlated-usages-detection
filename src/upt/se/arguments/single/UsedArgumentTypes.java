@@ -3,6 +3,8 @@ package upt.se.arguments.single;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.logging.Level;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+
 import io.vavr.collection.List;
 import io.vavr.control.Try;
 import ro.lrg.xcore.metametamodel.Group;
@@ -20,7 +22,7 @@ public class UsedArgumentTypes implements IRelationBuilder<MClass, MParameter> {
 
   @Override
   public Group<MClass> buildGroup(MParameter entity) {
-    return Try.of(() -> InheritanceArgumentTypes.getUsages(entity))
+    return Try.of(() -> getInheritanceUsages(entity))
         .map(usedTypes -> usedTypes.appendAll(VariablesArgumentTypes.getUsages(entity)))
         .map(usedTypes -> usedTypes.distinctBy(type -> type.getQualifiedName()))
         .map(typeBindings -> typeBindings
@@ -34,6 +36,12 @@ public class UsedArgumentTypes implements IRelationBuilder<MClass, MParameter> {
         .orElse(Try.success(List.empty()))
         .map(GroupBuilder::wrap)
         .get();
+  }
+  
+  private List<ITypeBinding> getInheritanceUsages(MParameter parameter) {
+	  List<List<ITypeBinding>> usages = InheritanceArgumentTypes.getUsages(parameter);
+	  int paramPosition = InheritanceArgumentTypes.getParameterNumber(parameter.getUnderlyingObject());
+	  return usages.map(arguments -> arguments.get(paramPosition));
   }
 
 }
