@@ -1,6 +1,5 @@
 package upt.se.arguments.pair;
 
-import static upt.se.utils.helpers.Equals.isEqualPairBindings;
 import static upt.se.utils.helpers.Converter.convert;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.logging.Level;
@@ -31,7 +30,9 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 		return Try.of(() -> entity.getUnderlyingObject())
 				.map(pair -> getInheritanceUsages(pair).appendAll(getVariablesUsages(pair)))
 				.map(usedArgumentPairs -> usedArgumentPairs
-						.distinctBy((first, second) -> isEqualPairBindings(first, second) ? 0 : 1))
+						.toMap(pair -> toString(pair))
+						.values()
+						.toList())
 				.map(usedArgumentPairs -> usedArgumentPairs.map(pair -> new ArgumentPair(convert(pair._1), convert(pair._2))))
 				.map(usedArgumentPairs -> usedArgumentPairs.map(Factory.getInstance()::createMClassPair))
 				.onFailure(exception -> LOGGER.log(Level.SEVERE,
@@ -40,6 +41,12 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 								+ entity.getUnderlyingObject().getSecond().getQualifiedName(),
 						exception))
 				.orElse(() -> Try.success(List.empty())).map(GroupBuilder::wrap).get();
+	}
+	
+	private Tuple2<String,Tuple2<ITypeBinding,ITypeBinding>> toString(Tuple2<ITypeBinding,ITypeBinding> pair) {
+		String key = "(" + pair._1.getQualifiedName() + "," + pair._2.getQualifiedName() + ")";
+		
+		return Tuple.of(key, pair);
 	}
 	
 	private List<Tuple2<ITypeBinding,ITypeBinding>> getInheritanceUsages(ParameterPair pair) {

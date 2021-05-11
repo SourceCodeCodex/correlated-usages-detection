@@ -79,11 +79,14 @@ class Test1 {
 	void test3() {
 		MClass theClass = findClass("tc3.ClassOne");
 		assertNotNull("tc3.ClassOne with 2 bounded parametes must be found", theClass);
+		
 		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc3.ClassOne", 1, typeParameterPairs.getElements().size());
+		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
 		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pairs for tc3.ClassOne.T and tc3.ClassOne.K", 4, possibleClassPairs.getElements().size());
+		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
 		assertEquals("(A1,B1),(A2,B2) pairs are the USED concrete type pair for tc3.ClassOne.T and tc3.ClassOne.K ", 2, usedClassPairs.getElements().size());
 		assertEquals(paramPair.aperture(), 0.5, 0);
