@@ -51,7 +51,6 @@ class Test1 {
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
 		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
-		System.out.println(possibleClassPairs.getElements());
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pairs for tc1.ClassOne.T and tc1.ClassOne.K", 4, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
@@ -72,7 +71,6 @@ class Test1 {
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pair for tc2.ClassOne.T and tc2.ClassOne.K", 4, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
-		System.out.println(usedClassPairs.getElements());
 		assertEquals("(A1,B1),(A2,B2),(A1,B2) pairs are the USED concrete type pair for for tc2.ClassOne.T and tc2.ClassOne.K ", 3, usedClassPairs.getElements().size());
 		assertEquals(paramPair.aperture(), 0.75, 0);
 	}

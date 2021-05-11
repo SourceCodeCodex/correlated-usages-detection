@@ -4,8 +4,8 @@ import io.vavr.Tuple;
 import io.vavr.Tuple2;
 
 public class Pair<F, S> {
-	private final F _1;
-	private final S _2;
+	protected final F _1;
+	protected final S _2;
 
 	public Pair(F _1, S _2) {
 		this._1 = _1;

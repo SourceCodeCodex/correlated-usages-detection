@@ -7,6 +7,7 @@ import io.vavr.collection.List;
 import io.vavr.control.Try;
 import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameter;
+import upt.se.utils.ParameterPair;
 
 public class Equals {
 	public static final String OBJECT_NAME = Object.class.getCanonicalName();
@@ -36,18 +37,22 @@ public class Equals {
 		return type1.getQualifiedName().equals(type2.getQualifiedName());
 	}
 
-	public static boolean isEqual(IType type1, IType type2) {
-		return type1.getFullyQualifiedName().equals(type2.getFullyQualifiedName());
-	}
-
 	public static boolean isEqual(IType type1, ITypeBinding type2) {
 		return Try.of(() -> type1.equals((IType) type2.getJavaElement()))
 				.orElse(() -> Try.of(() -> type1.getFullyQualifiedName().equals(type2.getBinaryName()))).get();
 	}
+	
+	public static boolean isEqualPairBindings(Tuple2<ITypeBinding, ITypeBinding> pair1, Tuple2<ITypeBinding, ITypeBinding> pair2) {
+		return isEqual(pair1._1, pair2._1) && isEqual(pair1._2, pair2._2);
+	}
 
-	public static boolean isEqual(Tuple2<IType, IType> tuple1, Tuple2<IType, IType> tuple2) {
-		return isEqual(tuple1._1, tuple2._1) && isEqual(tuple1._2, tuple2._2)
-				|| isEqual(tuple1._1, tuple2._2) && isEqual(tuple1._2, tuple2._1);
+	public static boolean isEqualTypes(IType type1, IType type2) {
+		return type1.getFullyQualifiedName().equals(type2.getFullyQualifiedName());
+	}
+
+	public static boolean isEqualPairTypes(Tuple2<IType, IType> tuple1, Tuple2<IType, IType> tuple2) {
+		return isEqualTypes(tuple1._1, tuple2._1) && isEqualTypes(tuple1._2, tuple2._2)
+				|| isEqualTypes(tuple1._1, tuple2._2) && isEqualTypes(tuple1._2, tuple2._1);
 	}
 
 }

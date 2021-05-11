@@ -6,9 +6,7 @@ import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
 
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
 
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;

@@ -7,19 +7,15 @@ import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import java.util.logging.Level;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import io.vavr.Tuple;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
-import thesis.metamodel.entity.MParameter;
 
-public class InheritanceArgumentTypes {
+public class InheritanceArgumentTypes extends Crawler {
 
 
-  public static List<List<ITypeBinding>> getUsages(MParameter entity) {
-    return Try.of(() -> entity.getUnderlyingObject())
-        .map(parameter -> parameter.getDeclaringClass())
-        .map(declaringClass -> getAllSubtypes(declaringClass))
-        .map(usages -> getTypeArguments(usages, entity.getUnderlyingObject()))
+  public static List<List<ITypeBinding>> getUsages(ITypeBinding entity) {
+    return Try.of(() -> getAllSubtypes(entity))
+        .map(usages -> getTypeArguments(usages, entity))
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(List.empty()))
         .get();
@@ -42,14 +38,6 @@ public class InheritanceArgumentTypes {
             .map(declaringClass -> getSuperclass(declaringClass, parameter.getDeclaringClass()))
             .map(superClass -> superClass.getTypeArguments())
             .map(typeArguments -> List.of(typeArguments));
-  }
-
-  public static int getParameterNumber(ITypeBinding actualParameter) {
-    return List.of(actualParameter.getDeclaringClass().getTypeParameters())
-        .zipWithIndex()
-        .filter(parameter -> isEqual(parameter._1, actualParameter))
-        .map(parameter -> parameter._2)
-        .head();
   }
 
   private static ITypeBinding getSuperclass(ITypeBinding declaringClass,

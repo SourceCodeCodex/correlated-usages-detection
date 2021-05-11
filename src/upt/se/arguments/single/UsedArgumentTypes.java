@@ -22,11 +22,11 @@ public class UsedArgumentTypes implements IRelationBuilder<MClass, MParameter> {
 
   @Override
   public Group<MClass> buildGroup(MParameter entity) {
-    return Try.of(() -> getInheritanceUsages(entity))
-        .map(usedTypes -> usedTypes.appendAll(VariablesArgumentTypes.getUsages(entity)))
+    return Try.of(() -> entity.getUnderlyingObject())
+        .map(param -> getInheritanceUsages(param).appendAll(getVariablesUsages(param)))
         .map(usedTypes -> usedTypes.distinctBy(type -> type.getQualifiedName()))
         .map(typeBindings -> typeBindings
-            .map(typeBinding -> (IType) typeBinding.getErasure().getJavaElement()))
+            .map(typeBinding -> (IType) typeBinding.getJavaElement()))
         .map(types -> types.distinctBy(type -> type.getFullyQualifiedName()))
         .map(types -> types.map(Factory.getInstance()::createMClass))
         .onFailure(exception -> LOGGER.log(Level.SEVERE,
@@ -38,9 +38,15 @@ public class UsedArgumentTypes implements IRelationBuilder<MClass, MParameter> {
         .get();
   }
   
-  private List<ITypeBinding> getInheritanceUsages(MParameter parameter) {
-	  List<List<ITypeBinding>> usages = InheritanceArgumentTypes.getUsages(parameter);
-	  int paramPosition = InheritanceArgumentTypes.getParameterNumber(parameter.getUnderlyingObject());
+  private List<ITypeBinding> getInheritanceUsages(ITypeBinding parameter) {
+	  List<List<ITypeBinding>> usages = InheritanceArgumentTypes.getUsages(parameter.getDeclaringClass());
+	  int paramPosition = InheritanceArgumentTypes.getParameterNumber(parameter);
+	  return usages.map(arguments -> arguments.get(paramPosition));
+  }
+  
+  private List<ITypeBinding> getVariablesUsages(ITypeBinding parameter) {
+	  List<List<ITypeBinding>> usages = VariablesArgumentTypes.getUsages(parameter.getDeclaringClass());
+	  int paramPosition = VariablesArgumentTypes.getParameterNumber(parameter);
 	  return usages.map(arguments -> arguments.get(paramPosition));
   }
 

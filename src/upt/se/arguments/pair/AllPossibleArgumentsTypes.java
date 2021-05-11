@@ -1,6 +1,6 @@
 package upt.se.arguments.pair;
 
-import static upt.se.utils.helpers.Equals.isEqual;
+import static upt.se.utils.helpers.Equals.isEqualPairTypes;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import java.util.logging.Level;
 import io.vavr.collection.List;
@@ -27,7 +27,7 @@ public class AllPossibleArgumentsTypes implements IRelationBuilder<MClassPair, M
 			List<IType> secondParamArgTypes = getAllArguments(pair.getSecond());
 
 			return firstParamArgTypes.crossProduct(secondParamArgTypes);
-		}).map(argumentPairs -> argumentPairs.distinctBy((first, second) -> isEqual(first, second) ? 0 : 1))
+		}).map(argumentPairs -> argumentPairs.distinctBy((first, second) -> isEqualPairTypes(first, second) ? 0 : 1))
 				.map(argumentPairs -> argumentPairs
 						.map(argumentPair -> new ArgumentPair(argumentPair._1, argumentPair._2)))
 				.map(argumentPairs -> argumentPairs.map(Factory.getInstance()::createMClassPair))
