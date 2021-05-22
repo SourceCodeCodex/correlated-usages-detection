@@ -136,10 +136,27 @@ class Test1 {
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
 		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
-		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pairs for tc6.ClassOne.T and tc6.ClassOne.K", 4, possibleClassPairs.getElements().size());
+		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2),(A3,B1),(A3,B2) pairs are the POSSIBLE concrete type pairs for tc6.ClassOne.T and tc6.ClassOne.K", 6, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
-		assertEquals("(A1,B1),(A1,B2) pairs are the USED concrete type pair for tc6.ClassOne.T and tc6.ClassOne.K ", 2, usedClassPairs.getElements().size());
+		assertEquals("(A1,B1),(A2,B1) pairs are the USED concrete type pair for tc6.ClassOne.T and tc6.ClassOne.K ", 2, usedClassPairs.getElements().size());
+		assertEquals(paramPair.aperture(), 0.333, 0.1);
+	}
+
+	@Test
+	void test7() {
+		MClass theClass = findClass("tc7.ClassOne");
+		assertNotNull("tc7.ClassOne with 2 bounded parametes must be found", theClass);
+		
+		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		assertEquals("There is one pair of bounded type parameters for tc7.ClassOne", 1, typeParameterPairs.getElements().size());
+		
+		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
+		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2),(A3,B1),(A3,B2) pairs are the POSSIBLE concrete type pairs for tc7.ClassOne.T and tc7.ClassOne.K", 6, possibleClassPairs.getElements().size());
+		
+		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
+		assertEquals("(A1,B1),(A2,B1),(A3,B1) pairs are the USED concrete type pair for tc7.ClassOne.T and tc7.ClassOne.K ", 3, usedClassPairs.getElements().size());
 		assertEquals(paramPair.aperture(), 0.5, 0);
 	}
 
