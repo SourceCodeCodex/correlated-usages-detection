@@ -1,6 +1,6 @@
 package upt.se.arguments.pair;
 
-import static upt.se.utils.helpers.Equals.isEqual;
+import static upt.se.utils.helpers.Equals.isEqualTypes;
 import io.vavr.Tuple;
 import io.vavr.collection.List;
 import ro.lrg.xcore.metametamodel.Group;
@@ -25,8 +25,8 @@ public class UnusedArgumentsTypes implements IRelationBuilder<MClassPair, MParam
   }
 
   private boolean contains(List<ArgumentPair> usedTypes, ArgumentPair type) {
-    return usedTypes.find(p -> isEqual(p.getFirst(), type.getFirst())
-        && isEqual(p.getSecond(), type.getSecond())).isDefined();
+    return usedTypes.find(p -> isEqualTypes(p.getFirst(), type.getFirst())
+        && isEqualTypes(p.getSecond(), type.getSecond())).isDefined();
   }
 
 }

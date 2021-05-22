@@ -8,9 +8,13 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.SimpleName;
+
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import upt.se.utils.Parser;
 
 public class VariableBindingVisitor extends ASTVisitor {
@@ -18,6 +22,7 @@ public class VariableBindingVisitor extends ASTVisitor {
   private static Map<ICompilationUnit, HashSet<IVariableBinding>> allVariableBindings =
       new HashMap<>();
   private HashSet<IVariableBinding> attributeBindings = new HashSet<>();
+  private HashSet<ITypeBinding> returnTypes = new HashSet<>();
   private ITypeBinding searchedType;
 
   private VariableBindingVisitor(ITypeBinding searchedType) {
@@ -31,6 +36,8 @@ public class VariableBindingVisitor extends ASTVisitor {
       if (!variable.getType().isRawType() && isEqual(variable.getType().getErasure(), searchedType)) {
         attributeBindings.add(variable);
       }
+    } else if(binding instanceof IMethodBinding) {
+    	returnTypes.add(((IMethodBinding) binding).getReturnType());
     }
     return super.visit(node);
   }
@@ -39,7 +46,7 @@ public class VariableBindingVisitor extends ASTVisitor {
     return attributeBindings;
   }
 
-  public static HashSet<IVariableBinding> convert(ICompilationUnit unit,
+  public static Tuple2<HashSet<IVariableBinding>, HashSet<ITypeBinding>> convert(ICompilationUnit unit,
       ITypeBinding searchedType) {
 
     VariableBindingVisitor self = new VariableBindingVisitor(searchedType);
@@ -48,6 +55,6 @@ public class VariableBindingVisitor extends ASTVisitor {
     cUnit.accept(self);
 
     allVariableBindings.put(unit, self.getAttributeBindings());
-    return allVariableBindings.get(unit);
+    return Tuple.of(allVariableBindings.get(unit), self.returnTypes);
   }
 }
