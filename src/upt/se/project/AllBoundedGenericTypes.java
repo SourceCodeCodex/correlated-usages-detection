@@ -15,7 +15,7 @@ public class AllBoundedGenericTypes implements IRelationBuilder<MClass, MProject
   @Override
   public Group<MClass> buildGroup(MProject project) {
     return GroupBuilder.wrap(List.ofAll(project.genericTypes().getElements())
-        .filter(type -> List.ofAll(type.allTypeParameters().getElements())
+        .filter(type -> List.ofAll(type.typeParameters().getElements())
             .filter(parameter -> parentExtendsObject(parameter))
             .size() == 0));
   }

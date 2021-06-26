@@ -1,4 +1,4 @@
-package upt.se.parameters.single;
+package upt.se.classes;
 
 import static upt.se.utils.helpers.Converter.convert;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
@@ -14,7 +14,7 @@ import thesis.metamodel.factory.Factory;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllTypeParameters implements IRelationBuilder<MParameter, MClass> {
+public class TypeParameters implements IRelationBuilder<MParameter, MClass> {
 
   @Override
   public Group<MParameter> buildGroup(MClass entity) {

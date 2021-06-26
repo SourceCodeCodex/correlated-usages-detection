@@ -10,7 +10,7 @@ public class OverallPairAperture implements IPropertyComputer<Double, MClass> {
 
   @Override
   public Double compute(MClass entity) {
-    List<Double> apertures = List.ofAll(entity.allTypeParameters().getElements())
+    List<Double> apertures = List.ofAll(entity.typeParameters().getElements())
         .map(parameter -> parameter.aperture());
 
     return apertures.fold(0d, (elem, acc) -> elem + acc) / apertures.size();

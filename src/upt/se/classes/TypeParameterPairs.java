@@ -1,4 +1,4 @@
-package upt.se.parameters.pair;
+package upt.se.classes;
 
 import io.vavr.Tuple;
 import ro.lrg.xcore.metametamodel.Group;
@@ -11,11 +11,11 @@ import upt.se.utils.ParameterPair;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllTypeParameterPairs implements IRelationBuilder<MParameterPair, MClass> {
+public class TypeParameterPairs implements IRelationBuilder<MParameterPair, MClass> {
 
   @Override
   public Group<MParameterPair> buildGroup(MClass entity) {
-    return Tuple.of(GroupBuilder.unwrapParameters(entity.allTypeParameters()))
+    return Tuple.of(GroupBuilder.unwrapParameters(entity.typeParameters()))
         .map(parameters -> Tuple.of(parameters, parameters))
         .map(parameters -> parameters._1()
             .sliding(2)

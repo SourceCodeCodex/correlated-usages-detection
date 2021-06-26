@@ -15,7 +15,7 @@ public class AllBoundedSingleParameterTypesWithLowAperture
   @Override
   public Group<MClass> buildGroup(MProject project) {
     return GroupBuilder.wrap(List.ofAll(project.allBoundedSingleParameterTypes().getElements())
-        .filter(mClass -> List.ofAll(mClass.allTypeParameterPairs().getElements())
+        .filter(mClass -> List.ofAll(mClass.typeParameterPairs().getElements())
             .map(pair -> pair.aperture())
             .filter(aperture -> aperture <= 50d)
             .isEmpty()));

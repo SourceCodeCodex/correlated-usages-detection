@@ -10,7 +10,7 @@ public class OverallIndividualAperture implements IPropertyComputer<Double, MCla
 
   @Override
   public Double compute(MClass entity) {
-    List<Double> apertures = List.ofAll(entity.allTypeParameterPairs().getElements())
+    List<Double> apertures = List.ofAll(entity.typeParameterPairs().getElements())
         .map(parameter -> parameter.aperture());
 
     return apertures.fold(0d, (elem, acc) -> elem + acc) / apertures.size();

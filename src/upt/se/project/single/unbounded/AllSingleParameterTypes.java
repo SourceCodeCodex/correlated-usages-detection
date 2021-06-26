@@ -14,6 +14,6 @@ public class AllSingleParameterTypes implements IRelationBuilder<MClass, MProjec
   @Override
   public Group<MClass> buildGroup(MProject project) {
     return GroupBuilder.wrap(List.ofAll(project.genericTypes().getElements())
-        .filter(type -> List.ofAll(type.allTypeParameters().getElements()).size() == 1));
+        .filter(type -> List.ofAll(type.typeParameters().getElements()).size() == 1));
   }
 }

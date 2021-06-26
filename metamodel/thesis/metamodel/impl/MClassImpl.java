@@ -4,8 +4,8 @@ import thesis.metamodel.entity.*;
 import upt.se.arguments.OverallIndividualAperture;
 import upt.se.classes.ToString;
 import upt.se.arguments.OverallPairAperture;
-import upt.se.parameters.pair.AllTypeParameterPairs;
-import upt.se.parameters.single.AllTypeParameters;
+import upt.se.classes.TypeParameterPairs;
+import upt.se.classes.TypeParameters;
 import upt.se.classes.ShowInEditor;
 
 public class MClassImpl implements MClass {
@@ -15,8 +15,8 @@ public class MClassImpl implements MClass {
 	private static final OverallIndividualAperture OverallIndividualAperture_INSTANCE = new OverallIndividualAperture();
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final OverallPairAperture OverallPairAperture_INSTANCE = new OverallPairAperture();
-	private static final AllTypeParameterPairs AllTypeParameterPairs_INSTANCE = new AllTypeParameterPairs();
-	private static final AllTypeParameters AllTypeParameters_INSTANCE = new AllTypeParameters();
+	private static final TypeParameterPairs TypeParameterPairs_INSTANCE = new TypeParameterPairs();
+	private static final TypeParameters TypeParameters_INSTANCE = new TypeParameters();
 	private static final ShowInEditor ShowInEditor_INSTANCE = new ShowInEditor();
 
 	public MClassImpl(org.eclipse.jdt.core.IType underlyingObj) {
@@ -48,14 +48,14 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MParameterPair> allTypeParameterPairs() {
-		return AllTypeParameterPairs_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MParameterPair> typeParameterPairs() {
+		return TypeParameterPairs_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MParameter> allTypeParameters() {
-		return AllTypeParameters_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MParameter> typeParameters() {
+		return TypeParameters_INSTANCE.buildGroup(this);
 	}
 
 	@Override

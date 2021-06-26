@@ -12,10 +12,10 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Double overallPairAperture();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MParameterPair> allTypeParameterPairs();
+	public ro.lrg.xcore.metametamodel.Group<MParameterPair> typeParameterPairs();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MParameter> allTypeParameters();
+	public ro.lrg.xcore.metametamodel.Group<MParameter> typeParameters();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAnAction(numParams = 0) 
 	public void showInEditor ();

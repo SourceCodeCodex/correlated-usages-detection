@@ -46,7 +46,7 @@ class Test1 {
 		MClass theClass = findClass("tc1.ClassOne");
 		assertNotNull("tc1.ClassOne with 2 bounded parametes must be found", theClass);
 		
-		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		Group<MParameterPair> typeParameterPairs = theClass.typeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc1.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
@@ -63,7 +63,7 @@ class Test1 {
 		MClass theClass = findClass("tc2.ClassOne");
 		assertNotNull("tc2.ClassOne with 2 bounded parametes must be found", theClass);
 		
-		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		Group<MParameterPair> typeParameterPairs = theClass.typeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc2.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
@@ -80,7 +80,7 @@ class Test1 {
 		MClass theClass = findClass("tc3.ClassOne");
 		assertNotNull("tc3.ClassOne with 2 bounded parametes must be found", theClass);
 		
-		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		Group<MParameterPair> typeParameterPairs = theClass.typeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc3.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
@@ -97,7 +97,7 @@ class Test1 {
 		MClass theClass = findClass("tc4.ClassOne");
 		assertNotNull("tc4.ClassOne with 2 bounded parametes must be found", theClass);
 		
-		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		Group<MParameterPair> typeParameterPairs = theClass.typeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc4.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
@@ -114,7 +114,7 @@ class Test1 {
 		MClass theClass = findClass("tc5.ClassOne");
 		assertNotNull("tc5.ClassOne with 2 bounded parametes must be found", theClass);
 		
-		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		Group<MParameterPair> typeParameterPairs = theClass.typeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc5.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
@@ -131,7 +131,7 @@ class Test1 {
 		MClass theClass = findClass("tc6.ClassOne");
 		assertNotNull("tc6.ClassOne with 2 bounded parametes must be found", theClass);
 		
-		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		Group<MParameterPair> typeParameterPairs = theClass.typeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc6.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
@@ -148,7 +148,7 @@ class Test1 {
 		MClass theClass = findClass("tc7.ClassOne");
 		assertNotNull("tc7.ClassOne with 2 bounded parametes must be found", theClass);
 		
-		Group<MParameterPair> typeParameterPairs = theClass.allTypeParameterPairs();
+		Group<MParameterPair> typeParameterPairs = theClass.typeParameterPairs();
 		assertEquals("There is one pair of bounded type parameters for tc7.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
