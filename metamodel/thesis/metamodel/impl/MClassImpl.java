@@ -1,9 +1,8 @@
 package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
-import upt.se.arguments.OverallIndividualAperture;
 import upt.se.classes.ToString;
-import upt.se.arguments.OverallPairAperture;
+import upt.se.classes.ApertureCoverage;
 import upt.se.classes.TypeParameterPairs;
 import upt.se.classes.TypeParameters;
 import upt.se.classes.ShowInEditor;
@@ -12,9 +11,8 @@ public class MClassImpl implements MClass {
 
 	private org.eclipse.jdt.core.IType underlyingObj_;
 
-	private static final OverallIndividualAperture OverallIndividualAperture_INSTANCE = new OverallIndividualAperture();
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final OverallPairAperture OverallPairAperture_INSTANCE = new OverallPairAperture();
+	private static final ApertureCoverage ApertureCoverage_INSTANCE = new ApertureCoverage();
 	private static final TypeParameterPairs TypeParameterPairs_INSTANCE = new TypeParameterPairs();
 	private static final TypeParameters TypeParameters_INSTANCE = new TypeParameters();
 	private static final ShowInEditor ShowInEditor_INSTANCE = new ShowInEditor();
@@ -30,20 +28,14 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double overallIndividualAperture() {
-		return OverallIndividualAperture_INSTANCE.compute(this);
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString() {
 		return ToString_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double overallPairAperture() {
-		return OverallPairAperture_INSTANCE.compute(this);
+	public java.lang.Double apertureCoverage() {
+		return ApertureCoverage_INSTANCE.compute(this);
 	}
 
 	@Override
