@@ -2,11 +2,11 @@ package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
 import upt.se.arguments.OverallIndividualAperture;
-import upt.se.arguments.single.ToString;
+import upt.se.classes.ToString;
 import upt.se.arguments.OverallPairAperture;
 import upt.se.parameters.pair.AllTypeParameterPairs;
 import upt.se.parameters.single.AllTypeParameters;
-import classes.ShowInEditor;
+import upt.se.classes.ShowInEditor;
 
 public class MClassImpl implements MClass {
 

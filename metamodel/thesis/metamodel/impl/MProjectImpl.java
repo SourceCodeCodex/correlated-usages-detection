@@ -4,8 +4,8 @@ import thesis.metamodel.entity.*;
 import upt.se.project.ToString;
 import upt.se.project.multiple.unbounded.AllMultipleParameterTypesWithLowAperture;
 import upt.se.project.multiple.unbounded.AllMultipleParameterTypes;
-import upt.se.project.AllGenericTypes;
 import upt.se.project.single.bounded.AllBoundedSingleParameterTypes;
+import upt.se.project.GenericTypes;
 import upt.se.project.multiple.bounded.AllBoundedMultipleParameterTypesWithLowAperture;
 import upt.se.project.single.unbounded.AllSingleParameterTypesWithLowAperture;
 import upt.se.project.single.bounded.AllBoundedSingleParameterTypesWithLowAperture;
@@ -20,8 +20,8 @@ public class MProjectImpl implements MProject {
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final AllMultipleParameterTypesWithLowAperture AllMultipleParameterTypesWithLowAperture_INSTANCE = new AllMultipleParameterTypesWithLowAperture();
 	private static final AllMultipleParameterTypes AllMultipleParameterTypes_INSTANCE = new AllMultipleParameterTypes();
-	private static final AllGenericTypes AllGenericTypes_INSTANCE = new AllGenericTypes();
 	private static final AllBoundedSingleParameterTypes AllBoundedSingleParameterTypes_INSTANCE = new AllBoundedSingleParameterTypes();
+	private static final GenericTypes GenericTypes_INSTANCE = new GenericTypes();
 	private static final AllBoundedMultipleParameterTypesWithLowAperture AllBoundedMultipleParameterTypesWithLowAperture_INSTANCE = new AllBoundedMultipleParameterTypesWithLowAperture();
 	private static final AllSingleParameterTypesWithLowAperture AllSingleParameterTypesWithLowAperture_INSTANCE = new AllSingleParameterTypesWithLowAperture();
 	private static final AllBoundedSingleParameterTypesWithLowAperture AllBoundedSingleParameterTypesWithLowAperture_INSTANCE = new AllBoundedSingleParameterTypesWithLowAperture();
@@ -58,14 +58,14 @@ public class MProjectImpl implements MProject {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allGenericTypes() {
-		return AllGenericTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedSingleParameterTypes() {
+		return AllBoundedSingleParameterTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedSingleParameterTypes() {
-		return AllBoundedSingleParameterTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> genericTypes() {
+		return GenericTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override

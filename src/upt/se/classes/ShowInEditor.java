@@ -1,4 +1,4 @@
-package classes;
+package upt.se.classes;
 
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;

@@ -13,7 +13,7 @@ public class AllMultipleParameterTypes implements IRelationBuilder<MClass, MProj
 
   @Override
   public Group<MClass> buildGroup(MProject project) {
-    return GroupBuilder.wrap(List.ofAll(project.allGenericTypes().getElements())
+    return GroupBuilder.wrap(List.ofAll(project.genericTypes().getElements())
         .filter(type -> List.ofAll(type.allTypeParameters().getElements()).size() > 1));
   }
 }
