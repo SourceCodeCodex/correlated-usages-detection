@@ -1,6 +1,6 @@
 package upt.se.utils.crawlers;
 
-import static upt.se.utils.helpers.Converter.convert;
+import static upt.se.utils.visitors.IType2ITypeDeclarationBindingConverter.convert;
 import static upt.se.utils.helpers.Equals.*;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
