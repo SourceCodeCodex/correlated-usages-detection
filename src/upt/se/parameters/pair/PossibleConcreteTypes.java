@@ -18,14 +18,13 @@ import upt.se.utils.ArgumentPair;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
-public class AllPossibleArgumentsTypes implements IRelationBuilder<MClassPair, MParameterPair> {
+public class PossibleConcreteTypes implements IRelationBuilder<MClassPair, MParameterPair> {
 
 	@Override
 	public Group<MClassPair> buildGroup(MParameterPair entity) {
 		return Try.of(() -> entity.getUnderlyingObject()).map(pair -> {
 			List<IType> firstParamArgTypes = getAllArguments(pair.getFirst());
 			List<IType> secondParamArgTypes = getAllArguments(pair.getSecond());
-
 			return firstParamArgTypes.crossProduct(secondParamArgTypes);
 		}).map(argumentPairs -> argumentPairs.distinctBy((first, second) -> isEqualPairTypes(first, second) ? 0 : 1))
 				.map(argumentPairs -> argumentPairs
@@ -42,7 +41,7 @@ public class AllPossibleArgumentsTypes implements IRelationBuilder<MClassPair, M
 
 	private List<IType> getAllArguments(ITypeBinding type) {
 		MParameter parameter = Factory.getInstance().createMParameter(type);
-		List<IType> argTypes = GroupBuilder.unwrapArguments(parameter.allPossibleArgumentTypes());
+		List<IType> argTypes = GroupBuilder.unwrapArguments(parameter.possibleConcreteTypes());
 		return argTypes;
 	}
 

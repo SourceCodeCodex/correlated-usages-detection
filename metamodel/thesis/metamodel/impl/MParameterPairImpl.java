@@ -5,8 +5,8 @@ import upt.se.parameters.pair.ToString;
 import upt.se.parameters.pair.ApertureCoverage;
 import upt.se.parameters.pair.IsBounded;
 import upt.se.parameters.pair.UsedArgumentsTypes;
+import upt.se.parameters.pair.PossibleConcreteTypes;
 import upt.se.parameters.pair.UnusedArgumentsTypes;
-import upt.se.parameters.pair.AllPossibleArgumentsTypes;
 
 public class MParameterPairImpl implements MParameterPair {
 
@@ -16,8 +16,8 @@ public class MParameterPairImpl implements MParameterPair {
 	private static final ApertureCoverage ApertureCoverage_INSTANCE = new ApertureCoverage();
 	private static final IsBounded IsBounded_INSTANCE = new IsBounded();
 	private static final UsedArgumentsTypes UsedArgumentsTypes_INSTANCE = new UsedArgumentsTypes();
+	private static final PossibleConcreteTypes PossibleConcreteTypes_INSTANCE = new PossibleConcreteTypes();
 	private static final UnusedArgumentsTypes UnusedArgumentsTypes_INSTANCE = new UnusedArgumentsTypes();
-	private static final AllPossibleArgumentsTypes AllPossibleArgumentsTypes_INSTANCE = new AllPossibleArgumentsTypes();
 
 	public MParameterPairImpl(upt.se.utils.ParameterPair underlyingObj) {
 		underlyingObj_ = underlyingObj;
@@ -54,14 +54,14 @@ public class MParameterPairImpl implements MParameterPair {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClassPair> unusedArgumentsTypes() {
-		return UnusedArgumentsTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClassPair> possibleConcreteTypes() {
+		return PossibleConcreteTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClassPair> allPossibleArgumentsTypes() {
-		return AllPossibleArgumentsTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClassPair> unusedArgumentsTypes() {
+		return UnusedArgumentsTypes_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {

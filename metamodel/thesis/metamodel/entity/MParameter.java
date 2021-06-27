@@ -12,10 +12,10 @@ public interface MParameter extends ro.lrg.xcore.metametamodel.XEntity {
 	public ro.lrg.xcore.metametamodel.Group<MClass> unusedArgumentTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> possibleConcreteTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allPossibleArgumentTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes();
 
 	org.eclipse.jdt.core.dom.ITypeBinding getUnderlyingObject();
 }

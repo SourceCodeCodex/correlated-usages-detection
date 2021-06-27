@@ -20,7 +20,7 @@ public class UnusedArgumentTypes implements IRelationBuilder<MClass, MParameter>
 	public Group<MClass> buildGroup(MParameter entity) {
 	    return Try.of(() -> entity)
 	        .map(type -> {
-	        	Set<IType> all = GroupBuilder.unwrapArguments(type.allPossibleArgumentTypes()).toSet();
+	        	Set<IType> all = GroupBuilder.unwrapArguments(type.possibleConcreteTypes()).toSet();
 	        	Set<IType> used = GroupBuilder.unwrapArguments(type.usedArgumentTypes()).toSet();
 	        	
 	        	return all.diff(used);

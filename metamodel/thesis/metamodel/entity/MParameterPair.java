@@ -15,10 +15,10 @@ public interface MParameterPair extends ro.lrg.xcore.metametamodel.XEntity {
 	public ro.lrg.xcore.metametamodel.Group<MClassPair> usedArgumentsTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClassPair> unusedArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClassPair> possibleConcreteTypes();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClassPair> allPossibleArgumentsTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClassPair> unusedArgumentsTypes();
 
 	upt.se.utils.ParameterPair getUnderlyingObject();
 }

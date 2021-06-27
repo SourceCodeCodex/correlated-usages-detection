@@ -25,7 +25,7 @@ public class ApertureCoverage implements IPropertyComputer<Double, MParameterPai
 				.distinctBy(pair -> Try.of(() -> pair._1.getFullyQualifiedParameterizedName()).getOrElse("") + ","
 						+ Try.of(() -> pair._2.getFullyQualifiedParameterizedName()).getOrElse(""))
 				.size();		
-		double apperture = usedTypesCount * 1d / entity.allPossibleArgumentsTypes().getElements().size();
+		double apperture = usedTypesCount * 1d / entity.possibleConcreteTypes().getElements().size();
 		return apperture;
 	}
 

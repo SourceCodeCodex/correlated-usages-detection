@@ -47,7 +47,7 @@ class Test1 {
 		assertEquals("There is one pair of bounded type parameters for tc1.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
-		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		Group<MClassPair> possibleClassPairs = paramPair.possibleConcreteTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pairs for tc1.ClassOne.T and tc1.ClassOne.K", 4, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
@@ -64,7 +64,7 @@ class Test1 {
 		assertEquals("There is one pair of bounded type parameters for tc2.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
-		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		Group<MClassPair> possibleClassPairs = paramPair.possibleConcreteTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pair for tc2.ClassOne.T and tc2.ClassOne.K", 4, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
@@ -81,7 +81,7 @@ class Test1 {
 		assertEquals("There is one pair of bounded type parameters for tc3.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
-		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		Group<MClassPair> possibleClassPairs = paramPair.possibleConcreteTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pairs for tc3.ClassOne.T and tc3.ClassOne.K", 4, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
@@ -98,7 +98,7 @@ class Test1 {
 		assertEquals("There is one pair of bounded type parameters for tc4.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
-		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		Group<MClassPair> possibleClassPairs = paramPair.possibleConcreteTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pairs for tc4.ClassOne.T and tc4.ClassOne.K", 4, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
@@ -115,7 +115,7 @@ class Test1 {
 		assertEquals("There is one pair of bounded type parameters for tc5.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
-		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		Group<MClassPair> possibleClassPairs = paramPair.possibleConcreteTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2) pairs are the POSSIBLE concrete type pairs for tc5.ClassOne.T and tc5.ClassOne.K", 4, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
@@ -132,7 +132,7 @@ class Test1 {
 		assertEquals("There is one pair of bounded type parameters for tc6.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
-		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		Group<MClassPair> possibleClassPairs = paramPair.possibleConcreteTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2),(A3,B1),(A3,B2) pairs are the POSSIBLE concrete type pairs for tc6.ClassOne.T and tc6.ClassOne.K", 6, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();
@@ -149,7 +149,7 @@ class Test1 {
 		assertEquals("There is one pair of bounded type parameters for tc7.ClassOne", 1, typeParameterPairs.getElements().size());
 		
 		MParameterPair paramPair = typeParameterPairs.getElements().get(0);
-		Group<MClassPair> possibleClassPairs = paramPair.allPossibleArgumentsTypes();
+		Group<MClassPair> possibleClassPairs = paramPair.possibleConcreteTypes();
 		assertEquals("(A1,B1),(A1,B2),(A2,B1),(A2,B2),(A3,B1),(A3,B2) pairs are the POSSIBLE concrete type pairs for tc7.ClassOne.T and tc7.ClassOne.K", 6, possibleClassPairs.getElements().size());
 		
 		Group<MClassPair> usedClassPairs = paramPair.usedArgumentsTypes();

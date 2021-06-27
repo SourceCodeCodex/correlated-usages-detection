@@ -17,7 +17,7 @@ public class UnusedArgumentsTypes implements IRelationBuilder<MClassPair, MParam
 
   @Override
   public Group<MClassPair> buildGroup(MParameterPair entity) {
-    return Tuple.of(entity.allPossibleArgumentsTypes(), entity.usedArgumentsTypes())
+    return Tuple.of(entity.possibleConcreteTypes(), entity.usedArgumentsTypes())
         .map(GroupBuilder::unwrapArgumentsPairs, GroupBuilder::unwrapArgumentsPairs)
         .apply((allTypes, usedTypes) -> allTypes.filter(type -> !contains(usedTypes, type)))
         .map(Factory.getInstance()::createMClassPair)

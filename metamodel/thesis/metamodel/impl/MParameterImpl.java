@@ -4,8 +4,8 @@ import thesis.metamodel.entity.*;
 import upt.se.parameters.single.ToString;
 import upt.se.parameters.single.IsBounded;
 import upt.se.parameters.single.UnusedArgumentTypes;
+import upt.se.parameters.single.PossibleConcreteTypes;
 import upt.se.parameters.single.UsedArgumentTypes;
-import upt.se.parameters.single.AllPossibleArgumentTypes;
 
 public class MParameterImpl implements MParameter {
 
@@ -14,8 +14,8 @@ public class MParameterImpl implements MParameter {
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final IsBounded IsBounded_INSTANCE = new IsBounded();
 	private static final UnusedArgumentTypes UnusedArgumentTypes_INSTANCE = new UnusedArgumentTypes();
+	private static final PossibleConcreteTypes PossibleConcreteTypes_INSTANCE = new PossibleConcreteTypes();
 	private static final UsedArgumentTypes UsedArgumentTypes_INSTANCE = new UsedArgumentTypes();
-	private static final AllPossibleArgumentTypes AllPossibleArgumentTypes_INSTANCE = new AllPossibleArgumentTypes();
 
 	public MParameterImpl(org.eclipse.jdt.core.dom.ITypeBinding underlyingObj) {
 		underlyingObj_ = underlyingObj;
@@ -46,14 +46,14 @@ public class MParameterImpl implements MParameter {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes() {
-		return UsedArgumentTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> possibleConcreteTypes() {
+		return PossibleConcreteTypes_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allPossibleArgumentTypes() {
-		return AllPossibleArgumentTypes_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> usedArgumentTypes() {
+		return UsedArgumentTypes_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {
