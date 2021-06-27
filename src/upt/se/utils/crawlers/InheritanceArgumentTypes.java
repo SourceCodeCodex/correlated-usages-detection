@@ -13,9 +13,9 @@ import io.vavr.control.Try;
 public class InheritanceArgumentTypes extends Crawler {
 
 
-  public static List<List<ITypeBinding>> getUsages(ITypeBinding entity) {
-    return Try.of(() -> getAllSubtypes(entity))
-        .map(usages -> getTypeArguments(usages, entity))
+  public static List<List<ITypeBinding>> getUsages(ITypeBinding declaringClassOfParameter) {
+    return Try.of(() -> getAllSubtypes(declaringClassOfParameter))
+        .map(usages -> getTypeArguments(usages, declaringClassOfParameter))
         .onFailure(t -> LOGGER.log(Level.SEVERE, "An error has occurred", t))
         .orElse(() -> Try.success(List.empty()))
         .get();
@@ -33,9 +33,9 @@ public class InheritanceArgumentTypes extends Crawler {
   }
 
   private static List<List<ITypeBinding>> getTypeArguments(List<ITypeBinding> declaringClasses,
-      ITypeBinding parameter) {
+      ITypeBinding declaringClassOfParameter) {
     return List.ofAll(declaringClasses)
-            .map(declaringClass -> getSuperclass(declaringClass, parameter.getDeclaringClass()))
+            .map(declaringClass -> getSuperclass(declaringClass, declaringClassOfParameter))
             .map(superClass -> superClass.getTypeArguments())
             .map(typeArguments -> List.of(typeArguments));
   }
