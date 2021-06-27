@@ -3,9 +3,6 @@ package thesis.metamodel.entity;
 public interface MParameter extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double aperture();
-
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder

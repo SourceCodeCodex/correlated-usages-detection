@@ -1,7 +1,6 @@
 package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
-import upt.se.arguments.single.Aperture;
 import upt.se.parameters.single.ToString;
 import upt.se.arguments.single.UnusedArgumentTypes;
 import upt.se.arguments.single.UsedArgumentTypes;
@@ -11,7 +10,6 @@ public class MParameterImpl implements MParameter {
 
 	private org.eclipse.jdt.core.dom.ITypeBinding underlyingObj_;
 
-	private static final Aperture Aperture_INSTANCE = new Aperture();
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final UnusedArgumentTypes UnusedArgumentTypes_INSTANCE = new UnusedArgumentTypes();
 	private static final UsedArgumentTypes UsedArgumentTypes_INSTANCE = new UsedArgumentTypes();
@@ -24,12 +22,6 @@ public class MParameterImpl implements MParameter {
 	@Override
 	public org.eclipse.jdt.core.dom.ITypeBinding getUnderlyingObject() {
 		return underlyingObj_;
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double aperture() {
-		return Aperture_INSTANCE.compute(this);
 	}
 
 	@Override
