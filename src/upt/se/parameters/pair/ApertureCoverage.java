@@ -1,7 +1,6 @@
 package upt.se.parameters.pair;
 
 import static upt.se.utils.helpers.Helper.isAbstract;
-import static upt.se.utils.helpers.Converter.round;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
@@ -13,7 +12,7 @@ import ro.lrg.xcore.metametamodel.PropertyComputer;
 import thesis.metamodel.entity.MParameterPair;
 
 @PropertyComputer
-public class Aperture implements IPropertyComputer<Double, MParameterPair> {
+public class ApertureCoverage implements IPropertyComputer<Double, MParameterPair> {
 
 	@Override
 	public Double compute(MParameterPair entity) {
@@ -22,11 +21,9 @@ public class Aperture implements IPropertyComputer<Double, MParameterPair> {
 				.flatMap(pair -> getAllConcreteTypes(pair.getFirst()).crossProduct(getAllConcreteTypes(pair.getSecond())))
 				.distinctBy(pair -> Try.of(() -> pair._1.getFullyQualifiedParameterizedName()).getOrElse("") + ","
 						+ Try.of(() -> pair._2.getFullyQualifiedParameterizedName()).getOrElse(""))
-				.size();
-		
+				.size();		
 		double apperture = usedTypesCount * 1d / entity.allPossibleArgumentsTypes().getElements().size();
-
-		return round(apperture, 2);
+		return apperture;
 	}
 
 	//TODO: if a class is not extended this will return an empty list

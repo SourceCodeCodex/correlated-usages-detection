@@ -1,8 +1,8 @@
 package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
-import upt.se.parameters.pair.Aperture;
 import upt.se.parameters.pair.ToString;
+import upt.se.parameters.pair.ApertureCoverage;
 import upt.se.parameters.pair.UsedArgumentsTypes;
 import upt.se.parameters.pair.UnusedArgumentsTypes;
 import upt.se.parameters.pair.AllPossibleArgumentsTypes;
@@ -11,8 +11,8 @@ public class MParameterPairImpl implements MParameterPair {
 
 	private upt.se.utils.ParameterPair underlyingObj_;
 
-	private static final Aperture Aperture_INSTANCE = new Aperture();
 	private static final ToString ToString_INSTANCE = new ToString();
+	private static final ApertureCoverage ApertureCoverage_INSTANCE = new ApertureCoverage();
 	private static final UsedArgumentsTypes UsedArgumentsTypes_INSTANCE = new UsedArgumentsTypes();
 	private static final UnusedArgumentsTypes UnusedArgumentsTypes_INSTANCE = new UnusedArgumentsTypes();
 	private static final AllPossibleArgumentsTypes AllPossibleArgumentsTypes_INSTANCE = new AllPossibleArgumentsTypes();
@@ -28,14 +28,14 @@ public class MParameterPairImpl implements MParameterPair {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double aperture() {
-		return Aperture_INSTANCE.compute(this);
+	public java.lang.String toString() {
+		return ToString_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.String toString() {
-		return ToString_INSTANCE.compute(this);
+	public java.lang.Double apertureCoverage() {
+		return ApertureCoverage_INSTANCE.compute(this);
 	}
 
 	@Override

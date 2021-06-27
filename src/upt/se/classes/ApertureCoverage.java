@@ -10,7 +10,10 @@ public class ApertureCoverage implements IPropertyComputer<Double, MClass> {
 	@Override
 	public Double compute(MClass entity) {
 		return entity.typeParameterPairs().getElements().stream()
-			.mapToDouble(pair -> pair.aperture()).min().orElse(Double.NaN);
+			.mapToDouble(pair -> pair.apertureCoverage())
+			.filter(value -> value != Double.NaN)
+			.min()
+			.orElse(Double.NaN);
 	}
 	
 }

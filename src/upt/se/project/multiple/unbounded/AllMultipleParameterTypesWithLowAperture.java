@@ -16,7 +16,7 @@ public class AllMultipleParameterTypesWithLowAperture
   public Group<MClass> buildGroup(MProject project) {
     return GroupBuilder.wrap(List.ofAll(project.allMultipleParameterTypes().getElements())
         .filter(mClass -> List.ofAll(mClass.typeParameterPairs().getElements())
-            .map(pair -> pair.aperture())
+            .map(pair -> pair.apertureCoverage())
             .filter(aperture -> aperture <= 50d)
             .isEmpty()));
   }
