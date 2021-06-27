@@ -14,11 +14,7 @@ public class GenericTypesWithLowApertureCoverageBoundedParameterPairs implements
 	@Override
 	public Group<MClass> buildGroup(MProject project) {
 		return GroupBuilder.wrap(List.ofAll(project.genericTypesWithBoundedParameterPairs().getElements())
-	        .filter(mClass -> List.ofAll(mClass.typeParameterPairs().getElements())
-		        .filter(pair -> pair.isBounded())
-	            .map(pair -> pair.apertureCoverage())
-	            .filter(aperture -> aperture <= 50d)
-	            .isEmpty()));
+	        .filter(mClass -> mClass.apertureCoverage() <= 0.5));
 	}
 	
 }

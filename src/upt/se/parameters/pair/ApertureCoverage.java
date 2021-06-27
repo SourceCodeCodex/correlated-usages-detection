@@ -16,6 +16,9 @@ public class ApertureCoverage implements IPropertyComputer<Double, MParameterPai
 
 	@Override
 	public Double compute(MParameterPair entity) {
+		if (!entity.isBounded()) {
+			return Double.NaN;
+		}
 		double usedTypesCount = List.ofAll(entity.usedArgumentsTypes().getElements())
 				.map(pair -> pair.getUnderlyingObject())
 				.flatMap(pair -> getAllConcreteTypes(pair.getFirst()).crossProduct(getAllConcreteTypes(pair.getSecond())))
