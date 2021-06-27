@@ -3,6 +3,7 @@ package thesis.metamodel.impl;
 import thesis.metamodel.entity.*;
 import upt.se.parameters.pair.ToString;
 import upt.se.parameters.pair.ApertureCoverage;
+import upt.se.parameters.pair.IsBounded;
 import upt.se.parameters.pair.UsedArgumentsTypes;
 import upt.se.parameters.pair.UnusedArgumentsTypes;
 import upt.se.parameters.pair.AllPossibleArgumentsTypes;
@@ -13,6 +14,7 @@ public class MParameterPairImpl implements MParameterPair {
 
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final ApertureCoverage ApertureCoverage_INSTANCE = new ApertureCoverage();
+	private static final IsBounded IsBounded_INSTANCE = new IsBounded();
 	private static final UsedArgumentsTypes UsedArgumentsTypes_INSTANCE = new UsedArgumentsTypes();
 	private static final UnusedArgumentsTypes UnusedArgumentsTypes_INSTANCE = new UnusedArgumentsTypes();
 	private static final AllPossibleArgumentsTypes AllPossibleArgumentsTypes_INSTANCE = new AllPossibleArgumentsTypes();
@@ -36,6 +38,12 @@ public class MParameterPairImpl implements MParameterPair {
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Double apertureCoverage() {
 		return ApertureCoverage_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Boolean isBounded() {
+		return IsBounded_INSTANCE.compute(this);
 	}
 
 	@Override

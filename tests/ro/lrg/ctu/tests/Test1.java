@@ -2,9 +2,6 @@ package ro.lrg.ctu.tests;
 
 import static org.junit.Assert.*;
 
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +30,7 @@ class Test1 {
 	public void loadProject() {
 		TestUtil.importProject("TestProject1", "TestProject1.zip");
 		MProject prj = thesis.metamodel.factory.Factory.getInstance().createMProject(TestUtil.getProject("TestProject1").get());
-		allGenericTypes = prj.allBoundedGenericTypes();
+		allGenericTypes = prj.genericTypesWithBoundedParameterPairs();
 	}
 	
 	@AfterEach

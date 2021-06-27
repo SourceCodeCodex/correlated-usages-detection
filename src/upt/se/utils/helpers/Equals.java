@@ -3,7 +3,6 @@ package upt.se.utils.helpers;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import io.vavr.Tuple2;
-import io.vavr.collection.List;
 import io.vavr.control.Try;
 import thesis.metamodel.entity.MClass;
 import thesis.metamodel.entity.MParameter;
@@ -17,11 +16,6 @@ public class Equals {
 
 	public static boolean isObject(MParameter entity) {
 		return isObject(entity.getUnderlyingObject());
-	}
-
-	public static boolean parentExtendsObject(MParameter entity) {
-		return isObject(entity.getUnderlyingObject().getSuperclass())
-				&& List.of(entity.getUnderlyingObject().getInterfaces()).isEmpty();
 	}
 
 	public static boolean isObject(String entity) {

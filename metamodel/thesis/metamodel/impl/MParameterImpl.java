@@ -2,6 +2,7 @@ package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
 import upt.se.parameters.single.ToString;
+import upt.se.parameters.single.IsBounded;
 import upt.se.parameters.single.UnusedArgumentTypes;
 import upt.se.parameters.single.UsedArgumentTypes;
 import upt.se.parameters.single.AllPossibleArgumentTypes;
@@ -11,6 +12,7 @@ public class MParameterImpl implements MParameter {
 	private org.eclipse.jdt.core.dom.ITypeBinding underlyingObj_;
 
 	private static final ToString ToString_INSTANCE = new ToString();
+	private static final IsBounded IsBounded_INSTANCE = new IsBounded();
 	private static final UnusedArgumentTypes UnusedArgumentTypes_INSTANCE = new UnusedArgumentTypes();
 	private static final UsedArgumentTypes UsedArgumentTypes_INSTANCE = new UsedArgumentTypes();
 	private static final AllPossibleArgumentTypes AllPossibleArgumentTypes_INSTANCE = new AllPossibleArgumentTypes();
@@ -28,6 +30,12 @@ public class MParameterImpl implements MParameter {
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString() {
 		return ToString_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Boolean isBounded() {
+		return IsBounded_INSTANCE.compute(this);
 	}
 
 	@Override

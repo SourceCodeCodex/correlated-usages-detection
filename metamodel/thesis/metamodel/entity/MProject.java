@@ -6,22 +6,13 @@ public interface MProject extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.String toString();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allMultipleParameterTypesWithLowAperture();
+	public ro.lrg.xcore.metametamodel.Group<MClass> genericTypesWithLowApertureCoverageBoundedParameterPairs();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allMultipleParameterTypes();
+	public ro.lrg.xcore.metametamodel.Group<MClass> genericTypesWithBoundedParameterPairs();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> genericTypes();
-
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedMultipleParameterTypesWithLowAperture();
-
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedGenericTypes();
-
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> allBoundedMultipleParameterTypes();
 
 	org.eclipse.jdt.core.IJavaProject getUnderlyingObject();
 }
