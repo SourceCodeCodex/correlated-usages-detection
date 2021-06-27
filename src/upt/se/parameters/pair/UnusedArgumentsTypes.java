@@ -1,4 +1,4 @@
-package upt.se.arguments.pair;
+package upt.se.parameters.pair;
 
 import static upt.se.utils.helpers.Equals.isEqualTypes;
 import io.vavr.Tuple;

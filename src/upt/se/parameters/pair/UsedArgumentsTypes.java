@@ -1,4 +1,4 @@
-package upt.se.arguments.pair;
+package upt.se.parameters.pair;
 
 import static upt.se.utils.visitors.IType2ITypeDeclarationBindingConverter.convert;
 import static upt.se.utils.helpers.Helper.isAbstract;

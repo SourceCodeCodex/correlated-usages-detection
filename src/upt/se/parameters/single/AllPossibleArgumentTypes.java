@@ -1,4 +1,4 @@
-package upt.se.arguments.single;
+package upt.se.parameters.single;
 
 import static upt.se.utils.helpers.Helper.isAbstract;
 import static upt.se.utils.helpers.Equals.isObject;

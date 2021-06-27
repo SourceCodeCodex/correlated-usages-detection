@@ -2,9 +2,9 @@ package thesis.metamodel.impl;
 
 import thesis.metamodel.entity.*;
 import upt.se.parameters.single.ToString;
-import upt.se.arguments.single.UnusedArgumentTypes;
-import upt.se.arguments.single.UsedArgumentTypes;
-import upt.se.arguments.single.AllPossibleArgumentTypes;
+import upt.se.parameters.single.UnusedArgumentTypes;
+import upt.se.parameters.single.UsedArgumentTypes;
+import upt.se.parameters.single.AllPossibleArgumentTypes;
 
 public class MParameterImpl implements MParameter {
 
