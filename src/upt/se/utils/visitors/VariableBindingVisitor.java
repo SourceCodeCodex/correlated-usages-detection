@@ -37,7 +37,10 @@ public class VariableBindingVisitor extends ASTVisitor {
         attributeBindings.add(variable);
       }
     } else if(binding instanceof IMethodBinding) {
-    	returnTypes.add(((IMethodBinding) binding).getReturnType());
+    	IMethodBinding method = (IMethodBinding) binding;
+        if (!method.getReturnType().isRawType() && isEqual(method.getReturnType().getErasure(), searchedType)) {
+        	returnTypes.add(((IMethodBinding) binding).getReturnType());
+        }
     }
     return super.visit(node);
   }
