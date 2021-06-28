@@ -4,7 +4,7 @@ import static upt.se.utils.helpers.Helper.isAbstract;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 import org.eclipse.jdt.core.IType;
@@ -23,8 +23,7 @@ import thesis.metamodel.entity.MParameterPair;
 import thesis.metamodel.factory.Factory;
 import upt.se.utils.ArgumentPair;
 import upt.se.utils.ParameterPair;
-import upt.se.utils.crawlers.InheritanceArgumentTypes;
-import upt.se.utils.crawlers.VariablesArgumentTypes;
+import upt.se.utils.crawlers.TypeArgumentsCrawler;
 import upt.se.utils.helpers.GroupBuilder;
 
 @RelationBuilder
@@ -33,7 +32,7 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 	@Override
 	public Group<MClassPair> buildGroup(MParameterPair entity) {
 		return Try.of(() -> entity.getUnderlyingObject())
-				.map(pair -> getInheritanceUsages(pair).appendAll(getVariablesUsages(pair)))
+				.map(pair -> getUsages(pair))
 				.map(usedArgumentPairs -> getHierarchy(usedArgumentPairs, entity.getUnderlyingObject()))
 				.map(usedArgumentPairs -> usedArgumentPairs.toMap(pair -> toString(pair)).values().toList())
 				.map(usedArgumentPairs -> usedArgumentPairs.map(Factory.getInstance()::createMClassPair))
@@ -51,25 +50,14 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 		String key = "(" + pair.getFirst().getFullyQualifiedName() + "," + pair.getSecond().getFullyQualifiedName() + ")";		
 		return Tuple.of(key, pair);
 	}
-
-	private List<Tuple2<ITypeBinding,ITypeBinding>> getInheritanceUsages(ParameterPair pair) {
-		ITypeBinding firstParameter = pair.getFirst();
-		ITypeBinding secondParameter = pair.getSecond();
-		List<List<ITypeBinding>> usages = InheritanceArgumentTypes.getUsages(firstParameter.getDeclaringClass());
-		
-		int firstParameterPos = InheritanceArgumentTypes.getParameterNumber(firstParameter);
-		int secondParameterPos = InheritanceArgumentTypes.getParameterNumber(secondParameter);
-		
-		return usages.map(types -> Tuple.of(types.get(firstParameterPos), types.get(secondParameterPos)));
-	}	
 	
-	private List<Tuple2<ITypeBinding,ITypeBinding>> getVariablesUsages(ParameterPair pair) {
+	private List<Tuple2<ITypeBinding,ITypeBinding>> getUsages(ParameterPair pair) {
 		ITypeBinding firstParameter = pair.getFirst();
 		ITypeBinding secondParameter = pair.getSecond();
-		List<List<ITypeBinding>> usages = VariablesArgumentTypes.getUsages(firstParameter.getDeclaringClass());
+		List<List<ITypeBinding>> usages = TypeArgumentsCrawler.getUsages(firstParameter.getDeclaringClass());
 		
-		int firstParameterPos = VariablesArgumentTypes.getParameterNumber(firstParameter);
-		int secondParameterPos = VariablesArgumentTypes.getParameterNumber(secondParameter);
+		int firstParameterPos = TypeArgumentsCrawler.getParameterNumber(firstParameter);
+		int secondParameterPos = TypeArgumentsCrawler.getParameterNumber(secondParameter);
 		
 		return usages.map(types -> Tuple.of(types.get(firstParameterPos), types.get(secondParameterPos)));
 	}
@@ -80,7 +68,7 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 			ITypeBinding secondType = pair._2;
 			List<IType> firstTypeHierarchy = getHierarchy(firstType, parameterPair.getFirst());
 			List<IType> secondTypeHierarchy = getHierarchy(secondType, parameterPair.getSecond());
-			LinkedList<ArgumentPair> result = new LinkedList<>();
+			ArrayList<ArgumentPair> result = new ArrayList<>();
 			firstTypeHierarchy.forEach(first -> {
 				secondTypeHierarchy.forEach(second -> {
 					result.add(new ArgumentPair(first, second));
