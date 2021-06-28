@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
@@ -15,10 +16,8 @@ import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
-import org.eclipse.jdt.core.search.TypeReferenceMatch;
 import io.vavr.collection.List;
-import io.vavr.control.Try;
-import upt.se.utils.visitors.BindingVisitor;
+import upt.se.utils.visitors.ParameterizedTypeBindingVisitor;
 
 public class TypeArgumentsCrawler {
 
@@ -27,7 +26,7 @@ public class TypeArgumentsCrawler {
 				.filter(parameter -> isEqual(parameter._1, actualParameter)).map(parameter -> parameter._2).head();
 	}
 
-	public static final List<List<ITypeBinding>> getUsages(ITypeBinding type) {
+	public static List<List<ITypeBinding>> getUsages(ITypeBinding type) {
 		java.util.Set<java.util.List<ITypeBinding>> types = new HashSet<>();
 
 		SearchPattern pattern = SearchPattern.createPattern(type.getJavaElement(),
@@ -39,20 +38,22 @@ public class TypeArgumentsCrawler {
 						| IJavaSearchConstants.SUPERTYPE_TYPE_REFERENCE);
 
 		IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
-
+		HashSet<ICompilationUnit> processed = new HashSet<>();
 		SearchRequestor requestor = new SearchRequestor() {
 			public void acceptSearchMatch(SearchMatch match) {
-				Try.of(() -> ((TypeReferenceMatch) match)).map(TypeReferenceMatch::getElement)
-				.peek(e -> System.out.println(e))
-				.map(element -> ((IMember) element).getCompilationUnit())
-				.map(compilationUnit -> BindingVisitor.convert(compilationUnit, type))
-				.onSuccess(list -> types.addAll(list));
+				Object element = match.getElement();
+				if (element instanceof IMember) {
+					ICompilationUnit cu = ((IMember) element).getCompilationUnit();
+					if (!processed.contains(cu)) {
+						processed.add(cu);
+						types.addAll(ParameterizedTypeBindingVisitor.convert(cu, type));
+					}
+				}
 			}
 		};
 
-		SearchEngine searchEngine = new SearchEngine();
-
 		try {
+			SearchEngine searchEngine = new SearchEngine();
 			searchEngine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
 					requestor, new NullProgressMonitor());
 		} catch (CoreException e) {

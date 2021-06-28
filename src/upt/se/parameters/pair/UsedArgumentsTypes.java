@@ -66,8 +66,8 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 		return pairs.flatMap(pair -> {
 			ITypeBinding firstType = pair._1;
 			ITypeBinding secondType = pair._2;
-			List<IType> firstTypeHierarchy = getHierarchy(firstType, parameterPair.getFirst());
-			List<IType> secondTypeHierarchy = getHierarchy(secondType, parameterPair.getSecond());
+			List<IType> firstTypeHierarchy = getHierarchyOfTypeArgument(firstType, parameterPair.getFirst());
+			List<IType> secondTypeHierarchy = getHierarchyOfTypeArgument(secondType, parameterPair.getSecond());
 			ArrayList<ArgumentPair> result = new ArrayList<>();
 			firstTypeHierarchy.forEach(first -> {
 				secondTypeHierarchy.forEach(second -> {
@@ -78,20 +78,26 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 		});
 	}
 		
-	private List<IType> getHierarchy(ITypeBinding argument, ITypeBinding parameter) {
+	private List<IType> getHierarchyOfTypeArgument(ITypeBinding argument, ITypeBinding parameter) {
 		try {
 			IType tmp;
+			List<IType> result;
 			if (argument.isWildcardType()) {
 				if (argument.isUpperbound()) {
 					tmp = (IType) argument.getBound().getJavaElement();
 				} else {
 					tmp = (IType) parameter.getTypeBounds()[0].getJavaElement();					
 				}
+				result = List.of(tmp.newTypeHierarchy(NULL_PROGRESS_MONITOR).getAllSubtypes(tmp))
+						.append(tmp).filter(tpe -> !isAbstract(tpe));
+			} else if (argument.isTypeVariable()) {
+				result = List.of();
 			} else {
 				tmp = (IType) argument.getJavaElement();
+				result = List.of(tmp.newTypeHierarchy(NULL_PROGRESS_MONITOR).getAllSubtypes(tmp))
+						.append(tmp).filter(tpe -> !isAbstract(tpe));
 			}
-			return List.of(tmp.newTypeHierarchy(NULL_PROGRESS_MONITOR).getAllSubtypes(tmp))
-					.append(tmp).filter(tpe -> !isAbstract(tpe));
+			return result;
 		} catch (JavaModelException e) {
 				e.printStackTrace();
 		}

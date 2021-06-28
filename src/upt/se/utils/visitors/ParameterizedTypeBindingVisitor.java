@@ -14,12 +14,12 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import io.vavr.collection.List;
 import upt.se.utils.Parser;
 
-public class BindingVisitor extends ASTVisitor {
+public class ParameterizedTypeBindingVisitor extends ASTVisitor {
 
 	private HashSet<ITypeBinding> bindings = new HashSet<>();
 	private ITypeBinding searchedType;
 	
-	private BindingVisitor(ITypeBinding searchedType) {	
+	private ParameterizedTypeBindingVisitor(ITypeBinding searchedType) {	
 		this.searchedType = searchedType;
 	}
 	
@@ -27,17 +27,17 @@ public class BindingVisitor extends ASTVisitor {
 		IBinding binding = node.resolveBinding();
 		if (binding instanceof IVariableBinding) {
 			IVariableBinding variable = (IVariableBinding) binding;
-		    if (!variable.getType().isRawType() && isEqual(variable.getType().getErasure(), searchedType)) {
+		    if (variable.getType().isParameterizedType() && isEqual(variable.getType().getErasure(), searchedType)) {
 		    	bindings.add(variable.getType());
 		    }
 		} else if(binding instanceof IMethodBinding) {
 		  	IMethodBinding method = (IMethodBinding) binding;
-		  	if (!method.getReturnType().isRawType() && isEqual(method.getReturnType().getErasure(), searchedType)) {
+		  	if (method.getReturnType().isParameterizedType() && isEqual(method.getReturnType().getErasure(), searchedType)) {
 		  		bindings.add(((IMethodBinding) binding).getReturnType());
 		  	}
 		} else if(binding instanceof ITypeBinding) {
 			ITypeBinding type = (ITypeBinding)binding;
-		    if (isEqual(type.getErasure(), searchedType)) {
+		    if (type.isParameterizedType() && isEqual(type.getErasure(), searchedType)) {
 		    	bindings.add(type);
 		    }    	
 		}
@@ -45,7 +45,7 @@ public class BindingVisitor extends ASTVisitor {
 	}
 	
 	public static java.util.List<java.util.List<ITypeBinding>> convert(ICompilationUnit unit, ITypeBinding searchedType) {
-		BindingVisitor self = new BindingVisitor(searchedType);
+		ParameterizedTypeBindingVisitor self = new ParameterizedTypeBindingVisitor(searchedType);
 		CompilationUnit cUnit = (CompilationUnit) Parser.parse(unit);
 		cUnit.accept(self);
 		return List.ofAll(self.bindings)
