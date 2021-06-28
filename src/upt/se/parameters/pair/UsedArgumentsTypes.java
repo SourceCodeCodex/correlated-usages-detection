@@ -1,6 +1,5 @@
 package upt.se.parameters.pair;
 
-import static upt.se.utils.visitors.IType2ITypeDeclarationBindingConverter.convert;
 import static upt.se.utils.helpers.Helper.isAbstract;
 import static upt.se.utils.helpers.LoggerHelper.LOGGER;
 import static upt.se.utils.helpers.LoggerHelper.NULL_PROGRESS_MONITOR;
@@ -65,7 +64,7 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 		int firstParameterPos = InheritanceArgumentTypes.getParameterNumber(firstParameter);
 		int secondParameterPos = InheritanceArgumentTypes.getParameterNumber(secondParameter);
 		
-		return usages.map(types -> Tuple.of(convert(types.get(firstParameterPos)), convert(types.get(secondParameterPos))));
+		return usages.map(types -> Tuple.of(analyzed(types.get(firstParameterPos)), analyzed(types.get(secondParameterPos))));
 	}	
 	
 	private List<Tuple2<IType,IType>> getVariablesUsages(ParameterPair pair) {
@@ -76,7 +75,7 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 		int firstParameterPos = VariablesArgumentTypes.getParameterNumber(firstParameter);
 		int secondParameterPos = VariablesArgumentTypes.getParameterNumber(secondParameter);
 		
-		return usages.map(types -> Tuple.of(convert(types.get(firstParameterPos)), convert(types.get(secondParameterPos))));
+		return usages.map(types -> Tuple.of(analyzed(types.get(firstParameterPos)), analyzed(types.get(secondParameterPos))));
 	}
 	
 	private List<ArgumentPair> getHierarchy(List<ArgumentPair> pairs) {
@@ -108,6 +107,14 @@ public class UsedArgumentsTypes implements IRelationBuilder<MClassPair, MParamet
 			}
 		}
 		return List.of(type);
+	}
+
+	private static IType analyzed(ITypeBinding binding) {
+		if (binding.isWildcardType()) {
+			return (IType) binding.getBound().getJavaElement();
+		} else {
+			return (IType) binding.getJavaElement();
+		}
 	}
 
 }

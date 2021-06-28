@@ -1,9 +1,7 @@
 package upt.se.utils.visitors;
 
 import static upt.se.utils.helpers.Equals.isEqual;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -13,14 +11,11 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.SimpleName;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
+import io.vavr.collection.List;
 import upt.se.utils.Parser;
 
 public class VariableBindingVisitor extends ASTVisitor {
 
-  private static Map<ICompilationUnit, HashSet<IVariableBinding>> allVariableBindings =
-      new HashMap<>();
   private HashSet<IVariableBinding> attributeBindings = new HashSet<>();
   private HashSet<ITypeBinding> returnTypes = new HashSet<>();
   private ITypeBinding searchedType;
@@ -45,19 +40,14 @@ public class VariableBindingVisitor extends ASTVisitor {
     return super.visit(node);
   }
 
-  private HashSet<IVariableBinding> getAttributeBindings() {
-    return attributeBindings;
-  }
-
-  public static Tuple2<HashSet<IVariableBinding>, HashSet<ITypeBinding>> convert(ICompilationUnit unit,
-      ITypeBinding searchedType) {
-
-    VariableBindingVisitor self = new VariableBindingVisitor(searchedType);
-
-    CompilationUnit cUnit = (CompilationUnit) Parser.parse(unit);
-    cUnit.accept(self);
-
-    allVariableBindings.put(unit, self.getAttributeBindings());
-    return Tuple.of(allVariableBindings.get(unit), self.returnTypes);
-  }
+  	public static java.util.List<java.util.List<ITypeBinding>> convert(ICompilationUnit unit, ITypeBinding searchedType) {
+	    VariableBindingVisitor self = new VariableBindingVisitor(searchedType);
+	    CompilationUnit cUnit = (CompilationUnit) Parser.parse(unit);
+	    cUnit.accept(self);
+	    List<List<ITypeBinding>> variableUsages = List.ofAll(self.attributeBindings)
+				.map(variable -> variable.getType()).map(type -> List.of(type.getTypeArguments()));
+		List<List<ITypeBinding>> returnUsages = List.ofAll(self.returnTypes)
+				.map(type -> List.of(type.getTypeArguments()));
+	    return variableUsages.appendAll(returnUsages).map(List::asJava).asJava();
+  	}
 }

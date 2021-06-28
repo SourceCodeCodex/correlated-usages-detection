@@ -55,8 +55,4 @@ public class IType2ITypeDeclarationBindingConverter extends ASTVisitor {
 		        .map(typeBinding -> res.get().append(typeBinding)));
 	}
 
-	public static IType convert(ITypeBinding binding) {
-		return (IType) binding.getJavaElement();
-	}
-
 }

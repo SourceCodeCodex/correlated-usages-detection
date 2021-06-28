@@ -38,15 +38,8 @@ public class VariablesArgumentTypes extends Crawler {
 				Try.of(() -> ((TypeReferenceMatch) match)).map(TypeReferenceMatch::getElement)
 						.filter(element -> element instanceof IMember)
 						.map(element -> ((IMember) element).getCompilationUnit())
-						.map(compilationUnit -> VariableBindingVisitor.convert(compilationUnit, type)).map(pair -> {
-							List<List<ITypeBinding>> variableUsages = List.ofAll(pair._1)
-									.map(variable -> variable.getType()).map(type -> List.of(type.getTypeArguments()));
-
-							List<List<ITypeBinding>> returnUsages = List.ofAll(pair._2)
-									.map(type -> List.of(type.getTypeArguments()));
-
-							return variableUsages.appendAll(returnUsages).map(List::asJava).asJava();
-						}).onSuccess(list -> types.addAll(list));
+						.map(compilationUnit -> VariableBindingVisitor.convert(compilationUnit, type))
+						.onSuccess(list -> types.addAll(list));
 			}
 		};
 
