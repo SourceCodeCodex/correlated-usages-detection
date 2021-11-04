@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="main.Startup">
+            class="upt.ac.cti.ui.Startup">
       </startup>
    </extension>
 
