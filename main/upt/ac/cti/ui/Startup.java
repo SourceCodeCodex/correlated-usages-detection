@@ -3,10 +3,10 @@ package upt.ac.cti.ui;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.ui.IStartup;
+import org.javatuples.Pair;
 
 import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.insider.view.ToolRegistration;
-import upt.ac.cti.model.TypePair;
 
 public class Startup implements IStartup {
 
@@ -16,11 +16,14 @@ public class Startup implements IStartup {
 			if (element instanceof IType) {
 				return Factory.getInstance().createMClass(element);
 			}
-			if (element instanceof IField) {
-				return Factory.getInstance().createMField(element);
-			}
-			if (element instanceof TypePair) {
-				return Factory.getInstance().createMTypePair(element);
+			if (element instanceof Pair<?, ?> p) {
+				if (p.getValue0() instanceof IType && p.getValue1() instanceof IType) {
+					return Factory.getInstance().createMTypePair(element);
+				}
+
+				if (p.getValue0() instanceof IField && p.getValue1() instanceof IField) {
+					return Factory.getInstance().createMFieldPair(element);
+				}
 			}
 			return null;
 		});
