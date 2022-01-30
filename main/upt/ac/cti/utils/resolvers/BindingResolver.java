@@ -1,4 +1,4 @@
-package upt.ac.cti.utils;
+package upt.ac.cti.utils.resolvers;
 
 import java.util.List;
 
