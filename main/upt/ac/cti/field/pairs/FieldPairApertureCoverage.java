@@ -5,7 +5,7 @@ import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
-import upt.ac.cti.coverage.analysis.iterative.ParallelIterativeAnalysis;
+import upt.ac.cti.coverage.analysis.flow.insensitive.ParallelIterativeAnalysis;
 
 @PropertyComputer
 public class FieldPairApertureCoverage implements IPropertyComputer<Integer, MFieldPair> {

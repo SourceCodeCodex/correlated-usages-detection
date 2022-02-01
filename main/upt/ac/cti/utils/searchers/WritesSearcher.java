@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.search.FieldReferenceMatch;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.LocalVariableDeclarationMatch;
 import org.eclipse.jdt.core.search.LocalVariableReferenceMatch;
 import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchMatch;
@@ -36,16 +37,14 @@ public class WritesSearcher {
     SearchRequestor requestor = new SearchRequestor() {
       @Override
       public void acceptSearchMatch(SearchMatch match) {
-        if (match instanceof FieldReferenceMatch fieldRef) {
-          if (fieldRef.isWriteAccess()) {
-            var iMethod = (IMethod) match.getElement();
-            if (!matches.contains(iMethod)) {
-              matches.add(iMethod);
-            }
+        if (match instanceof FieldReferenceMatch ref && ref.isWriteAccess()) {
+          var iMethod = (IMethod) match.getElement();
+          if (!matches.contains(iMethod)) {
+            matches.add(iMethod);
+            return;
           }
-        } else {
-          Logger.getGlobal().warning("Execution should never reach this code!");
         }
+        Logger.getGlobal().warning("Unhandled match: " + match);
       }
     };
 
@@ -75,19 +74,21 @@ public class WritesSearcher {
     SearchRequestor requestor = new SearchRequestor() {
       @Override
       public void acceptSearchMatch(SearchMatch match) {
-        if(match instanceof LocalVariableReferenceMatch localVarRef) {
-
+        if (match instanceof LocalVariableReferenceMatch ref && ref.isWriteAccess()) {
+          var iMethod = (IMethod) ref.getElement();
+          if (!matches.contains(iMethod)) {
+            matches.add(iMethod);
+            return;
+          }
         }
-        System.out.println(match.getElement());
-        System.out.println(match);
-        System.out.println(match.getClass().getCanonicalName());
-        System.out.println("----------");
-        // if (((LocalVariableReferenceMatch) match).isWriteAccess()) {
-         var iMethod = (IMethod) match.getElement();
-         if (!matches.contains(iMethod)) {
-         matches.add(iMethod);
-        // }
-        // }
+
+        if (match instanceof LocalVariableDeclarationMatch dec) {
+          var iMethod = (IMethod) ((ILocalVariable) dec.getElement()).getDeclaringMember();
+          if (!matches.contains(iMethod)) {
+            matches.add(iMethod);
+            return;
+          }
+        }
       }
     };
 

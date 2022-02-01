@@ -1,0 +1,48 @@
+package upt.ac.cti.coverage.analysis.flow.insensitive.iterators.handlers;
+
+import java.util.logging.Logger;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.ILocalVariable;
+import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.Name;
+import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPHandlingResult;
+import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPIndex;
+import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
+
+class NameHandler extends RightSideHandler {
+
+  private final Logger logger = Logger.getGlobal();
+
+  public NameHandler(CorelationPair cp, CPIndex index) {
+    super(cp, index);
+  }
+
+  @Override
+  public CPHandlingResult handle() {
+    var name = (Name) cp.fieldAsgmt(index).rightSide();
+    var binding = name.resolveBinding();
+
+    var varBinding = (IVariableBinding) binding;
+
+    if (varBinding.isParameter()) {
+      logger.warning("HARDEST ... POSTPONE ... FAIL ON PARAM");
+
+      return null;
+    }
+
+    if (varBinding.isField()) {
+      logger.info("Handle field " + binding.getName());
+
+      var fh = new NameFieldHandler(cp, index, (IField) binding.getJavaElement());
+      return fh.handle();
+    }
+
+    logger.info("Handle local var " + binding.getName());
+
+    var lvh = new NameLocalVarHandler(cp, index, (ILocalVariable) binding.getJavaElement());
+    return lvh.handle();
+  }
+
+}
+
+

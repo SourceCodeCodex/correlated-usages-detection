@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import upt.ac.cti.coverage.analysis.iterative.model.FieldAsgmt;
+import upt.ac.cti.coverage.analysis.flow.insensitive.model.FieldAsgmt;
 
 public class AsgmtBindingResolver {
   private static final AsgmtBindingResolver instance = new AsgmtBindingResolver();
