@@ -9,7 +9,7 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPHandlingResult;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPIndex;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 
-class NameHandler extends RightSideHandler {
+final class NameHandler extends RightSideHandler {
 
   private final Logger logger = Logger.getGlobal();
 
@@ -25,9 +25,10 @@ class NameHandler extends RightSideHandler {
     var varBinding = (IVariableBinding) binding;
 
     if (varBinding.isParameter()) {
-      logger.warning("HARDEST ... POSTPONE ... FAIL ON PARAM");
+      logger.info("Handle parameter " + binding.getName());
 
-      return null;
+      var ph = new NameParameterHandler(cp, index, (ILocalVariable) binding.getJavaElement());
+      return ph.handle();
     }
 
     if (varBinding.isField()) {

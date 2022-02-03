@@ -7,7 +7,7 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPHandlingResult;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPIndex;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 
-class ConditionalExpressionHandler extends RightSideHandler {
+final class ConditionalExpressionHandler extends RightSideHandler {
 
   public ConditionalExpressionHandler(CorelationPair cp, CPIndex index) {
     super(cp, index);

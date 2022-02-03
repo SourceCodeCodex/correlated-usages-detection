@@ -9,7 +9,7 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 import upt.ac.cti.utils.parsers.CachedParser;
 import upt.ac.cti.utils.searchers.WritesSearcher;
 
-class NameLocalVarHandler extends RightSideHandler {
+final class NameLocalVarHandler extends RightSideHandler {
   private final ILocalVariable localVar;
 
   public NameLocalVarHandler(CorelationPair cp, CPIndex index, ILocalVariable localVar) {

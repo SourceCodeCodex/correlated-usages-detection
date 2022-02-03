@@ -10,7 +10,7 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 import upt.ac.cti.utils.parsers.CachedParser;
 import upt.ac.cti.utils.searchers.WritesSearcher;
 
-class SuperFieldAccessHandler extends RightSideHandler {
+final class SuperFieldAccessHandler extends RightSideHandler {
 
   public SuperFieldAccessHandler(CorelationPair cp, CPIndex index) {
     super(cp, index);

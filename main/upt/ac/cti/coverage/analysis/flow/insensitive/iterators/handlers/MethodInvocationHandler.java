@@ -9,7 +9,8 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPIndex;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 import upt.ac.cti.utils.parsers.CachedParser;
 
-class MethodInvocationHandler extends RightSideHandler {
+// TODO: Should the object change when invoking a method?
+final class MethodInvocationHandler extends RightSideHandler {
 
   public MethodInvocationHandler(CorelationPair cp, CPIndex index) {
     super(cp, index);

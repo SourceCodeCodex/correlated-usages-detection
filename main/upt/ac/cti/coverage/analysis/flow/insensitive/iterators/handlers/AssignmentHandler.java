@@ -7,7 +7,7 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPHandlingResult;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPIndex;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 
-class AssignmentHandler extends RightSideHandler {
+final class AssignmentHandler extends RightSideHandler {
   public AssignmentHandler(CorelationPair cp, CPIndex index) {
     super(cp, index);
   }

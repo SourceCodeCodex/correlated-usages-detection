@@ -2,7 +2,6 @@ package upt.ac.cti.utils.searchers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IField;
@@ -21,6 +20,10 @@ import org.eclipse.jdt.core.search.SearchRequestor;
 
 public class WritesSearcher {
   private static WritesSearcher instance = new WritesSearcher();
+
+  private WritesSearcher() {
+
+  }
 
   public static WritesSearcher instance() {
     return instance;
@@ -44,7 +47,6 @@ public class WritesSearcher {
             return;
           }
         }
-        Logger.getGlobal().warning("Unhandled match: " + match);
       }
     };
 

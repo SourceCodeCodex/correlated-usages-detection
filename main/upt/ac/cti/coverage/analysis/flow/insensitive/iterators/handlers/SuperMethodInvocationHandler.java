@@ -9,7 +9,7 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPIndex;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 import upt.ac.cti.utils.parsers.CachedParser;
 
-class SuperMethodInvocationHandler extends RightSideHandler {
+final class SuperMethodInvocationHandler extends RightSideHandler {
 
   public SuperMethodInvocationHandler(CorelationPair cp, CPIndex index) {
     super(cp, index);

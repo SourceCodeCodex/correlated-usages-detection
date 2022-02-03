@@ -7,7 +7,7 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPHandlingResult;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CPIndex;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 
-public class CPFieldHandler extends RightSideHandler {
+final public class CPFieldHandler extends RightSideHandler {
 
   private final FieldAccessHandler fah = new FieldAccessHandler(cp, index);
   private final MethodInvocationHandler mih = new MethodInvocationHandler(cp, index);
