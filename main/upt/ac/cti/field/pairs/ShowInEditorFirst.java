@@ -1,24 +1,24 @@
-package upt.ac.cti.type.pairs;
+package upt.ac.cti.field.pairs;
 
-import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.PartInitException;
 import org.javatuples.Pair;
 
-import familypolymorphismdetection.metamodel.entity.MTypePair;
+import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import ro.lrg.xcore.metametamodel.ActionPerformer;
 import ro.lrg.xcore.metametamodel.HListEmpty;
 import ro.lrg.xcore.metametamodel.IActionPerformer;
 
 @ActionPerformer
-public class ShowFirstInEditor implements IActionPerformer<Void, MTypePair, HListEmpty> {
+public class ShowInEditorFirst implements IActionPerformer<Void, MFieldPair, HListEmpty> {
 
 	@Override
-	public Void performAction(MTypePair mTypePair, HListEmpty hList) {
+	public Void performAction(MFieldPair mFieldPair, HListEmpty hList) {
 		try {
 			@SuppressWarnings("unchecked")
-			var pair = (Pair<IType, IType>) mTypePair.getUnderlyingObject();
+			var pair = (Pair<IField, IField>) mFieldPair.getUnderlyingObject();
 			JavaUI.openInEditor(pair.getValue0(), true, true);
 		} catch (PartInitException e) {
 		} catch (JavaModelException e) {

@@ -18,8 +18,8 @@ final class FieldAccessHandler extends RightSideHandler {
 
   @Override
   public CPHandlingResult handle() {
-    var invoc = (FieldAccess) cp.fieldAsgmt(index).rightSide();
-    var iField = (IField) invoc.resolveFieldBinding().getJavaElement();
+    var access = (FieldAccess) cp.fieldAsgmt(index).rightSide();
+    var iField = (IField) access.resolveFieldBinding().getJavaElement();
 
     var assignmentMethods = WritesSearcher.instance().searchFieldWrites(iField);
 
@@ -32,8 +32,8 @@ final class FieldAccessHandler extends RightSideHandler {
 
     var newPairs = rightExpressions.stream()
         .map(expr -> {
-          var updatedRight = cp.fieldAsgmt(index).withRightSide(expr);
-          return cp.withFieldAsgmt(updatedRight, index);
+          var updatedExpr = cp.fieldAsgmt(index).withRightSide(expr);
+          return cp.withFieldAsgmt(updatedExpr, index);
         })
         .toList();;
 

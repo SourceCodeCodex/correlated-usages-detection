@@ -38,10 +38,7 @@ public class FieldPairGroup implements IRelationBuilder<MFieldPair, MClass> {
 
   private List<IField> filterOutIneligible(List<IField> fields) {
     return fields.stream()
-        .filter(it -> !FieldFilters
-            .filters()
-            .stream()
-            .anyMatch(pred -> pred.test(it)))
+        .filter(FieldsValidator::isValid)
         .toList();
   }
 

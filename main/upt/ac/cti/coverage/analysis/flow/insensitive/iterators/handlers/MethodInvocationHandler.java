@@ -28,8 +28,8 @@ final class MethodInvocationHandler extends RightSideHandler {
 
     var newPairs = returns.stream()
         .map(expr -> {
-          var updatedRight = cp.fieldAsgmt(index).withRightSide(expr).withCurrentMethod(iMethod);
-          return cp.withFieldAsgmt(updatedRight, index);
+          var updatedExpr = cp.fieldAsgmt(index).withRightSide(expr).withCurrentMethod(iMethod);
+          return cp.withFieldAsgmt(updatedExpr, index);
         })
         .toList();;
 

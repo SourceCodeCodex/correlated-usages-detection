@@ -12,7 +12,7 @@ import ro.lrg.xcore.metametamodel.HListEmpty;
 import ro.lrg.xcore.metametamodel.IActionPerformer;
 
 @ActionPerformer
-public class ShowSecondInEditor implements IActionPerformer<Void, MTypePair, HListEmpty> {
+public class ShowInEditorSecond implements IActionPerformer<Void, MTypePair, HListEmpty> {
 
 	@Override
 	public Void performAction(MTypePair mTypePair, HListEmpty hList) {

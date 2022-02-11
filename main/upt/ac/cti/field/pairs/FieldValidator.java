@@ -14,13 +14,22 @@ import upt.ac.cti.utils.resolvers.BindingResolver;
  * @author alinrosu
  *
  */
-class FieldFilters {
+class FieldsValidator {
 
-  private FieldFilters() {
+  private FieldsValidator() {
 
   }
 
-  public static List<Predicate<IField>> filters() {
+
+  public static boolean isValid(IField it) {
+    return !filters()
+        .stream()
+        .anyMatch(pred -> pred.test(it));
+  }
+
+
+
+  private static List<Predicate<IField>> filters() {
     return List.of(
         isFieldStatic,
         isPrimitive,
@@ -44,7 +53,6 @@ class FieldFilters {
       iField -> BindingResolver.instance().resolveField(iField).isArray();
 
   private static final Predicate<IField> isGeneric =
-      iField -> BindingResolver.instance().resolveField(iField).isGenericType();
-
+      iField -> BindingResolver.instance().resolveField(iField).isParameterizedType();
 
 }

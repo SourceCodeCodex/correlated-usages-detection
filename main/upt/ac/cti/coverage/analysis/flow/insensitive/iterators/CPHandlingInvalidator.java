@@ -16,16 +16,18 @@ class CPHandlingInvalidator {
   }
 
 
-  public static List<Predicate<CorelationPair>> list() {
+  private static List<Predicate<CorelationPair>> list() {
     return List.of(
-        baseObjectsDifferent,
+        baseObjectsDifferentRef,
         anyIsNull,
         anyIsArrayAccess);
   }
 
-  // TODO: will be removed and maybe reason is the references are pointing to the same object
-  private static final Predicate<CorelationPair> baseObjectsDifferent =
-      cp -> !cp.field1Asgmt().baseObject().equals(cp.field2Asgmt().baseObject());
+  // TODO: the condition that objects are different is a NECESSARY condition when computin the
+  // result
+  // this predicate should make sure the expressions are referencing to the same object
+  private static final Predicate<CorelationPair> baseObjectsDifferentRef =
+      cp -> false;
 
   private static final Predicate<CorelationPair> anyIsNull = anyIs(ASTNode.NULL_LITERAL);
 

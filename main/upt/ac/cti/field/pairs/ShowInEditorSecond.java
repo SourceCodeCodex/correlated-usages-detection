@@ -12,14 +12,14 @@ import ro.lrg.xcore.metametamodel.HListEmpty;
 import ro.lrg.xcore.metametamodel.IActionPerformer;
 
 @ActionPerformer
-public class ShowFirstInEditor implements IActionPerformer<Void, MFieldPair, HListEmpty> {
+public class ShowInEditorSecond implements IActionPerformer<Void, MFieldPair, HListEmpty> {
 
 	@Override
 	public Void performAction(MFieldPair mFieldPair, HListEmpty hList) {
 		try {
 			@SuppressWarnings("unchecked")
 			var pair = (Pair<IField, IField>) mFieldPair.getUnderlyingObject();
-			JavaUI.openInEditor(pair.getValue0(), true, true);
+			JavaUI.openInEditor(pair.getValue1(), true, true);
 		} catch (PartInitException e) {
 		} catch (JavaModelException e) {
 			e.printStackTrace();

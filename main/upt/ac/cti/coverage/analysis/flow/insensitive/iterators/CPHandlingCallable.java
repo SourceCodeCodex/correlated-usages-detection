@@ -41,11 +41,16 @@ class CPHandlingCallable implements Callable<CPHandlingResult> {
 
     // Stop condition 1: both have leaf bindings
     if (f1Binding.isPresent() && f2Binding.isPresent()) {
-      logger.info("Both bindings resolved: " + f1Binding.get().getName() + " & "
-          + f2Binding.get().getName());
+      // Base object differs
+      if (pair.field1Asgmt().baseObject().equals(pair.field2Asgmt().baseObject())) {
+        logger.info("Both bindings resolved: " + f1Binding.get().getName() + " & "
+            + f2Binding.get().getName());
 
-      return new CPHandlingResult(List.of(), Optional
-          .of(Pair.with(f1Binding.get(), f2Binding.get())));
+        return new CPHandlingResult(List.of(), Optional
+            .of(Pair.with(f1Binding.get(), f2Binding.get())));
+      }
+
+      return new CPHandlingResult(List.of(), Optional.empty());
     }
 
 
