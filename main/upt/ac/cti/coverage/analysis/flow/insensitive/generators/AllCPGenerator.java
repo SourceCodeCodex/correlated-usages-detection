@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IMethod;
 import upt.ac.cti.coverage.analysis.flow.insensitive.generators.visitors.FieldAsgmtVisitor;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.CorelationPair;
 import upt.ac.cti.coverage.analysis.flow.insensitive.model.FieldAsgmt;
@@ -25,19 +26,11 @@ public class AllCPGenerator implements CPGenerator {
     var f1AssignmentsMethods = WritesSearcher.instance().searchFieldWrites(field1);
     var f2AssignmentsMethods = WritesSearcher.instance().searchFieldWrites(field2);
 
-    var f1Asgmts = f1AssignmentsMethods.stream().flatMap(it -> {
-      var visitor = new FieldAsgmtVisitor(field1, it);
-      var node = CachedParser.instance().parse(it).getBody();
-      node.accept(visitor);
-      return visitor.result().stream();
-    }).toList();
+    var f1Asgmts = f1AssignmentsMethods.stream()
+        .flatMap(it -> computeFieldAssignments(it, field1).stream()).toList();
 
-    var f2Asgmts = f2AssignmentsMethods.stream().flatMap(it -> {
-      var visitor = new FieldAsgmtVisitor(field2, it);
-      var node = CachedParser.instance().parse(it).getBody();
-      node.accept(visitor);
-      return visitor.result().stream();
-    }).toList();
+    var f2Asgmts = f2AssignmentsMethods.stream()
+        .flatMap(it -> computeFieldAssignments(it, field2).stream()).toList();
 
     var result = new LinkedList<CorelationPair>();
 
@@ -48,5 +41,12 @@ public class AllCPGenerator implements CPGenerator {
     }
 
     return result;
+  }
+
+  private List<FieldAsgmt> computeFieldAssignments(IMethod iMethod, IField iField) {
+    var visitor = new FieldAsgmtVisitor(iField);
+    var node = CachedParser.instance().parse(iMethod).getBody();
+    node.accept(visitor);
+    return visitor.result();
   }
 }

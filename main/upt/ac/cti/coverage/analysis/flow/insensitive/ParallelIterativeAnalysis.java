@@ -3,7 +3,7 @@ package upt.ac.cti.coverage.analysis.flow.insensitive;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.core.IField;
 import upt.ac.cti.coverage.analysis.CoverageAnalysis;
-import upt.ac.cti.coverage.analysis.flow.insensitive.generators.AllCPGenerator;
+import upt.ac.cti.coverage.analysis.flow.insensitive.generators.MethodBasedCPGenerator;
 import upt.ac.cti.coverage.analysis.flow.insensitive.iterators.ParallelCPIterator;
 import upt.ac.cti.utils.parsers.CachedParser;
 
@@ -23,7 +23,8 @@ public class ParallelIterativeAnalysis implements CoverageAnalysis {
   public int coverage() {
     try {
       CachedParser.instance().refresh();
-      return new ParallelCPIterator(new AllCPGenerator(field1, field2)).corelations().size();
+      return new ParallelCPIterator(new MethodBasedCPGenerator(field1, field2)).corelations()
+          .size();
     } catch (InterruptedException | ExecutionException e) {
       e.printStackTrace();
       return -1;

@@ -3,7 +3,6 @@ package upt.ac.cti.coverage.analysis.flow.insensitive.generators.visitors;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
@@ -21,13 +20,11 @@ import upt.ac.cti.coverage.analysis.flow.insensitive.model.This;
 public class FieldAsgmtVisitor extends ASTVisitor {
 
   private final IField iField;
-  private final IMethod iMethod;
 
   private final List<FieldAsgmt> result = new ArrayList<>();
 
-  public FieldAsgmtVisitor(IField iField, IMethod iMethod) {
+  public FieldAsgmtVisitor(IField iField) {
     this.iField = iField;
-    this.iMethod = iMethod;
   }
 
   @Override
@@ -50,7 +47,6 @@ public class FieldAsgmtVisitor extends ASTVisitor {
             var state = FieldAsgmt.builder()
                 .field(iField)
                 .baseObject(This.instance())
-                .currentMethod(iMethod)
                 .rightSide(node.getRightHandSide())
                 .build();
             result.add(state);
@@ -67,7 +63,6 @@ public class FieldAsgmtVisitor extends ASTVisitor {
             var state = FieldAsgmt.builder()
                 .field(iField)
                 .baseObject(new ConcreteObject(((QualifiedName) leftSide).getQualifier()))
-                .currentMethod(iMethod)
                 .rightSide(node.getRightHandSide())
                 .build();
             result.add(state);
@@ -84,7 +79,6 @@ public class FieldAsgmtVisitor extends ASTVisitor {
             var state = FieldAsgmt.builder()
                 .field(iField)
                 .baseObject(This.instance())
-                .currentMethod(iMethod)
                 .rightSide(node.getRightHandSide())
                 .build();
             result.add(state);
@@ -92,7 +86,6 @@ public class FieldAsgmtVisitor extends ASTVisitor {
             var state = FieldAsgmt.builder()
                 .field(iField)
                 .baseObject(new ConcreteObject(expr))
-                .currentMethod(iMethod)
                 .rightSide(node.getRightHandSide())
                 .build();
             result.add(state);

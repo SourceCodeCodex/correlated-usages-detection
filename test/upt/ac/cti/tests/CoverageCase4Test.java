@@ -11,7 +11,7 @@ public class CoverageCase4Test extends CoverageTest {
 
   @Test
   public void test2() {
-    assertExactlyOneFieldPairCoverageForClassIs("upt.ac.cti.sut.coverage.case4.test2.Test", 4);
+    assertExactlyOneFieldPairCoverageForClassIs("upt.ac.cti.sut.coverage.case4.test2.Test", 2);
   }
 
   @Test

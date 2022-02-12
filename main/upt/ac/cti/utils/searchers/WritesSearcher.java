@@ -1,7 +1,7 @@
 package upt.ac.cti.utils.searchers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IField;
@@ -29,8 +29,8 @@ public class WritesSearcher {
     return instance;
   }
 
-  public List<IMethod> searchFieldWrites(IField iField) {
-    var matches = new ArrayList<IMethod>();
+  public Set<IMethod> searchFieldWrites(IField iField) {
+    var matches = new HashSet<IMethod>();
 
     var scope = SearchEngine.createJavaSearchScope(new IJavaElement[] {iField.getJavaProject()});
 
@@ -42,10 +42,7 @@ public class WritesSearcher {
       public void acceptSearchMatch(SearchMatch match) {
         if (match instanceof FieldReferenceMatch ref && ref.isWriteAccess()) {
           var iMethod = (IMethod) match.getElement();
-          if (!matches.contains(iMethod)) {
-            matches.add(iMethod);
-            return;
-          }
+          matches.add(iMethod);
         }
       }
     };
@@ -63,8 +60,8 @@ public class WritesSearcher {
     return matches;
   }
 
-  public List<IMethod> searchLocalVariablesWrites(ILocalVariable iLocalVariable) {
-    var matches = new ArrayList<IMethod>();
+  public Set<IMethod> searchLocalVariablesWrites(ILocalVariable iLocalVariable) {
+    var matches = new HashSet<IMethod>();
 
     var scope =
         SearchEngine.createJavaSearchScope(new IJavaElement[] {iLocalVariable.getJavaProject()});
@@ -78,18 +75,12 @@ public class WritesSearcher {
       public void acceptSearchMatch(SearchMatch match) {
         if (match instanceof LocalVariableReferenceMatch ref && ref.isWriteAccess()) {
           var iMethod = (IMethod) ref.getElement();
-          if (!matches.contains(iMethod)) {
-            matches.add(iMethod);
-            return;
-          }
+          matches.add(iMethod);
         }
 
         if (match instanceof LocalVariableDeclarationMatch dec) {
           var iMethod = (IMethod) ((ILocalVariable) dec.getElement()).getDeclaringMember();
-          if (!matches.contains(iMethod)) {
-            matches.add(iMethod);
-            return;
-          }
+          matches.add(iMethod);
         }
       }
     };

@@ -27,7 +27,7 @@ final class SuperMethodInvocationHandler extends RightSideHandler {
 
     var newPairs = returns.stream()
         .map(expr -> {
-          var updatedRight = cp.fieldAsgmt(index).withRightSide(expr).withCurrentMethod(iMethod);
+          var updatedRight = cp.fieldAsgmt(index).withRightSide(expr);
           return cp.withFieldAsgmt(updatedRight, index);
         })
         .toList();;
