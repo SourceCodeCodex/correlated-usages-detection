@@ -1,4 +1,4 @@
-package upt.ac.cti.analysis.coverage.flow.insensitive.deriver;
+package upt.ac.cti.analysis.coverage.flow.insensitive.derivator;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,11 +12,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
+import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.FieldWritingsDerivator;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.DerivationResult;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
+import upt.ac.cti.analysis.coverage.flow.insensitive.model.NewWritingPairs;
+import upt.ac.cti.analysis.coverage.flow.insensitive.model.ResolvedBindings;
+import upt.ac.cti.analysis.coverage.flow.insensitive.parser.CodeParser;
+import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.JavaEntitySearcher;
 import upt.ac.cti.analysis.coverage.flow.insensitive.util.FieldWritingBindingResolver;
 
-public class FieldWritingsDeriver implements IFieldWritingsDeriver {
+public class DerivationManager implements IDerivationManager {
 
   private final LinkedBlockingQueue<Pair<FieldWriting, FieldWriting>> writingPairs =
       new LinkedBlockingQueue<>();
@@ -29,11 +34,18 @@ public class FieldWritingsDeriver implements IFieldWritingsDeriver {
   private final ExecutorService pool = Executors.newFixedThreadPool(POOL_SIZE);
 
   private final FieldWritingBindingResolver assignmentBindingResolver;
+  private final FieldWritingsDerivator derivator;
 
-  private static final Logger logger = Logger.getLogger(FieldWritingsDeriver.class.getSimpleName());
+  private final DerivationJobValidator derivationJobValidator = new DerivationJobValidator();
 
-  public FieldWritingsDeriver(FieldWritingBindingResolver assignmentBindingResolver) {
+
+  private static final Logger logger =
+      Logger.getLogger(DerivationManager.class.getSimpleName());
+
+  public DerivationManager(FieldWritingBindingResolver assignmentBindingResolver,
+      JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
     this.assignmentBindingResolver = assignmentBindingResolver;
+    this.derivator = new FieldWritingsDerivator(javaEntitySearcher, codeParser);
   }
 
   @Override
@@ -49,7 +61,8 @@ public class FieldWritingsDeriver implements IFieldWritingsDeriver {
 
       try {
         futures = pool.invokeAll(writingPairs.parallelStream()
-            .map(p -> new DerivationCallable(assignmentBindingResolver, p))
+            .filter(p -> derivationJobValidator.isValid(p))
+            .map(p -> new DerivationJob(assignmentBindingResolver, derivator, p))
             .toList());
       } catch (InterruptedException e) {
         var ste = e.getStackTrace()[0];
@@ -71,14 +84,19 @@ public class FieldWritingsDeriver implements IFieldWritingsDeriver {
 
           return typePairs;
         }
-        writingPairs.addAll(result.newPairs());
 
-        if (result.resolvedCorelation().isPresent()) {
-          var corelation = result.resolvedCorelation().get();
-          logger.info("Resolved type pair: " + corelation.getValue0().getQualifiedName() + " & "
-              + corelation.getValue1().getQualifiedName());
+        if (result instanceof NewWritingPairs nwp) {
+          writingPairs.addAll(nwp.writingPairs());
+        } else if (result instanceof ResolvedBindings rb) {
+          var bindingPair = rb.bindingsPair();
+          var log = String.format("Resolved type pair: %s & &s",
+              bindingPair.getValue0().getQualifiedName(),
+              bindingPair.getValue1().getQualifiedName());
+          logger.info(log);
 
-          typePairs.add(corelation);
+          typePairs.add(bindingPair);
+        } else {
+          logger.severe("Unknown instance of DerivationResult. Impossible to happen");
         }
       }
     }

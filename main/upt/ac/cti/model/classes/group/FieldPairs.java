@@ -6,17 +6,13 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.javatuples.Pair;
-import familypolymorphismdetection.metamodel.entity.MClass;
-import familypolymorphismdetection.metamodel.entity.MFieldPair;
-import familypolymorphismdetection.metamodel.factory.Factory;
-import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
 import upt.ac.cti.model.util.FieldBindingResolver;
 import upt.ac.cti.util.HierarchyResolver;
 
 @RelationBuilder
-public class FieldPairs implements IRelationBuilder<MFieldPair, MClass> {
+public final class FieldPairs implements IRelationBuilder<MFieldPair, MClass> {
 
   private static final Logger logger = Logger.getLogger(FieldPairs.class.getSimpleName());
 

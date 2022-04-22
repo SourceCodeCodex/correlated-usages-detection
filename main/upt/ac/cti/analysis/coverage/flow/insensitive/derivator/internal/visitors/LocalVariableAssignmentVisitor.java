@@ -1,4 +1,4 @@
-package upt.ac.cti.analysis.coverage.flow.insensitive.iterators.handlers.visitors;
+package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,13 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
-public class LocalVarAsgmtVisitor extends ASTVisitor {
+public class LocalVariableAssignmentVisitor extends ASTVisitor {
 
   private final ILocalVariable localVar;
 
   private final List<Expression> result = new ArrayList<>();
 
-  public LocalVarAsgmtVisitor(ILocalVariable localVar) {
+  public LocalVariableAssignmentVisitor(ILocalVariable localVar) {
     this.localVar = localVar;
   }
 

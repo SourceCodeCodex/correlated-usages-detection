@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import upt.ac.cti.cache.Cache;
 
 
-public class CodeParser {
+public final class CodeParser {
 
   private static final Cache<IMethod, MethodDeclaration> methodCache = new Cache<>();
   private static final Cache<ICompilationUnit, CompilationUnit> compilationUnitCache =

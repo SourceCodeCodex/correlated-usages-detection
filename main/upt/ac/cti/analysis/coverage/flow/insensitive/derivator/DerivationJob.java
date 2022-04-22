@@ -1,47 +1,36 @@
-package upt.ac.cti.analysis.coverage.flow.insensitive.deriver;
+package upt.ac.cti.analysis.coverage.flow.insensitive.derivator;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 import org.eclipse.jdt.core.dom.Expression;
 import org.javatuples.Pair;
-import upt.ac.cti.analysis.coverage.flow.insensitive.iterators.handlers.CPFieldHandler;
-import upt.ac.cti.analysis.coverage.flow.insensitive.model.CPIndex;
+import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.FieldWritingsDerivator;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.DerivationResult;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
+import upt.ac.cti.analysis.coverage.flow.insensitive.model.NewWritingPairs;
+import upt.ac.cti.analysis.coverage.flow.insensitive.model.ResolvedBindings;
 import upt.ac.cti.analysis.coverage.flow.insensitive.util.FieldWritingBindingResolver;
 
-class DerivationCallable implements Callable<DerivationResult> {
+class DerivationJob implements Callable<DerivationResult> {
 
   private final Pair<FieldWriting, FieldWriting> writingPair;
 
-  private static int counter = 0;
-
-  private final DerivationValidator derivationValidator = new DerivationValidator();
-
   private final FieldWritingBindingResolver assignmentBindingResolver;
+  private final FieldWritingsDerivator derivator;
 
-  private static final Logger logger =
-      Logger.getLogger(DerivationCallable.class.getSimpleName() + "_" + counter);
+  private static final Logger logger = Logger.getLogger(DerivationJob.class.getSimpleName());
 
-  public DerivationCallable(FieldWritingBindingResolver assignmentBindingResolver,
+  public DerivationJob(
+      FieldWritingBindingResolver assignmentBindingResolver,
+      FieldWritingsDerivator derivator,
       Pair<FieldWriting, FieldWriting> writingPair) {
     this.assignmentBindingResolver = assignmentBindingResolver;
+    this.derivator = derivator;
     this.writingPair = writingPair;
-    counter++;
   }
 
   @Override
   public DerivationResult call() throws Exception {
-    // Force discarding particular derivations as the binding cannot be assured in current
-    // implementation
-
-    if (!derivationValidator.isValid(writingPair)) {
-      logger.info("Writing pair discarded: " + writingPair);
-
-      return DerivationResult.NULL;
-    }
 
     // Check if writing expressions are bound to a concrete type which is a leaf in a type hierarchy
     var f1Binding =
@@ -64,30 +53,25 @@ class DerivationCallable implements Callable<DerivationResult> {
         logger.info("Both field writing bindings resolved: " + f1Binding.get().getName() + " & "
             + f2Binding.get().getName());
 
-        return new DerivationResult(List.of(), Optional
-            .of(Pair.with(f1Binding.get(), f2Binding.get())));
+        return new ResolvedBindings(Pair.with(f1Binding.get(), f2Binding.get()));
       }
 
-      return DerivationResult.NULL;
+      return NewWritingPairs.NULL;
     }
 
 
-    // If field 1 is not resolved, then expand
     if (f1Binding.isEmpty()) {
-      logger.info("Handling field1: " + pair);
-      var updatedBinding = pair.withFieldBinding(f2Binding, CPIndex.SECOND);
-      return new CPFieldHandler(updatedBinding, CPIndex.FIRST).handle();
+      logger.info("Deriving field writing: " + writingPair);
+      return derivator.derive(writingPair.getValue0(), writingPair.getValue1());
     }
 
-    // If field 2 is not resolved, then expand
     if (f2Binding.isEmpty()) {
-      logger.info("Handling field2: " + pair);
-      var updatedBinding = pair.withFieldBinding(f1Binding, CPIndex.FIRST);
-      return new CPFieldHandler(updatedBinding, CPIndex.SECOND).handle();
+      logger.info("Deriving field writing: " + writingPair);
+      return derivator.derive(writingPair.getValue1(), writingPair.getValue0());
     }
 
-    logger.warning("Never should the code arrive here: " + pair);
-    return new DerivationResult(List.of(), Optional.empty());
+    logger.warning("This code should not be reached " + writingPair);
+    return NewWritingPairs.NULL;
   }
 
 }

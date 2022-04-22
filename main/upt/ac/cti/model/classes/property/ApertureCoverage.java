@@ -1,13 +1,11 @@
 package upt.ac.cti.model.classes.property;
 
 import java.util.logging.Logger;
-import familypolymorphismdetection.metamodel.entity.MClass;
-import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
 
 @PropertyComputer
-public class ApertureCoverage implements IPropertyComputer<Double, MClass> {
+public final class ApertureCoverage implements IPropertyComputer<Double, MClass> {
 
   private static final Logger logger = Logger.getLogger(ApertureCoverage.class.getName());
 

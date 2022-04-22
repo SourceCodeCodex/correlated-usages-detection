@@ -8,7 +8,7 @@ import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 import upt.ac.cti.cache.Cache;
 import upt.ac.cti.util.HierarchyResolver;
 
-public class FieldWritingBindingResolver {
+public final class FieldWritingBindingResolver {
 
   private static final Cache<FieldWriting, ITypeBinding> cache =
       new Cache<>();

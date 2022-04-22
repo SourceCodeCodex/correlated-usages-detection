@@ -1,4 +1,4 @@
-package upt.ac.cti.analysis.coverage.flow.insensitive.deriver;
+package upt.ac.cti.analysis.coverage.flow.insensitive.derivator;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.javatuples.Pair;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 
-class DerivationValidator {
+class DerivationJobValidator {
 
   public boolean isValid(Pair<FieldWriting, FieldWriting> wp) {
     return !list().stream().anyMatch(p -> p.test(wp));

@@ -4,7 +4,7 @@ package upt.ac.cti.cache;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Cache<K, T> implements ICache<K, T> {
+public final class Cache<K, T> implements ICache<K, T> {
 
   private final ConcurrentHashMap<K, T> map = new ConcurrentHashMap<>();
 

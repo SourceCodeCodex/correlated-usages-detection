@@ -5,17 +5,13 @@ import java.util.logging.Logger;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
-import familypolymorphismdetection.metamodel.entity.MFieldPair;
-import familypolymorphismdetection.metamodel.entity.MTypePair;
-import familypolymorphismdetection.metamodel.factory.Factory;
-import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
 import upt.ac.cti.model.util.FieldBindingResolver;
 import upt.ac.cti.util.HierarchyResolver;
 
 @RelationBuilder
-public class TypePairs implements IRelationBuilder<MTypePair, MFieldPair> {
+public final class TypePairs implements IRelationBuilder<MTypePair, MFieldPair> {
 
   private final FieldBindingResolver fieldTypeBindingResolver = new FieldBindingResolver();
   private final HierarchyResolver hierarchyResolver = new HierarchyResolver();

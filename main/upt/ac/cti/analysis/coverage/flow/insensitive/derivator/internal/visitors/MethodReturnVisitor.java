@@ -1,4 +1,4 @@
-package upt.ac.cti.analysis.coverage.flow.insensitive.iterators.handlers.visitors;
+package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitors;
 
 import java.util.ArrayList;
 import java.util.List;

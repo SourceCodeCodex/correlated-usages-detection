@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 import upt.ac.cti.cache.Cache;
 
-public class HierarchyResolver {
+public final class HierarchyResolver {
 
   private static final Cache<IType, ITypeHierarchy> cache = new Cache<>();
 

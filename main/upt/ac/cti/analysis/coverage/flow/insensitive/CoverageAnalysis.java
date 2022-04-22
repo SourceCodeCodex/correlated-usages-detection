@@ -2,15 +2,15 @@ package upt.ac.cti.analysis.coverage.flow.insensitive;
 
 import org.eclipse.jdt.core.IField;
 import org.javatuples.Pair;
-import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import upt.ac.cti.analysis.coverage.ICoverageAnalysis;
 import upt.ac.cti.analysis.coverage.flow.insensitive.combiner.FieldWritingsCombiner;
-import upt.ac.cti.analysis.coverage.flow.insensitive.deriver.FieldWritingsDeriver;
+import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.DerivationManager;
 import upt.ac.cti.analysis.coverage.flow.insensitive.parser.CodeParser;
+import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.JavaEntitySearcher;
 import upt.ac.cti.analysis.coverage.flow.insensitive.util.FieldWritingBindingResolver;
 import upt.ac.cti.util.HierarchyResolver;
 
-public class CoverageAnalysis implements ICoverageAnalysis {
+public final class CoverageAnalysis implements ICoverageAnalysis {
 
   private final IField field1;
   private final IField field2;
@@ -27,14 +27,16 @@ public class CoverageAnalysis implements ICoverageAnalysis {
   @Override
   public int coverage() {
     var codeParser = new CodeParser();
-    var fieldWritingsCombiner = new FieldWritingsCombiner(codeParser);
+    var javaEntitySearcher = new JavaEntitySearcher();
+
+    var fieldWritingsCombiner = new FieldWritingsCombiner(codeParser, javaEntitySearcher);
 
     var writingPairs = fieldWritingsCombiner.combine(field1, field2);
 
     var hierarchyResolver = new HierarchyResolver();
     var assignmentBindingResolver = new FieldWritingBindingResolver(hierarchyResolver);
 
-    var deriver = new FieldWritingsDeriver(assignmentBindingResolver);
+    var deriver = new DerivationManager(assignmentBindingResolver, javaEntitySearcher, codeParser);
 
     var bindingPairs = deriver.derive(writingPairs);
 

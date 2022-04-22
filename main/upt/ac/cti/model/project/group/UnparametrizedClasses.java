@@ -7,15 +7,11 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import familypolymorphismdetection.metamodel.entity.MClass;
-import familypolymorphismdetection.metamodel.entity.MProject;
-import familypolymorphismdetection.metamodel.factory.Factory;
-import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
 
 @RelationBuilder
-public class UnparametrizedClasses implements IRelationBuilder<MClass, MProject> {
+public final class UnparametrizedClasses implements IRelationBuilder<MClass, MProject> {
 
   @Override
   public Group<MClass> buildGroup(MProject mProject) {

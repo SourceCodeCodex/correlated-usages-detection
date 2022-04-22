@@ -9,7 +9,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import upt.ac.cti.cache.Cache;
 
-public class FieldBindingResolver {
+public final class FieldBindingResolver {
 
   private static final Cache<IField, ITypeBinding> cache = new Cache<>();
 

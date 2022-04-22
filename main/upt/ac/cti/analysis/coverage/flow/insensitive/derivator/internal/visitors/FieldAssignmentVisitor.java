@@ -1,4 +1,4 @@
-package upt.ac.cti.analysis.coverage.flow.insensitive.iterators.handlers.visitors;
+package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,13 @@ import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 
-public class FieldAsgmtVisitor extends ASTVisitor {
+public class FieldAssignmentVisitor extends ASTVisitor {
 
   private final IField iField;
 
   private final List<Expression> result = new ArrayList<>();
 
-  public FieldAsgmtVisitor(IField iField) {
+  public FieldAssignmentVisitor(IField iField) {
     this.iField = iField;
   }
 

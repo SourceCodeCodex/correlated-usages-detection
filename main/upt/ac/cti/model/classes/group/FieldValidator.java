@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import upt.ac.cti.model.util.FieldBindingResolver;
 import upt.ac.cti.util.HierarchyResolver;
 
-class FieldValidator {
+final class FieldValidator {
 
   private static final Logger logger = Logger.getLogger(FieldValidator.class.getSimpleName());
 

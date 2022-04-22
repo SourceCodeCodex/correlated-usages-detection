@@ -8,22 +8,24 @@ import org.eclipse.jdt.core.IMethod;
 import org.javatuples.Pair;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 import upt.ac.cti.analysis.coverage.flow.insensitive.parser.CodeParser;
-import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.WritingsSearcher;
+import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.JavaEntitySearcher;
 
 public class FieldWritingsCombiner implements IFieldWritingsCombiner {
 
   private final CodeParser parser;
+  private final JavaEntitySearcher javaEntitySearcher;
 
-  public FieldWritingsCombiner(CodeParser parser) {
+  public FieldWritingsCombiner(CodeParser parser, JavaEntitySearcher javaEntitySearcher) {
     this.parser = parser;
+    this.javaEntitySearcher = javaEntitySearcher;
   }
 
   @Override
   public List<Pair<FieldWriting, FieldWriting>> combine(IField field1, IField field2) {
 
 
-    var f1WritingMethods = WritingsSearcher.instance().searchFieldWrites(field1);
-    var f2WritingMethods = WritingsSearcher.instance().searchFieldWrites(field2);
+    var f1WritingMethods = javaEntitySearcher.searchFieldWritings(field1);
+    var f2WritingMethods = javaEntitySearcher.searchFieldWritings(field2);
 
     var writingBoth = new HashSet<>(f1WritingMethods);
     writingBoth.retainAll(f2WritingMethods);

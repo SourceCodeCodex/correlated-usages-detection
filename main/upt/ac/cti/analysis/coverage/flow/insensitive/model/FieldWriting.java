@@ -4,10 +4,10 @@ import java.util.Optional;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.dom.Expression;
 
-public record FieldWriting(IField field, Expression writingExpression,
+public final record FieldWriting(IField field, Expression writingExpression,
     Optional<Expression> accessExpression) {
 
-  public FieldWriting withWriteExpression(Expression writingExpression) {
+  public FieldWriting withWritingExpression(Expression writingExpression) {
     return new FieldWriting(field, writingExpression, accessExpression);
   }
 

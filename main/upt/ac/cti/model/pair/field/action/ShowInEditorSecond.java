@@ -6,13 +6,12 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.PartInitException;
 import org.javatuples.Pair;
-import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import ro.lrg.xcore.metametamodel.ActionPerformer;
 import ro.lrg.xcore.metametamodel.HListEmpty;
 import ro.lrg.xcore.metametamodel.IActionPerformer;
 
 @ActionPerformer
-public class ShowInEditorSecond implements IActionPerformer<Void, MFieldPair, HListEmpty> {
+public final class ShowInEditorSecond implements IActionPerformer<Void, MFieldPair, HListEmpty> {
 
   private static final Logger logger = Logger.getLogger(ShowInEditorSecond.class.getSimpleName());
 
