@@ -10,11 +10,11 @@ public abstract class CoverageTest {
     var mClass = findClass(className);
     assertNotNull(mClass);
 
-    var fieldPairs = mClass.fieldPairGroup().getElements();
+    var fieldPairs = mClass.fieldPairs().getElements();
     assertEquals(1, fieldPairs.size());
 
     var firstPair = fieldPairs.get(0);
-    var coverage = (int) firstPair.fieldPairApertureCoverage();
+    var coverage = (int) firstPair.coverage();
 
     assertEquals(expected, coverage);
   }

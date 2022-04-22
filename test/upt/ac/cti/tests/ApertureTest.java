@@ -42,11 +42,11 @@ public class ApertureTest {
     var mClass = findClass(className);
     assertNotNull(mClass);
 
-    var fieldPairs = mClass.fieldPairGroup().getElements();
+    var fieldPairs = mClass.fieldPairs().getElements();
     assertEquals(1, fieldPairs.size());
 
     var firstPair = fieldPairs.get(0);
-    var aperture = (int) firstPair.fieldPairAperture();
+    var aperture = (int) firstPair.aperture();
 
     assertEquals(expected, aperture);
   }
