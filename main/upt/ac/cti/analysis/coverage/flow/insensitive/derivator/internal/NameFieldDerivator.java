@@ -2,6 +2,7 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal;
 
 import java.util.Optional;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.dom.Name;
 import org.javatuples.Pair;
 import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitors.FieldAssignmentVisitor;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.DerivationResult;
@@ -23,7 +24,10 @@ final class NameFieldDerivator implements IFieldWritingsDerivator {
 
   @Override
   public DerivationResult derive(FieldWriting deriver, FieldWriting constant) {
-    var field = (IField) deriver.writingExpression().resolveTypeBinding().getJavaElement();
+    var name = (Name) deriver.writingExpression();
+    var binding = name.resolveBinding();
+
+    var field = (IField) binding.getJavaElement();
 
     var wirtingMethods = javaEntitySearcher.searchFieldWritings(field);
 

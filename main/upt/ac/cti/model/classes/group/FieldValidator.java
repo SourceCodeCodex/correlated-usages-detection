@@ -2,7 +2,6 @@ package upt.ac.cti.model.classes.group;
 
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.logging.Logger;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
@@ -11,8 +10,6 @@ import upt.ac.cti.model.util.FieldBindingResolver;
 import upt.ac.cti.util.HierarchyResolver;
 
 final class FieldValidator {
-
-  private static final Logger logger = Logger.getLogger(FieldValidator.class.getSimpleName());
 
   private final FieldBindingResolver fieldTypeBindingResolver;
   private final HierarchyResolver hierarchyResolver;
@@ -46,8 +43,8 @@ final class FieldValidator {
       try {
         return Flags.isStatic(field.getFlags());
       } catch (JavaModelException e) {
-        var ste = e.getStackTrace()[0];
-        logger.throwing(ste.getClassName(), ste.getMethodName(), e);
+        e.printStackTrace();
+
         return false;
       }
     };

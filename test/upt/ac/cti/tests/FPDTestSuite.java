@@ -18,10 +18,10 @@ public class FPDTestSuite {
 
   private static final String PROJECT_NAME = "SUT";
 
-  private static Group<MClass> nonGenericClasses;
+  private static Group<MClass> familyPolymorphismSusceptibleClasses;
 
   static MClass findClass(String name) {
-    for (MClass mClass : nonGenericClasses.getElements()) {
+    for (MClass mClass : familyPolymorphismSusceptibleClasses.getElements()) {
       if (((IType) mClass.getUnderlyingObject()).getFullyQualifiedName().equals(name)) {
         return mClass;
       }
@@ -34,7 +34,7 @@ public class FPDTestSuite {
     TestUtil.importProject(PROJECT_NAME, PROJECT_NAME + ".zip");
     var mProject = Factory.getInstance()
         .createMProject(TestUtil.getProject(PROJECT_NAME).get());
-    nonGenericClasses = mProject.unparametrizedClasses();
+    familyPolymorphismSusceptibleClasses = mProject.familyPolymorphismSusceptibleClasses();
   }
 
   @AfterClass

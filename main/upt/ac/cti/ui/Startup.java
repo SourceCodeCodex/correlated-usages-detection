@@ -5,6 +5,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.ui.IStartup;
 import org.javatuples.Pair;
+import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.insider.view.ToolRegistration;
 
 public final class Startup implements IStartup {

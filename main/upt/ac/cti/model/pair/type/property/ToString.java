@@ -2,6 +2,7 @@ package upt.ac.cti.model.pair.type.property;
 
 import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
+import familypolymorphismdetection.metamodel.entity.MTypePair;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
 

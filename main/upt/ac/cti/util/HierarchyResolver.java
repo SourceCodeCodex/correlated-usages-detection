@@ -2,7 +2,6 @@ package upt.ac.cti.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IType;
@@ -13,8 +12,6 @@ import upt.ac.cti.cache.Cache;
 public final class HierarchyResolver {
 
   private static final Cache<IType, ITypeHierarchy> cache = new Cache<>();
-
-  private static final Logger logger = Logger.getLogger(HierarchyResolver.class.getName());
 
   public List<IType> resolveConcreteDescendets(IType type) {
     ITypeHierarchy hierarchy;
@@ -27,8 +24,7 @@ public final class HierarchyResolver {
         hierarchy = type.newTypeHierarchy(new NullProgressMonitor());
         cache.put(type, hierarchy);
       } catch (JavaModelException e) {
-        var ste = e.getStackTrace()[0];
-        logger.throwing(ste.getClassName(), ste.getMethodName(), e);
+        e.printStackTrace();
 
         return List.of();
       }
@@ -41,8 +37,7 @@ public final class HierarchyResolver {
       try {
         return !Flags.isAbstract(it.getFlags());
       } catch (JavaModelException e) {
-        var ste = e.getStackTrace()[0];
-        logger.throwing(ste.getClassName(), ste.getMethodName(), e);
+        e.printStackTrace();
 
         return false;
       }

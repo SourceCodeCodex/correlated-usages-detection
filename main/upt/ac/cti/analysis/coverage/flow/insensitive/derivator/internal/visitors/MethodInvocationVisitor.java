@@ -30,8 +30,8 @@ public class MethodInvocationVisitor extends ASTVisitor {
   public boolean visit(ClassInstanceCreation node) {
     if (localVar.getDeclaringMember().equals(node.resolveConstructorBinding().getJavaElement())) {
       try {
-        var iMethod = (IMethod) localVar.getDeclaringMember();
-        var index = Arrays.asList(iMethod.getParameters()).indexOf(localVar);
+        var method = (IMethod) localVar.getDeclaringMember();
+        var index = Arrays.asList(method.getParameters()).indexOf(localVar);
         result.add((Expression) node.arguments().get(index));
       } catch (JavaModelException e) {
         e.printStackTrace();
@@ -45,8 +45,8 @@ public class MethodInvocationVisitor extends ASTVisitor {
   public boolean visit(MethodInvocation node) {
     if (localVar.getDeclaringMember().equals(node.resolveMethodBinding().getJavaElement())) {
       try {
-        var iMethod = (IMethod) localVar.getDeclaringMember();
-        var index = Arrays.asList(iMethod.getParameters()).indexOf(localVar);
+        var method = (IMethod) localVar.getDeclaringMember();
+        var index = Arrays.asList(method.getParameters()).indexOf(localVar);
         result.add((Expression) node.arguments().get(index));
       } catch (JavaModelException e) {
         e.printStackTrace();
@@ -60,8 +60,8 @@ public class MethodInvocationVisitor extends ASTVisitor {
   public boolean visit(SuperMethodInvocation node) {
     if (localVar.getDeclaringMember().equals(node.resolveMethodBinding().getJavaElement())) {
       try {
-        var iMethod = (IMethod) localVar.getDeclaringMember();
-        var index = Arrays.asList(iMethod.getParameters()).indexOf(localVar);
+        var method = (IMethod) localVar.getDeclaringMember();
+        var index = Arrays.asList(method.getParameters()).indexOf(localVar);
         result.add((Expression) node.arguments().get(index));
       } catch (JavaModelException e) {
         e.printStackTrace();

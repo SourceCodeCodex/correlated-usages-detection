@@ -52,12 +52,12 @@ public class DerivationManager implements IDerivationManager {
   public Set<Pair<ITypeBinding, ITypeBinding>> derive(
       List<Pair<FieldWriting, FieldWriting>> input) {
 
-    var counter = 0;
+    writingPairs.addAll(input);
+
     List<Future<DerivationResult>> futures;
 
     while (!writingPairs.isEmpty()) {
       writingPairs.removeAll(derived);
-      logger.info(String.format("Start set %d of derivations", counter++));
 
       try {
         futures = pool.invokeAll(writingPairs.parallelStream()
@@ -65,8 +65,7 @@ public class DerivationManager implements IDerivationManager {
             .map(p -> new DerivationJob(assignmentBindingResolver, derivator, p))
             .toList());
       } catch (InterruptedException e) {
-        var ste = e.getStackTrace()[0];
-        logger.throwing(ste.getClassName(), ste.getMethodName(), e);
+        e.printStackTrace();
 
         return typePairs;
       }
@@ -79,8 +78,7 @@ public class DerivationManager implements IDerivationManager {
         try {
           result = f.get();
         } catch (InterruptedException | ExecutionException e) {
-          var ste = e.getStackTrace()[0];
-          logger.throwing(ste.getClassName(), ste.getMethodName(), e);
+          e.printStackTrace();
 
           return typePairs;
         }
@@ -89,14 +87,10 @@ public class DerivationManager implements IDerivationManager {
           writingPairs.addAll(nwp.writingPairs());
         } else if (result instanceof ResolvedBindings rb) {
           var bindingPair = rb.bindingsPair();
-          var log = String.format("Resolved type pair: %s & &s",
-              bindingPair.getValue0().getQualifiedName(),
-              bindingPair.getValue1().getQualifiedName());
-          logger.info(log);
-
           typePairs.add(bindingPair);
         } else {
-          logger.severe("Unknown instance of DerivationResult. Impossible to happen");
+          logger.severe(
+              "Unknown instance of DerivationResult. Impossible to happen! Result: " + result);
         }
       }
     }

@@ -2,6 +2,7 @@ package upt.ac.cti.analysis.coverage.flow.insensitive;
 
 import org.eclipse.jdt.core.IField;
 import org.javatuples.Pair;
+import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import upt.ac.cti.analysis.coverage.ICoverageAnalysis;
 import upt.ac.cti.analysis.coverage.flow.insensitive.combiner.FieldWritingsCombiner;
 import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.DerivationManager;

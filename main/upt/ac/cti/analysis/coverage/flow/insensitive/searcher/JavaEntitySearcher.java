@@ -1,7 +1,6 @@
 package upt.ac.cti.analysis.coverage.flow.insensitive.searcher;
 
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -27,8 +26,6 @@ public final class JavaEntitySearcher {
 
   private final Cache<IJavaElement, Set<IJavaElement>> cache = new Cache<>();
 
-  private static final Logger logger = Logger.getLogger(JavaEntitySearcher.class.getName());
-
   private IJavaSearchScope createScope(IJavaElement javaElement) {
     return SearchEngine.createJavaSearchScope(new IJavaElement[] {javaElement.getJavaProject()});
   }
@@ -41,8 +38,7 @@ public final class JavaEntitySearcher {
           scope, requestor, new NullProgressMonitor());
       return requestor.getMatches();
     } catch (CoreException e) {
-      var ste = e.getStackTrace()[0];
-      logger.throwing(ste.getClassName(), ste.getMethodName(), e);
+      e.printStackTrace();
     }
     return Set.of();
   }

@@ -2,6 +2,7 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitor
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -10,37 +11,34 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 
 public class FieldAssignmentVisitor extends ASTVisitor {
 
-  private final IField iField;
+  private final IField field;
 
   private final List<Expression> result = new ArrayList<>();
 
-  public FieldAssignmentVisitor(IField iField) {
-    this.iField = iField;
-  }
+  private static final Logger logger = Logger.getLogger(FieldAssignmentVisitor.class.getName());
 
-  @Override
-  public boolean visit(Assignment node) {
-    return handleLefSide(node, node.getLeftHandSide());
+  public FieldAssignmentVisitor(IField field) {
+    this.field = field;
   }
 
   public List<Expression> result() {
     return result;
   }
 
-  private boolean handleLefSide(Assignment node, Expression leftSide) {
-    var leftExpressionType = leftSide.getNodeType();
-    switch (leftExpressionType) {
+  @Override
+  public boolean visit(Assignment node) {
+    var left = node.getLeftHandSide();
+    switch (left.getNodeType()) {
       case ASTNode.SIMPLE_NAME: {
-        var binding = ((SimpleName) leftSide).resolveBinding();
+        var binding = ((SimpleName) left).resolveBinding();
         if (binding.getKind() == IBinding.VARIABLE) {
           var varBinding = (IVariableBinding) binding;
-          if (iField.equals(varBinding.getJavaElement())) {
+          if (field.equals(varBinding.getJavaElement())) {
             result.add(node.getRightHandSide());
 
           }
@@ -48,10 +46,10 @@ public class FieldAssignmentVisitor extends ASTVisitor {
         break;
       }
       case ASTNode.QUALIFIED_NAME: {
-        var binding = ((QualifiedName) leftSide).resolveBinding();
+        var binding = ((QualifiedName) left).resolveBinding();
         if (binding.getKind() == IBinding.VARIABLE) {
           var varBinding = (IVariableBinding) binding;
-          if (iField.equals(varBinding.getJavaElement())) {
+          if (field.equals(varBinding.getJavaElement())) {
             result.add(node.getRightHandSide());
 
           }
@@ -59,17 +57,20 @@ public class FieldAssignmentVisitor extends ASTVisitor {
         break;
       }
       case ASTNode.FIELD_ACCESS: {
-        var varBinding = ((FieldAccess) leftSide).resolveFieldBinding();
-        if (iField.equals(varBinding.getJavaElement())) {
+        var fieldBinding = ((FieldAccess) left).resolveFieldBinding();
+        if (field.equals(fieldBinding.getJavaElement())) {
           result.add(node.getRightHandSide());
         }
         break;
       }
-      case ASTNode.PARENTHESIZED_EXPRESSION: {
-        return handleLefSide(node, ((ParenthesizedExpression) leftSide).getExpression());
+      default: {
+        if (field.equals(left.resolveTypeBinding().getJavaElement())) {
+          logger.warning(
+              "Assignment omitted as there is no handling method for assignments with this left side expression type: "
+                  + left.getNodeType());
+        }
       }
     }
     return true;
   }
-
 }

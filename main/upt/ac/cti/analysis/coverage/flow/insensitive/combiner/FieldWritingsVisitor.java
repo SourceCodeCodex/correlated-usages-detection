@@ -17,11 +17,11 @@ import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 
 class FieldWritingsVisitor extends ASTVisitor {
 
-  private static final Logger logger = Logger.getLogger(FieldWritingsVisitor.class.getName());
-
   private final IField field;
 
   private final List<FieldWriting> result = new ArrayList<>();
+
+  private static final Logger logger = Logger.getLogger(FieldWritingsVisitor.class.getName());
 
   public FieldWritingsVisitor(IField field) {
     this.field = field;
@@ -33,42 +33,40 @@ class FieldWritingsVisitor extends ASTVisitor {
 
   @Override
   public boolean visit(Assignment node) {
-    var leftExpression = node.getLeftHandSide();
+    var left = node.getLeftHandSide();
 
-    switch (leftExpression.getNodeType()) {
+    switch (left.getNodeType()) {
 
       case ASTNode.SIMPLE_NAME: {
-        var binding = ((SimpleName) leftExpression).resolveBinding();
+        var binding = ((SimpleName) left).resolveBinding();
         if (binding.getKind() == IBinding.VARIABLE) {
           var varBinding = (IVariableBinding) binding;
           if (field.equals(varBinding.getJavaElement())) {
             var fieldWrite = new FieldWriting(field, node.getRightHandSide(), Optional.empty());
             result.add(fieldWrite);
-            logger.info("Found SIMPLE_NAME field write: " + node.toString());
           }
         }
         break;
       }
 
       case ASTNode.QUALIFIED_NAME: {
-        var binding = ((QualifiedName) leftExpression).resolveBinding();
-        var qualifier = ((QualifiedName) leftExpression).getQualifier();
+        var binding = ((QualifiedName) left).resolveBinding();
+        var qualifier = ((QualifiedName) left).getQualifier();
         if (binding.getKind() == IBinding.VARIABLE) {
           var varBinding = (IVariableBinding) binding;
           if (field.equals(varBinding.getJavaElement())) {
             var fieldWrite =
                 new FieldWriting(field, node.getRightHandSide(), Optional.of(qualifier));
             result.add(fieldWrite);
-            logger.info("Found QUALIFIED_NAME field write: " + node.toString());
           }
         }
         break;
       }
 
       case ASTNode.FIELD_ACCESS: {
-        var varBinding = ((FieldAccess) leftExpression).resolveFieldBinding();
+        var varBinding = ((FieldAccess) left).resolveFieldBinding();
         if (field.equals(varBinding.getJavaElement())) {
-          var accessExpression = ((FieldAccess) leftExpression).getExpression();
+          var accessExpression = ((FieldAccess) left).getExpression();
           if (accessExpression.getNodeType() == ASTNode.THIS_EXPRESSION) {
             var fieldWrite = new FieldWriting(field, node.getRightHandSide(), Optional.empty());
             result.add(fieldWrite);
@@ -77,15 +75,16 @@ class FieldWritingsVisitor extends ASTVisitor {
                 new FieldWriting(field, node.getRightHandSide(), Optional.of(accessExpression));
             result.add(fieldWrite);
           }
-          logger.info("Found FIELD_ACCESS field write: " + node.toString());
         }
         break;
       }
 
       default: {
-        logger.warning(
-            "Assignment omitted as there is no handling method for assignments with this left side expression type! Expression type : "
-                + leftExpression.getNodeType());
+        if (field.equals(left.resolveTypeBinding().getJavaElement())) {
+          logger.warning(
+              "Assignment omitted as there is no handling method for assignments with this left side expression type: "
+                  + left.getNodeType());
+        }
       }
     }
     return true;

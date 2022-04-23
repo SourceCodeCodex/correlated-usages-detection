@@ -2,6 +2,7 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal;
 
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.dom.Name;
 import org.javatuples.Pair;
 import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitors.MethodInvocationVisitor;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.DerivationResult;
@@ -26,8 +27,11 @@ final public class NameParameterDerivator implements IFieldWritingsDerivator {
 
   @Override
   public DerivationResult derive(FieldWriting deriver, FieldWriting constant) {
+    var name = (Name) deriver.writingExpression();
+    var binding = name.resolveBinding();
+
     var parameter =
-        (ILocalVariable) deriver.writingExpression().resolveTypeBinding().getJavaElement();
+        (ILocalVariable) binding.getJavaElement();
 
     var invocations =
         javaEntitySearcher.searchMethodInvocations((IMethod) parameter.getDeclaringMember());

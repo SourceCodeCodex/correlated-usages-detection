@@ -1,6 +1,7 @@
 package upt.ac.cti.model.method.property;
 
 import org.eclipse.jdt.core.IMethod;
+import familypolymorphismdetection.metamodel.entity.MMethod;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
 

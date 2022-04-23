@@ -2,6 +2,7 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal;
 
 import java.util.Optional;
 import org.eclipse.jdt.core.ILocalVariable;
+import org.eclipse.jdt.core.dom.Name;
 import org.javatuples.Pair;
 import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitors.LocalVariableAssignmentVisitor;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.DerivationResult;
@@ -22,8 +23,11 @@ final class NameLocalVariableDerivator implements IFieldWritingsDerivator {
 
   @Override
   public DerivationResult derive(FieldWriting deriver, FieldWriting constant) {
+    var name = (Name) deriver.writingExpression();
+    var binding = name.resolveBinding();
+
     var localVariable =
-        (ILocalVariable) deriver.writingExpression().resolveTypeBinding().getJavaElement();
+        (ILocalVariable) binding.getJavaElement();
 
     var wirtingMethods = javaEntitySearcher.searchLocalVariableWritings(localVariable);
 

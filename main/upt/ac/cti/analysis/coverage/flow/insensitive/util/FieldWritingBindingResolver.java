@@ -3,6 +3,7 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.util;
 import java.util.Optional;
 import java.util.logging.Logger;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 import upt.ac.cti.cache.Cache;
@@ -22,7 +23,7 @@ public final class FieldWritingBindingResolver {
     this.hierarchyResolver = hierarchyResolver;
   }
 
-  public Optional<ITypeBinding> resolveHierarchyLeafBinding(FieldWriting fieldWriting) {
+  public Optional<ITypeBinding> resolveBinding(FieldWriting fieldWriting) {
     var cachedBinding = cache.get(fieldWriting);
     if (cachedBinding.isPresent()) {
       return cachedBinding;
@@ -36,6 +37,14 @@ public final class FieldWritingBindingResolver {
       return Optional.empty();
     }
 
+    if (fieldWriting.writingExpression().getNodeType() == ASTNode.CLASS_INSTANCE_CREATION) {
+      cache.put(fieldWriting, writingExpressionBinding);
+      return Optional.of(writingExpressionBinding);
+    }
+
+    if (fieldWriting.writingExpression().getNodeType() == ASTNode.NULL_LITERAL) {
+      return Optional.empty();
+    }
 
     var type = (IType) writingExpressionBinding.getJavaElement();
     if (type == null) {
@@ -45,6 +54,7 @@ public final class FieldWritingBindingResolver {
     if (hierarchyResolver
         .resolveConcreteDescendets(type)
         .size() == 1) {
+      cache.put(fieldWriting, writingExpressionBinding);
       return Optional.of(writingExpressionBinding);
     }
     return Optional.empty();

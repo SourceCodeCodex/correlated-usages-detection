@@ -34,10 +34,10 @@ class DerivationJob implements Callable<DerivationResult> {
 
     // Check if writing expressions are bound to a concrete type which is a leaf in a type hierarchy
     var f1Binding =
-        assignmentBindingResolver.resolveHierarchyLeafBinding(writingPair.getValue0());
+        assignmentBindingResolver.resolveBinding(writingPair.getValue0());
 
     var f2Binding =
-        assignmentBindingResolver.resolveHierarchyLeafBinding(writingPair.getValue1());
+        assignmentBindingResolver.resolveBinding(writingPair.getValue1());
 
     // Stop condition 1: both have leaf bindings
     if (f1Binding.isPresent() && f2Binding.isPresent()) {
@@ -50,9 +50,6 @@ class DerivationJob implements Callable<DerivationResult> {
           .equals(accessExpr2.map(Expression::resolveTypeBinding));
 
       if (areAccessingExpressionsEqual || areAccessingExpressionsBindingsEqual) {
-        logger.info("Both field writing bindings resolved: " + f1Binding.get().getName() + " & "
-            + f2Binding.get().getName());
-
         return new ResolvedBindings(Pair.with(f1Binding.get(), f2Binding.get()));
       }
 
@@ -61,16 +58,15 @@ class DerivationJob implements Callable<DerivationResult> {
 
 
     if (f1Binding.isEmpty()) {
-      logger.info("Deriving field writing: " + writingPair);
       return derivator.derive(writingPair.getValue0(), writingPair.getValue1());
     }
 
     if (f2Binding.isEmpty()) {
-      logger.info("Deriving field writing: " + writingPair);
       return derivator.derive(writingPair.getValue1(), writingPair.getValue0());
     }
 
-    logger.warning("This code should not be reached " + writingPair);
+    logger.severe(
+        "The program ran into an inconsistent state! Check the DerivationJob: " + writingPair);
     return NewWritingPairs.NULL;
   }
 

@@ -11,7 +11,7 @@ public class ProjectsAnalyser {
     TestUtil.importProject(PROJECT_NAME, PROJECT_NAME + ".zip");
     var mProject = Factory.getInstance()
         .createMProject(TestUtil.getProject(PROJECT_NAME).get());
-    mProject.unparametrizedClasses();
+    mProject.familyPolymorphismSusceptibleClasses();
 
     TestUtil.deleteProject(PROJECT_NAME);
   }
@@ -20,6 +20,5 @@ public class ProjectsAnalyser {
   public void project1() {
     analyseProject("P1");
   }
-
 
 }
