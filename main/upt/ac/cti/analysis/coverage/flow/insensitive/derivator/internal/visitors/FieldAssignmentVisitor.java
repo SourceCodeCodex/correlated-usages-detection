@@ -11,7 +11,6 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 
 public class FieldAssignmentVisitor extends ASTVisitor {
@@ -36,17 +35,6 @@ public class FieldAssignmentVisitor extends ASTVisitor {
     switch (left.getNodeType()) {
       case ASTNode.SIMPLE_NAME: {
         var binding = ((SimpleName) left).resolveBinding();
-        if (binding.getKind() == IBinding.VARIABLE) {
-          var varBinding = (IVariableBinding) binding;
-          if (field.equals(varBinding.getJavaElement())) {
-            result.add(node.getRightHandSide());
-
-          }
-        }
-        break;
-      }
-      case ASTNode.QUALIFIED_NAME: {
-        var binding = ((QualifiedName) left).resolveBinding();
         if (binding.getKind() == IBinding.VARIABLE) {
           var varBinding = (IVariableBinding) binding;
           if (field.equals(varBinding.getJavaElement())) {

@@ -53,6 +53,8 @@ class DerivationJob implements Callable<DerivationResult> {
         return new ResolvedBindings(Pair.with(f1Binding.get(), f2Binding.get()));
       }
 
+      logger.warning(
+          "Bindings discarded without know reason: " + f1Binding + " - " + f2Binding);
       return NewWritingPairs.NULL;
     }
 

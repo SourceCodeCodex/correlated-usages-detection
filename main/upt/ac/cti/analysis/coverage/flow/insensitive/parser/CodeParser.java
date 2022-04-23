@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import upt.ac.cti.cache.Cache;
+import upt.ac.cti.util.cache.Cache;
 
 
 public final class CodeParser {
@@ -62,8 +62,10 @@ public final class CodeParser {
         if (method.equals(node.resolveBinding().getJavaElement())) {
           methodCache.put(method, node);
           result = node;
+          return false;
         }
         return true;
+
       }
     };
     cuAST.accept(visitor);

@@ -1,6 +1,8 @@
 package upt.ac.cti.analysis.coverage.flow.insensitive;
 
+import java.util.List;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import upt.ac.cti.analysis.coverage.ICoverageAnalysis;
@@ -26,7 +28,7 @@ public final class CoverageAnalysis implements ICoverageAnalysis {
 
 
   @Override
-  public int coverage() {
+  public List<Pair<IType, IType>> coveredTypes() {
     var codeParser = new CodeParser();
     var javaEntitySearcher = new JavaEntitySearcher();
 
@@ -41,7 +43,11 @@ public final class CoverageAnalysis implements ICoverageAnalysis {
 
     var bindingPairs = deriver.derive(writingPairs);
 
-    return bindingPairs.size();
+    var coveredTypes = bindingPairs.stream().map(p -> Pair
+        .with((IType) p.getValue0().getJavaElement(), (IType) p.getValue1().getJavaElement()))
+        .toList();
+
+    return coveredTypes;
   }
 
 }

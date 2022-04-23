@@ -18,6 +18,7 @@ final public class FieldWritingsDerivator implements IFieldWritingsDerivator {
   private final ParenthesizedExpressionDerivator pe;
   private final ConditionalExpressionDerivator ce;
   private final NameDerivator n;
+  private final CastDerivator c;
 
   private static final Logger logger =
       Logger.getLogger(FieldWritingsDerivator.class.getSimpleName());;
@@ -31,6 +32,7 @@ final public class FieldWritingsDerivator implements IFieldWritingsDerivator {
     this.pe = new ParenthesizedExpressionDerivator();
     this.ce = new ConditionalExpressionDerivator();
     this.n = new NameDerivator(javaEntitySearcher, codeParser);
+    this.c = new CastDerivator();
   }
 
 
@@ -59,7 +61,9 @@ final public class FieldWritingsDerivator implements IFieldWritingsDerivator {
       }
       case ASTNode.CONDITIONAL_EXPRESSION: {
         return ce.derive(deriver, constant);
-
+      }
+      case ASTNode.CAST_EXPRESSION: {
+        return c.derive(deriver, constant);
       }
       case ASTNode.SIMPLE_NAME:
       case ASTNode.QUALIFIED_NAME: {

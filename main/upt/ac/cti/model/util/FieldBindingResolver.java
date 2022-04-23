@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import upt.ac.cti.cache.Cache;
+import upt.ac.cti.util.cache.Cache;
 
 public final class FieldBindingResolver {
 

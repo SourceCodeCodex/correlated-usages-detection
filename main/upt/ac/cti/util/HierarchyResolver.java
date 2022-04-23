@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
-import upt.ac.cti.cache.Cache;
+import upt.ac.cti.util.cache.Cache;
 
 public final class HierarchyResolver {
 

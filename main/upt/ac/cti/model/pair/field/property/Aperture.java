@@ -9,7 +9,7 @@ public final class Aperture implements IPropertyComputer<Integer, MFieldPair> {
 
   @Override
   public Integer compute(MFieldPair mFieldPair) {
-    var result = mFieldPair.typePairs().getElements().size();
+    var result = mFieldPair.allTypePairs().getElements().size();
     return result;
   }
 

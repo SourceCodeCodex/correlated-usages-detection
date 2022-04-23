@@ -38,6 +38,16 @@ public class ApertureTest {
     assertExactlyOneFieldPairApertureForClassIs("upt.ac.cti.sut.aperture.test6.Test", 4);
   }
 
+  @Test
+  public void test7() {
+    assertExactlyOneFieldPairApertureForClassIs("upt.ac.cti.sut.aperture.test7.Test", 9);
+  }
+
+  @Test
+  public void test8() {
+    assertExactlyOneFieldPairApertureForClassIs("upt.ac.cti.sut.aperture.test8.Test", 9);
+  }
+
   private void assertExactlyOneFieldPairApertureForClassIs(String className, int expected) {
     var mClass = findClass(className);
     assertNotNull(mClass);
@@ -49,6 +59,8 @@ public class ApertureTest {
     var aperture = (int) firstPair.aperture();
 
     assertEquals(expected, aperture);
+
+
   }
 
 }

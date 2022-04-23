@@ -11,7 +11,6 @@ import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 
@@ -43,20 +42,6 @@ class FieldWritingsVisitor extends ASTVisitor {
           var varBinding = (IVariableBinding) binding;
           if (field.equals(varBinding.getJavaElement())) {
             var fieldWrite = new FieldWriting(field, node.getRightHandSide(), Optional.empty());
-            result.add(fieldWrite);
-          }
-        }
-        break;
-      }
-
-      case ASTNode.QUALIFIED_NAME: {
-        var binding = ((QualifiedName) left).resolveBinding();
-        var qualifier = ((QualifiedName) left).getQualifier();
-        if (binding.getKind() == IBinding.VARIABLE) {
-          var varBinding = (IVariableBinding) binding;
-          if (field.equals(varBinding.getJavaElement())) {
-            var fieldWrite =
-                new FieldWriting(field, node.getRightHandSide(), Optional.of(qualifier));
             result.add(fieldWrite);
           }
         }

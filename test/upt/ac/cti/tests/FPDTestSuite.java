@@ -12,8 +12,11 @@ import ro.lrg.xcore.metametamodel.Group;
 import upt.ac.cti.util.TestUtil;
 
 @RunWith(Suite.class)
-@SuiteClasses({ApertureTest.class, CoverageCase1Test.class, CoverageCase2Test.class,
-    CoverageCase3Test.class, CoverageCase4Test.class})
+@SuiteClasses({
+    CacheTest.class,
+    ApertureTest.class,
+    CoverageTest.class,
+    ApertureCoverageTest.class})
 public class FPDTestSuite {
 
   private static final String PROJECT_NAME = "SUT";

@@ -18,7 +18,7 @@ import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.requestor.AMatches
 import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.requestor.FieldWritingsRequestor;
 import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.requestor.LocalVariableWritingsRequestor;
 import upt.ac.cti.analysis.coverage.flow.insensitive.searcher.requestor.MethodInvocationsRequestor;
-import upt.ac.cti.cache.Cache;
+import upt.ac.cti.util.cache.Cache;
 
 public final class JavaEntitySearcher {
 

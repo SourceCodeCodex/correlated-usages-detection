@@ -14,17 +14,17 @@ import upt.ac.cti.model.util.FieldBindingResolver;
 import upt.ac.cti.util.HierarchyResolver;
 
 @RelationBuilder
-public final class TypePairs implements IRelationBuilder<MTypePair, MFieldPair> {
+public final class AllTypePairs implements IRelationBuilder<MTypePair, MFieldPair> {
 
   private final FieldBindingResolver fieldTypeBindingResolver = new FieldBindingResolver();
   private final HierarchyResolver hierarchyResolver = new HierarchyResolver();
 
   @Override
-  public Group<MTypePair> buildGroup(MFieldPair mFieldPair) {
+  public Group<MTypePair> buildGroup(MFieldPair fieldPair) {
     var group = new Group<MTypePair>();
 
     @SuppressWarnings("unchecked")
-    var pair = (Pair<IField, IField>) mFieldPair.getUnderlyingObject();
+    var pair = (Pair<IField, IField>) fieldPair.getUnderlyingObject();
 
     var f1Types = concreteTypes(pair.getValue0());
     var f2Types = concreteTypes(pair.getValue1());

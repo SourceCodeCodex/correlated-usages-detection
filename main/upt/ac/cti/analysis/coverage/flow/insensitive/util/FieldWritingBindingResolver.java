@@ -6,8 +6,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
-import upt.ac.cti.cache.Cache;
 import upt.ac.cti.util.HierarchyResolver;
+import upt.ac.cti.util.cache.Cache;
 
 public final class FieldWritingBindingResolver {
 
