@@ -14,16 +14,9 @@ class DerivationJobValidator {
 
   private List<Predicate<Pair<FieldWriting, FieldWriting>>> list() {
     return List.of(
-        baseObjectsDifferentRef,
         anyIsNull,
         anyIsArrayAccess);
   }
-
-  // TODO: the condition that objects are different is a NECESSARY condition when computin the
-  // result
-  // this predicate should make sure the expressions are referencing to the same object
-  private final Predicate<Pair<FieldWriting, FieldWriting>> baseObjectsDifferentRef =
-      wp -> false;
 
   private final Predicate<Pair<FieldWriting, FieldWriting>> anyIsNull =
       anyIs(ASTNode.NULL_LITERAL);

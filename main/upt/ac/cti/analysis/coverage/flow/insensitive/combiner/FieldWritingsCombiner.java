@@ -3,6 +3,7 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.combiner;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
 import org.javatuples.Pair;
@@ -62,6 +63,14 @@ public class FieldWritingsCombiner implements IFieldWritingsCombiner {
       }
     }
 
+    var init1 = getFieldInitialization(field1);
+    var init2 = getFieldInitialization(field2);
+
+    if (init1.isPresent() && init2.isPresent()) {
+      result.addFirst(Pair.with(init1.get(), init2.get()));
+    }
+
+
     return result;
   }
 
@@ -75,6 +84,14 @@ public class FieldWritingsCombiner implements IFieldWritingsCombiner {
 
     }
     return List.of();
+  }
+
+  private Optional<FieldWriting> getFieldInitialization(IField field) {
+    var variableDeclarationFragmentOpt = parser.parse(field);
+    return variableDeclarationFragmentOpt
+        .flatMap(vdf -> Optional.ofNullable(vdf.getInitializer()))
+        .map(initializer -> new FieldWriting(field, initializer, Optional.empty()));
+
   }
 
 }

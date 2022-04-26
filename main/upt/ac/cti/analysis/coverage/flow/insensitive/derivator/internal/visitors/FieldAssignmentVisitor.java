@@ -2,31 +2,36 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.visitor
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
-import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 
 public class FieldAssignmentVisitor extends ASTVisitor {
 
+  private final FieldWriting deriver;
   private final IField field;
 
-  private final List<Expression> result = new ArrayList<>();
+  private final List<FieldWriting> derivations = new ArrayList<>();
 
   private static final Logger logger = Logger.getLogger(FieldAssignmentVisitor.class.getName());
 
-  public FieldAssignmentVisitor(IField field) {
+  public FieldAssignmentVisitor(FieldWriting deriver, IField field) {
+    this.deriver = deriver;
     this.field = field;
   }
 
-  public List<Expression> result() {
-    return result;
+  public List<FieldWriting> derivations() {
+    return derivations;
   }
 
   @Override
@@ -38,27 +43,53 @@ public class FieldAssignmentVisitor extends ASTVisitor {
         if (binding.getKind() == IBinding.VARIABLE) {
           var varBinding = (IVariableBinding) binding;
           if (field.equals(varBinding.getJavaElement())) {
-            result.add(node.getRightHandSide());
+            derivations.add(deriver.withWritingExpression(node.getRightHandSide()));
 
           }
         }
-        break;
+        return true;
       }
+
+      case ASTNode.QUALIFIED_NAME: {
+        var binding = ((QualifiedName) left).resolveBinding();
+        if (binding.getKind() == IBinding.VARIABLE) {
+          var varBinding = (IVariableBinding) binding;
+          if (field.equals(varBinding.getJavaElement())) {
+            derivations.add(deriver.withWritingExpression(node.getRightHandSide()));
+          }
+        }
+        return true;
+      }
+
+      case ASTNode.SUPER_FIELD_ACCESS: {
+        var binding = ((SuperFieldAccess) left).resolveFieldBinding();
+
+        if (field.equals(binding.getJavaElement())) {
+          var fieldWrite = new FieldWriting(field, node.getRightHandSide(), Optional.empty());
+          derivations.add(fieldWrite);
+        }
+        return true;
+      }
+
       case ASTNode.FIELD_ACCESS: {
-        var fieldBinding = ((FieldAccess) left).resolveFieldBinding();
-        if (field.equals(fieldBinding.getJavaElement())) {
-          result.add(node.getRightHandSide());
+        var binding = ((FieldAccess) left).resolveFieldBinding();
+
+        if (field.equals(binding.getJavaElement())) {
+          derivations.add(deriver.withWritingExpression(node.getRightHandSide()));
         }
-        break;
+        return true;
       }
+
+      case ASTNode.ARRAY_ACCESS: {
+        return true;
+      }
+
       default: {
-        if (field.equals(left.resolveTypeBinding().getJavaElement())) {
-          logger.warning(
-              "Assignment omitted as there is no handling method for assignments with this left side expression type: "
-                  + left.getNodeType());
-        }
+        logger.warning(
+            "Assignment discarded as left hand side type is not resolved yet: "
+                + left.getNodeType());
+        return true;
       }
     }
-    return true;
   }
 }

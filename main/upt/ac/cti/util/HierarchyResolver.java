@@ -11,7 +11,7 @@ import upt.ac.cti.util.cache.Cache;
 
 public final class HierarchyResolver {
 
-  private static final Cache<IType, ITypeHierarchy> cache = new Cache<>();
+  private final Cache<IType, ITypeHierarchy> cache = new Cache<>();
 
   public List<IType> resolveConcreteDescendets(IType type) {
     ITypeHierarchy hierarchy;

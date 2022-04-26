@@ -11,19 +11,22 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import upt.ac.cti.analysis.coverage.flow.insensitive.model.FieldWriting;
 
-public class MethodInvocationVisitor extends ASTVisitor {
+public class ArgumentMethodInvocationVisitor extends ASTVisitor {
 
+  private final FieldWriting deriver;
   private final ILocalVariable localVar;
 
-  private final List<Expression> result = new ArrayList<>();
+  private final List<FieldWriting> derivations = new ArrayList<>();
 
-  public MethodInvocationVisitor(ILocalVariable localVar) {
+  public ArgumentMethodInvocationVisitor(FieldWriting deriver, ILocalVariable localVar) {
+    this.deriver = deriver;
     this.localVar = localVar;
   }
 
-  public List<Expression> result() {
-    return result;
+  public List<FieldWriting> derivations() {
+    return derivations;
   }
 
   @Override
@@ -32,7 +35,9 @@ public class MethodInvocationVisitor extends ASTVisitor {
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
-        result.add((Expression) node.arguments().get(index));
+        var arg = (Expression) node.arguments().get(index);
+        var derivation = deriver.withWritingExpression(arg).withAccessExpression(node);
+        derivations.add(derivation);
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -47,7 +52,10 @@ public class MethodInvocationVisitor extends ASTVisitor {
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
-        result.add((Expression) node.arguments().get(index));
+        var arg = (Expression) node.arguments().get(index);
+        var derivation =
+            deriver.withWritingExpression(arg).withAccessExpression(node.getExpression());
+        derivations.add(derivation);
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -62,7 +70,9 @@ public class MethodInvocationVisitor extends ASTVisitor {
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
-        result.add((Expression) node.arguments().get(index));
+        var arg = (Expression) node.arguments().get(index);
+        var derivation = deriver.withWritingExpression(arg);
+        derivations.add(derivation);
       } catch (JavaModelException e) {
         e.printStackTrace();
       }

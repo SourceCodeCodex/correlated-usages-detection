@@ -36,9 +36,9 @@ public class ProjectReport {
         throw new IOException();
       }
     }
-    report.forEach((name, index) -> {
+    report.forEach((name, apertureCoverage) -> {
       try {
-        writer.write("" + name + " => " + index + "\n");
+        writer.write("" + name + " => " + apertureCoverage + "\n");
       } catch (IOException e) {
         e.printStackTrace();
       }

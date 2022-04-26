@@ -2,7 +2,6 @@ package upt.ac.cti.analysis.coverage.flow.insensitive.derivator;
 
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
-import org.eclipse.jdt.core.dom.Expression;
 import org.javatuples.Pair;
 import upt.ac.cti.analysis.coverage.flow.insensitive.derivator.internal.FieldWritingsDerivator;
 import upt.ac.cti.analysis.coverage.flow.insensitive.model.DerivationResult;
@@ -41,20 +40,18 @@ class DerivationJob implements Callable<DerivationResult> {
 
     // Stop condition 1: both have leaf bindings
     if (f1Binding.isPresent() && f2Binding.isPresent()) {
+
       var accessExpr1 = writingPair.getValue0().accessExpression();
       var accessExpr2 = writingPair.getValue1().accessExpression();
 
-      var areAccessingExpressionsEqual = accessExpr1.equals(accessExpr2);
 
-      var areAccessingExpressionsBindingsEqual = accessExpr1.map(Expression::resolveTypeBinding)
-          .equals(accessExpr2.map(Expression::resolveTypeBinding));
+      var areJavaElementsEqual = accessExpr1.map(e -> e.resolveTypeBinding().getJavaElement())
+          .equals(accessExpr2.map(e -> e.resolveTypeBinding().getJavaElement()));
 
-      if (areAccessingExpressionsEqual || areAccessingExpressionsBindingsEqual) {
+      if (areJavaElementsEqual) {
         return new ResolvedBindings(Pair.with(f1Binding.get(), f2Binding.get()));
       }
 
-      logger.warning(
-          "Bindings discarded without know reason: " + f1Binding + " - " + f2Binding);
       return NewWritingPairs.NULL;
     }
 

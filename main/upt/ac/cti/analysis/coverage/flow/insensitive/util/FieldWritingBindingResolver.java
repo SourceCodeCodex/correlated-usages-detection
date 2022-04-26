@@ -11,7 +11,7 @@ import upt.ac.cti.util.cache.Cache;
 
 public final class FieldWritingBindingResolver {
 
-  private static final Cache<FieldWriting, ITypeBinding> cache =
+  private final Cache<FieldWriting, ITypeBinding> cache =
       new Cache<>();
 
   private static final Logger logger =

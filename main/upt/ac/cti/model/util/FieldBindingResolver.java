@@ -11,7 +11,7 @@ import upt.ac.cti.util.cache.Cache;
 
 public final class FieldBindingResolver {
 
-  private static final Cache<IField, ITypeBinding> cache = new Cache<>();
+  private final Cache<IField, ITypeBinding> cache = new Cache<>();
 
   public ITypeBinding resolve(IField field) {
     var cachedBinding = cache.get(field);

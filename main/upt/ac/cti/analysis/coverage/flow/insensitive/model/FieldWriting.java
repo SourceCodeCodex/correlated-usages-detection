@@ -11,7 +11,7 @@ public final record FieldWriting(IField field, Expression writingExpression,
     return new FieldWriting(field, writingExpression, accessExpression);
   }
 
-  public FieldWriting withBaseObject(Expression accessExpression) {
+  public FieldWriting withAccessExpression(Expression accessExpression) {
     return new FieldWriting(field, writingExpression, Optional.of(accessExpression));
   }
 
