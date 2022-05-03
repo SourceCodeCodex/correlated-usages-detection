@@ -21,7 +21,7 @@ public class ProjectReport {
     group.getElements()
         .forEach(
             mClass -> report.put(((IType) mClass.getUnderlyingObject()).getFullyQualifiedName(),
-                mClass.apertureCoverage()));
+                mClass.fieldApertureCoverage()));
   }
 
   public void writeReport() throws IOException {
