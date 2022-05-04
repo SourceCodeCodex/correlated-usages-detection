@@ -1,4 +1,4 @@
-package upt.ac.cti.coverage.combiner.field;
+package upt.ac.cti.coverage.combiner.field.visitor;
 
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import upt.ac.cti.coverage.model.Writing;
 
-class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
+public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
 
   private static final Logger logger = Logger.getLogger(ReferenceWritingsVisitor.class.getName());
 

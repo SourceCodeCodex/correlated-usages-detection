@@ -3,10 +3,11 @@ package upt.ac.cti.coverage.derivator.internal;
 import java.util.logging.Logger;
 import org.eclipse.jdt.core.dom.ASTNode;
 import upt.ac.cti.coverage.model.DerivationResult;
+import upt.ac.cti.coverage.model.NewWritingPairs;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.parsing.CodeParser;
 import upt.ac.cti.coverage.search.JavaEntitySearcher;
-import upt.ac.cti.coverage.model.NewWritingPairs;
+import upt.ac.cti.util.logging.RLogger;
 
 final public class FieldWritingsDerivator implements IFieldWritingsDerivator {
 
@@ -20,8 +21,7 @@ final public class FieldWritingsDerivator implements IFieldWritingsDerivator {
   private final NameDerivator n;
   private final CastDerivator c;
 
-  private static final Logger logger =
-      Logger.getLogger(FieldWritingsDerivator.class.getSimpleName());;
+  private static final Logger logger = RLogger.get();
 
   public FieldWritingsDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
     this.fa = new FieldAccessDerivator(javaEntitySearcher, codeParser);;

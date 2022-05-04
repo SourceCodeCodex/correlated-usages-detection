@@ -22,10 +22,11 @@ import upt.ac.cti.coverage.search.requestor.MethodInvocationsRequestor;
 import upt.ac.cti.coverage.search.requestor.ReferencesRequestor;
 import upt.ac.cti.coverage.search.requestor.WritingsRequestor;
 import upt.ac.cti.util.cache.Cache;
+import upt.ac.cti.util.logging.RLogger;
 
 public final class JavaEntitySearcher {
 
-  private static final Logger logger = Logger.getLogger(JavaEntitySearcher.class.getName());
+  private static final Logger logger = RLogger.get();
 
   private final SearchEngine searchEngine = new SearchEngine();
 

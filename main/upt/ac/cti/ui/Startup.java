@@ -9,11 +9,14 @@ import org.eclipse.ui.IStartup;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.insider.view.ToolRegistration;
+import upt.ac.cti.util.logging.RLogger;
 
 public final class Startup implements IStartup {
 
   @Override
   public void earlyStartup() {
+    System.setProperty("java.util.logging.SimpleFormatter.format",
+        RLogger.format());
     ToolRegistration.getInstance().registerXEntityConverter(element -> {
       if (element instanceof IJavaProject) {
         return Factory.getInstance().createMProject(element);

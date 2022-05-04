@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import upt.ac.cti.coverage.model.Writing;
+import upt.ac.cti.util.logging.RLogger;
 
 public class FieldAssignmentVisitor extends ASTVisitor {
 
@@ -22,7 +23,7 @@ public class FieldAssignmentVisitor extends ASTVisitor {
 
   private final List<Writing> derivations = new ArrayList<>();
 
-  private static final Logger logger = Logger.getLogger(FieldAssignmentVisitor.class.getName());
+  private static final Logger logger = RLogger.get();
 
   public FieldAssignmentVisitor(Writing deriver, IField field) {
     this.deriver = deriver;

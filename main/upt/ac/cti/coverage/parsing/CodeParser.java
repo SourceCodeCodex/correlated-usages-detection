@@ -15,13 +15,14 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import upt.ac.cti.util.cache.Cache;
+import upt.ac.cti.util.logging.RLogger;
 
 
 public final class CodeParser {
 
   private final Cache<IJavaElement, ASTNode> cache = new Cache<>();
 
-  private static final Logger logger = Logger.getLogger(CodeParser.class.getName());
+  private static final Logger logger = RLogger.get();
 
   public Optional<CompilationUnit> parse(ICompilationUnit compilationUnit) {
     var cachedCU = cache.get(compilationUnit);

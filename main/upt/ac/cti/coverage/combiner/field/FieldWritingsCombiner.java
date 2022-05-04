@@ -8,13 +8,17 @@ import java.util.Set;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
 import org.javatuples.Pair;
+import upt.ac.cti.coverage.combiner.IWritingsCombiner;
+import upt.ac.cti.coverage.combiner.field.visitor.AFieldWritingsVisitor;
+import upt.ac.cti.coverage.combiner.field.visitor.CollectionWritingsVisitor;
+import upt.ac.cti.coverage.combiner.field.visitor.ReferenceWritingsVisitor;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.parsing.CodeParser;
 import upt.ac.cti.coverage.search.JavaEntitySearcher;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
 import upt.ac.cti.util.validation.IsJavaElementCollection;
 
-public class FieldWritingsCombiner {
+public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
 
   private final CodeParser parser;
   private final JavaEntitySearcher javaEntitySearcher;
@@ -26,8 +30,8 @@ public class FieldWritingsCombiner {
     this.isCollection = new IsJavaElementCollection<>(new FieldTypeBindingResolver());
   }
 
-  public List<Pair<Writing, Writing>> combine(IField field1,
-      IField field2) {
+  @Override
+  public List<Pair<Writing, Writing>> combine(IField field1, IField field2) {
 
     Set<IMethod> f1WritingMethods, f2WritingMethods;
 

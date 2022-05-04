@@ -16,6 +16,7 @@ import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
+import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.time.StopWatch;
 import upt.ac.cti.util.validation.SusceptibleTypeValidator;
 
@@ -23,7 +24,7 @@ import upt.ac.cti.util.validation.SusceptibleTypeValidator;
 public final class FamilyPolymorphismSusceptibleClasses
     implements IRelationBuilder<MClass, MProject> {
 
-  private static final Logger logger = Logger.getGlobal();
+  private static final Logger logger = RLogger.get();
 
   @Override
   public Group<MClass> buildGroup(MProject mProject) {
@@ -32,6 +33,8 @@ public final class FamilyPolymorphismSusceptibleClasses
     var javaProject = (IJavaProject) mProject.getUnderlyingObject();
 
     var stopWatch = new StopWatch();
+    logger
+        .info("Start searching susceptible classes for project: " + javaProject.getElementName());
     stopWatch.start();
 
     var allTypes = new ArrayList<IType>();
@@ -63,8 +66,12 @@ public final class FamilyPolymorphismSusceptibleClasses
     group.addAll(mClasses);
 
     stopWatch.end();
+
+
     logger
-        .info("Time to resolve susceptible classes :" + stopWatch.getDuration().toMillis() + "ms");
+        .info("Susceptible classes: " + mClasses.size() + " out of " + allTypes.size());
+    logger
+        .info("Time to resolve: " + stopWatch.getDuration().toMillis() + "ms");
 
     return group;
   }

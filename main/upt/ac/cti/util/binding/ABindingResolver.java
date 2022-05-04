@@ -12,10 +12,11 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.IBinding;
 import upt.ac.cti.util.binding.visitor.ABindingResolverVisitor;
 import upt.ac.cti.util.cache.Cache;
+import upt.ac.cti.util.logging.RLogger;
 
 public abstract class ABindingResolver<J extends IJavaElement, B extends IBinding> {
 
-  private static final Logger logger = Logger.getGlobal();
+  private static final Logger logger = RLogger.get();
   private static final ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
 
   private final Cache<J, B> bindingCache = new Cache<>();

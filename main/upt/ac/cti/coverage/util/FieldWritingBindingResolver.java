@@ -8,14 +8,14 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.util.cache.Cache;
 import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.logging.RLogger;
 
 public final class FieldWritingBindingResolver {
 
   private final Cache<Writing, ITypeBinding> cache =
       new Cache<>();
 
-  private static final Logger logger =
-      Logger.getLogger(FieldWritingBindingResolver.class.getName());
+  private static final Logger logger = RLogger.get();
 
   private final ConcreteDescendantsResolver hierarchyResolver;
 

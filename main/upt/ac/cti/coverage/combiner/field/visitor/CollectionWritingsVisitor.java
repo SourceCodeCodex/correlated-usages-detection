@@ -1,4 +1,4 @@
-package upt.ac.cti.coverage.combiner.field;
+package upt.ac.cti.coverage.combiner.field.visitor;
 
 import java.util.Optional;
 import org.eclipse.jdt.core.IField;
@@ -8,7 +8,7 @@ import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import upt.ac.cti.coverage.model.Writing;
 
-class CollectionWritingsVisitor extends AFieldWritingsVisitor {
+public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
 
   public CollectionWritingsVisitor(IField field) {
     super(field);

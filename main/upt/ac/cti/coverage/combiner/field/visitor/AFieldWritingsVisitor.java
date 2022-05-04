@@ -1,4 +1,4 @@
-package upt.ac.cti.coverage.combiner.field;
+package upt.ac.cti.coverage.combiner.field.visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import upt.ac.cti.coverage.model.Writing;
 
-abstract class AFieldWritingsVisitor extends ASTVisitor {
+public abstract class AFieldWritingsVisitor extends ASTVisitor {
   protected final IField field;
 
   protected final List<Writing> result = new ArrayList<>();

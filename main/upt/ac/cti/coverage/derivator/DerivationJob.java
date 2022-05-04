@@ -9,6 +9,7 @@ import upt.ac.cti.coverage.model.NewWritingPairs;
 import upt.ac.cti.coverage.model.ResolvedBindings;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.util.FieldWritingBindingResolver;
+import upt.ac.cti.util.logging.RLogger;
 
 class DerivationJob {
 
@@ -17,7 +18,7 @@ class DerivationJob {
   private final FieldWritingBindingResolver assignmentBindingResolver;
   private final FieldWritingsDerivator derivator;
 
-  private static final Logger logger = Logger.getLogger(DerivationJob.class.getSimpleName());
+  private static final Logger logger = RLogger.get();
 
   public DerivationJob(
       FieldWritingBindingResolver assignmentBindingResolver,
