@@ -1,74 +1,110 @@
 package upt.ac.cti.coverage.derivator;
 
 import java.util.logging.Logger;
-import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.derivator.internal.FieldWritingsDerivator;
-import upt.ac.cti.coverage.model.DerivationResult;
-import upt.ac.cti.coverage.model.NewWritingPairs;
-import upt.ac.cti.coverage.model.ResolvedBindings;
+import upt.ac.cti.aperture.AAllTypePairsResolver;
+import upt.ac.cti.coverage.derivator.derivation.simple.SimpleWritingsDerivator;
+import upt.ac.cti.coverage.derivator.util.DerivationPrioritizer;
+import upt.ac.cti.coverage.derivator.util.SameAccessExpressionValidator;
+import upt.ac.cti.coverage.derivator.util.WritingBindingResolver;
 import upt.ac.cti.coverage.model.Writing;
-import upt.ac.cti.coverage.util.FieldWritingBindingResolver;
+import upt.ac.cti.coverage.model.binding.Inconclusive;
+import upt.ac.cti.coverage.model.binding.NotLeafBinding;
+import upt.ac.cti.coverage.model.binding.ResolvedBinding;
+import upt.ac.cti.coverage.model.derivation.AllTypes;
+import upt.ac.cti.coverage.model.derivation.DerivationResult;
+import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
+import upt.ac.cti.coverage.model.derivation.ResolvedTypePairs;
 import upt.ac.cti.util.logging.RLogger;
 
-class DerivationJob {
+class DerivationJob<J extends IJavaElement> {
 
-  private final Pair<Writing, Writing> writingPair;
+  private final Pair<Writing<J>, Writing<J>> writingPair;
 
-  private final FieldWritingBindingResolver assignmentBindingResolver;
-  private final FieldWritingsDerivator derivator;
+  private final DerivationPrioritizer<J> derivationPrioritizer = new DerivationPrioritizer<>();
+  private final SameAccessExpressionValidator<J> sameAccessExpressionValidator =
+      new SameAccessExpressionValidator<>();
+  private final WritingBindingResolver<J> assignmentBindingResolver;
+  private final SimpleWritingsDerivator<J> simpleDerivator;
+  private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
   private static final Logger logger = RLogger.get();
 
   public DerivationJob(
-      FieldWritingBindingResolver assignmentBindingResolver,
-      FieldWritingsDerivator derivator,
-      Pair<Writing, Writing> writingPair) {
+      WritingBindingResolver<J> assignmentBindingResolver,
+      SimpleWritingsDerivator<J> derivator,
+      AAllTypePairsResolver<J> aAllTypePairsResolver,
+      Pair<Writing<J>, Writing<J>> writingPair) {
     this.assignmentBindingResolver = assignmentBindingResolver;
-    this.derivator = derivator;
+    this.simpleDerivator = derivator;
     this.writingPair = writingPair;
+    this.aAllTypePairsResolver = aAllTypePairsResolver;
   }
 
-  public DerivationResult start() {
+  public DerivationResult<J> derive() {
 
-    // Check if writing expressions are bound to a concrete type which is a leaf in a type hierarchy
-    var f1Binding =
-        assignmentBindingResolver.resolveBinding(writingPair.getValue0());
+    var w1 = writingPair.getValue0();
+    var w2 = writingPair.getValue1();
 
-    var f2Binding =
+    var w1Binding =
+        assignmentBindingResolver.resolveBinding(w1);
+
+    var w2Binding =
         assignmentBindingResolver.resolveBinding(writingPair.getValue1());
 
-    // Stop condition 1: both have leaf bindings
-    if (f1Binding.isPresent() && f2Binding.isPresent()) {
-
-      // TODO: Define accesing object validation
-      var accessExpr1 = writingPair.getValue0().accessExpression();
-      var accessExpr2 = writingPair.getValue1().accessExpression();
-
-      var areAccessingExpressionsEqual = accessExpr1.equals(accessExpr2);
-
-      var areAccessingExpressionsBindingsEqual = accessExpr1.map(Expression::resolveTypeBinding)
-          .equals(accessExpr2.map(Expression::resolveTypeBinding));
-
-      if (areAccessingExpressionsEqual || areAccessingExpressionsBindingsEqual) {
-        return new ResolvedBindings(Pair.with(f1Binding.get(), f2Binding.get()));
+    if (w1Binding instanceof ResolvedBinding r1 && w2Binding instanceof ResolvedBinding r2) {
+      if (sameAccessExpressionValidator.test(writingPair)) {
+        var t1 = (IType) r1.typeBinding().getJavaElement();
+        var t2 = (IType) r2.typeBinding().getJavaElement();
+        return ResolvedTypePairs.of(Pair.with(t1, t2));
       }
-
-      return NewWritingPairs.NULL;
+      return NewWritingPairs.NULL();
     }
 
-
-    if (f1Binding.isEmpty()) {
-      return derivator.derive(writingPair.getValue0(), writingPair.getValue1());
+    if (w1Binding instanceof Inconclusive && w2Binding instanceof Inconclusive) {
+      logger.info("Inconclusive field pair: " + writingPair);
+      return new AllTypes<>();
     }
 
-    if (f2Binding.isEmpty()) {
-      return derivator.derive(writingPair.getValue1(), writingPair.getValue0());
+    if (w1Binding instanceof ResolvedBinding r && w2Binding instanceof Inconclusive) {
+      var t = (IType) r.typeBinding().getJavaElement();
+      var possibleTypes = aAllTypePairsResolver.resolve(w2.element());
+      var pairs = possibleTypes.stream().map(pt -> Pair.with(t, pt)).toList();
+      return new ResolvedTypePairs<>(pairs);
     }
 
-    logger.severe(
-        "The program ran into an inconsistent state! Check the DerivationJob: " + writingPair);
-    return NewWritingPairs.NULL;
+    if (w1Binding instanceof Inconclusive && w2Binding instanceof ResolvedBinding r) {
+      var t = (IType) r.typeBinding().getJavaElement();
+      var possibleTypes = aAllTypePairsResolver.resolve(w1.element());
+      var pairs = possibleTypes.stream().map(pt -> Pair.with(pt, t)).toList();
+      return new ResolvedTypePairs<>(pairs);
+    }
+
+    if (w1Binding instanceof NotLeafBinding && !(w2Binding instanceof NotLeafBinding)) {
+      return simpleDerivator.derive(w1, w2);
+    }
+
+    if (!(w1Binding instanceof NotLeafBinding) && w2Binding instanceof NotLeafBinding) {
+      return swap(simpleDerivator.derive(w2, w1));
+    }
+
+    var priority = derivationPrioritizer.prioritize(writingPair);
+    switch (priority) {
+      case DERIVATE_FIRST:
+        return simpleDerivator.derive(w1, w2);
+      case DERIVATE_SECOND:
+        return swap(simpleDerivator.derive(w2, w1));
+      default:
+        return NewWritingPairs.NULL();
+    }
+  }
+
+  private NewWritingPairs<J> swap(NewWritingPairs<J> pairings) {
+    return new NewWritingPairs<>(pairings.writingPairs().stream()
+        .map(p -> Pair.with(p.getValue1(), p.getValue0()))
+        .toList());
   }
 
 }

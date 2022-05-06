@@ -4,44 +4,58 @@ import java.util.HashSet;
 import java.util.Set;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
+import upt.ac.cti.aperture.AAllTypePairsResolver;
 import upt.ac.cti.coverage.combiner.IWritingsCombiner;
 import upt.ac.cti.coverage.derivator.DerivationManager;
-import upt.ac.cti.coverage.parsing.CodeParser;
-import upt.ac.cti.coverage.search.JavaEntitySearcher;
-import upt.ac.cti.coverage.util.FieldWritingBindingResolver;
+import upt.ac.cti.coverage.derivator.util.WritingBindingResolver;
+import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.parsing.CodeParser;
+import upt.ac.cti.util.search.JavaEntitySearcher;
 
 abstract class ACoveredTypesResolver<J extends IJavaElement> {
 
-  protected final CodeParser codeParser;
-  protected final JavaEntitySearcher javaEntitySearcher;
+  private final CodeParser codeParser;
+  private final JavaEntitySearcher javaEntitySearcher;
+  private final ABindingResolver<J, ITypeBinding> aBindingResolver;
   private final IWritingsCombiner<J> writingsCombiner;
+  private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
-  public ACoveredTypesResolver(IWritingsCombiner<J> writingsCombiner, CodeParser codeParser,
-      JavaEntitySearcher javaEntitySearcher) {
+
+  public ACoveredTypesResolver(
+      IWritingsCombiner<J> writingsCombiner,
+      CodeParser codeParser,
+      JavaEntitySearcher javaEntitySearcher,
+      ABindingResolver<J, ITypeBinding> aBindingResolver,
+      AAllTypePairsResolver<J> aAllTypePairsResolver) {
+    this.aBindingResolver = aBindingResolver;
     this.writingsCombiner = writingsCombiner;
     this.codeParser = codeParser;
     this.javaEntitySearcher = javaEntitySearcher;
+    this.aAllTypePairsResolver = aAllTypePairsResolver;
   }
 
   protected Set<Pair<IType, IType>> resolve(J javaElement1, J javaElement2) {
 
-    var writingPairs = writingsCombiner.combine(javaElement1, javaElement1);
+    var writingPairs = writingsCombiner.combine(javaElement1, javaElement2);
 
-    var hierarchyResolver = new ConcreteDescendantsResolver();
-    var assignmentBindingResolver = new FieldWritingBindingResolver(hierarchyResolver);
+    var concreteDescendantsResolver = new ConcreteDescendantsResolver();
+    var assignmentBindingResolver =
+        new WritingBindingResolver<>(concreteDescendantsResolver, aBindingResolver);
 
-    var deriver = new DerivationManager(assignmentBindingResolver, javaEntitySearcher, codeParser);
+    var deriver =
+        new DerivationManager<>(
+            assignmentBindingResolver,
+            javaEntitySearcher,
+            codeParser,
+            aAllTypePairsResolver);
 
     var bindingPairs = deriver.derive(writingPairs);
 
     var coveredTypes = bindingPairs.stream()
-        .filter(
-            p -> p.getValue0().getJavaElement() != null && p.getValue1().getJavaElement() != null)
-        .map(
-            p -> Pair.with((IType) p.getValue0().getJavaElement(),
-                (IType) p.getValue1().getJavaElement()))
+        .map(p -> Pair.with(p.getValue0(), p.getValue1()))
         .toList();
 
     return new HashSet<>(coveredTypes);

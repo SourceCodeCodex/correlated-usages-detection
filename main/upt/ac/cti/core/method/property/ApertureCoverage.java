@@ -11,7 +11,7 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MMethod
 
   @Override
   public Double compute(MMethod mMethod) {
-    return mMethod.parameterPairs().getElements()
+    return mMethod.susceptibleParameterPairs().getElements()
         .stream()
         .map(MParameterPair::apertureCoverage)
         .filter(d -> !d.isNaN())

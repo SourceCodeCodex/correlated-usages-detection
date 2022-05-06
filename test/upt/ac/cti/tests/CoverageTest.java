@@ -73,7 +73,7 @@ public class CoverageTest {
     var mClass = findClass(className);
     assertNotNull(mClass);
 
-    var fieldPairs = mClass.fieldPairs().getElements();
+    var fieldPairs = mClass.susceptibleFieldPairs().getElements();
     assertEquals(1, fieldPairs.size());
 
     var firstPair = fieldPairs.get(0);

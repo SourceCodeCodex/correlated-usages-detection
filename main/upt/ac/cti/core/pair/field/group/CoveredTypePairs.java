@@ -1,5 +1,6 @@
 package upt.ac.cti.core.pair.field.group;
 
+import static upt.ac.cti.dependencies.DependencyUtils.newFieldCoveredTypesResolver;
 import org.eclipse.jdt.core.IField;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
@@ -8,9 +9,6 @@ import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
-import upt.ac.cti.coverage.FieldCoveredTypesResolver;
-import upt.ac.cti.coverage.parsing.CodeParser;
-import upt.ac.cti.coverage.search.JavaEntitySearcher;
 
 @RelationBuilder
 public class CoveredTypePairs implements IRelationBuilder<MTypePair, MFieldPair> {
@@ -22,7 +20,7 @@ public class CoveredTypePairs implements IRelationBuilder<MTypePair, MFieldPair>
     @SuppressWarnings("unchecked")
     var pair = (Pair<IField, IField>) mFieldPair.getUnderlyingObject();
 
-    var resolver = new FieldCoveredTypesResolver(new CodeParser(), new JavaEntitySearcher());
+    var resolver = newFieldCoveredTypesResolver();
 
     var factory = Factory.getInstance();
 

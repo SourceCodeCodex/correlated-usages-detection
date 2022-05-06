@@ -4,7 +4,7 @@ Bundle-Name: Family Polymorphism Detection
 Bundle-SymbolicName: FamilyPolymorphismDetection;singleton:=true
 Bundle-Version: 0.0.1
 Automatic-Module-Name: FamilyPolymorphismDetection
-Bundle-RequiredExecutionEnvironment: JavaSE-18
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ClassPath: .,
  lib/javatuples-1.2.jar
 Import-Package: ro.lrg.xcore.metametamodel

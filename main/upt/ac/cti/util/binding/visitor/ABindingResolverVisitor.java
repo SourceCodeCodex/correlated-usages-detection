@@ -8,11 +8,11 @@ import org.eclipse.jdt.core.dom.IBinding;
 public class ABindingResolverVisitor<J extends IJavaElement, B extends IBinding>
     extends ASTVisitor {
 
-  protected final J member;
+  protected final J javaElement;
   protected Optional<B> binding = Optional.empty();
 
-  public ABindingResolverVisitor(J member) {
-    this.member = member;
+  public ABindingResolverVisitor(J javaElement) {
+    this.javaElement = javaElement;
   }
 
   public Optional<B> binding() {

@@ -13,9 +13,9 @@ import upt.ac.cti.coverage.combiner.field.visitor.AFieldWritingsVisitor;
 import upt.ac.cti.coverage.combiner.field.visitor.CollectionWritingsVisitor;
 import upt.ac.cti.coverage.combiner.field.visitor.ReferenceWritingsVisitor;
 import upt.ac.cti.coverage.model.Writing;
-import upt.ac.cti.coverage.parsing.CodeParser;
-import upt.ac.cti.coverage.search.JavaEntitySearcher;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
+import upt.ac.cti.util.parsing.CodeParser;
+import upt.ac.cti.util.search.JavaEntitySearcher;
 import upt.ac.cti.util.validation.IsJavaElementCollection;
 
 public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
@@ -31,42 +31,35 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
   }
 
   @Override
-  public List<Pair<Writing, Writing>> combine(IField field1, IField field2) {
+  public List<Pair<Writing<IField>, Writing<IField>>> combine(IField field1, IField field2) {
 
     Set<IMethod> f1WritingMethods, f2WritingMethods;
 
     if (!isCollection.test(field1)) {
-      f1WritingMethods = javaEntitySearcher.searchWritings(field1);
+      f1WritingMethods = javaEntitySearcher.searchFieldWritings(field1);
     } else {
-      f1WritingMethods = javaEntitySearcher.searchReferences(field1);
+      f1WritingMethods = javaEntitySearcher.searchFieldReferences(field1);
     }
 
-
     if (!isCollection.test(field2)) {
-      f2WritingMethods = javaEntitySearcher.searchWritings(field2);
+      f2WritingMethods = javaEntitySearcher.searchFieldWritings(field2);
     } else {
-      f2WritingMethods = javaEntitySearcher.searchReferences(field2);
+      f2WritingMethods = javaEntitySearcher.searchFieldReferences(field2);
     }
 
     var writingBoth = new HashSet<>(f1WritingMethods);
     writingBoth.retainAll(f2WritingMethods);
 
-    var result = new LinkedList<Pair<Writing, Writing>>();
+    var result = new LinkedList<Pair<Writing<IField>, Writing<IField>>>();
 
-    // Combining field writings only from the same method if the respective methods writes both
-    // fields
     writingBoth.forEach(it -> {
-      var f1Writings = getWritings(it, field1).stream().toList();
-      var f2Writings = getWritings(it, field2).stream().toList();
-
-      for (Writing w1 : f1Writings) {
-        for (Writing w2 : f2Writings) {
+      for (Writing<IField> w1 : getWritings(it, field1)) {
+        for (Writing<IField> w2 : getWritings(it, field2)) {
           result.add(Pair.with(w1, w2));
         }
       }
     });
 
-    // Combining writings from separate methods if the repsective methods write only one field
     f1WritingMethods.removeAll(writingBoth);
     f2WritingMethods.removeAll(writingBoth);
 
@@ -77,8 +70,8 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
         .flatMap(it -> getWritings(it, field2).stream()).toList();
 
 
-    for (Writing w1 : f1Writings) {
-      for (Writing w2 : f2Writings) {
+    for (Writing<IField> w1 : f1Writings) {
+      for (Writing<IField> w2 : f2Writings) {
         result.add(Pair.with(w1, w2));
       }
     }
@@ -90,17 +83,16 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
       result.addFirst(Pair.with(init1.get(), init2.get()));
     }
 
-
     return result;
   }
 
-  private List<Writing> getWritings(IMethod method, IField field) {
+  private List<Writing<IField>> getWritings(IMethod method, IField field) {
     AFieldWritingsVisitor visitor;
 
     if (!isCollection.test(field)) {
-      visitor = new ReferenceWritingsVisitor(field);
+      visitor = new ReferenceWritingsVisitor(field, method);
     } else {
-      visitor = new CollectionWritingsVisitor(field);
+      visitor = new CollectionWritingsVisitor(field, method);
     }
 
 
@@ -114,12 +106,13 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
     return List.of();
   }
 
-  private Optional<Writing> getFieldInitialization(IField field) {
+  private Optional<Writing<IField>> getFieldInitialization(IField field) {
     if (!isCollection.test(field)) {
       var variableDeclarationFragmentOpt = parser.parse(field);
       return variableDeclarationFragmentOpt
           .flatMap(vdf -> Optional.ofNullable(vdf.getInitializer()))
-          .map(initializer -> new Writing(field, initializer, Optional.empty()));
+          .map(initializer -> new Writing<>(field, initializer, Optional.empty(),
+              field.getDeclaringType()));
     }
     return Optional.empty();
 

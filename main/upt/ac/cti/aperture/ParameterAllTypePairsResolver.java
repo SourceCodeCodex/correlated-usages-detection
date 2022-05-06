@@ -10,8 +10,8 @@ import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
 public class ParameterAllTypePairsResolver extends AAllTypePairsResolver<ILocalVariable> {
 
   public ParameterAllTypePairsResolver(ParameterTypeBindingResolver parameterTypeBindingResolver,
-      ConcreteDescendantsResolver hierarchyResolver) {
-    super(parameterTypeBindingResolver, hierarchyResolver);
+      ConcreteDescendantsResolver concreteDescendantsResolver) {
+    super(parameterTypeBindingResolver, concreteDescendantsResolver);
   }
 
   @Override

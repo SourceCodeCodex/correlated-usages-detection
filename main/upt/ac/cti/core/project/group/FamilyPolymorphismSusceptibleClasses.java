@@ -1,5 +1,6 @@
 package upt.ac.cti.core.project.group;
 
+import static upt.ac.cti.dependencies.DependencyUtils.newSusceptibleTypeValidator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -18,7 +19,6 @@ import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
 import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.time.StopWatch;
-import upt.ac.cti.util.validation.SusceptibleTypeValidator;
 
 @RelationBuilder
 public final class FamilyPolymorphismSusceptibleClasses
@@ -57,7 +57,7 @@ public final class FamilyPolymorphismSusceptibleClasses
       e.printStackTrace();
     }
 
-    var typeValidator = new SusceptibleTypeValidator();
+    var typeValidator = newSusceptibleTypeValidator();
     var mClasses = allTypes.parallelStream()
         .filter(typeValidator)
         .map(type -> Factory.getInstance().createMClass(type))
@@ -66,7 +66,6 @@ public final class FamilyPolymorphismSusceptibleClasses
     group.addAll(mClasses);
 
     stopWatch.end();
-
 
     logger
         .info("Susceptible classes: " + mClasses.size() + " out of " + allTypes.size());

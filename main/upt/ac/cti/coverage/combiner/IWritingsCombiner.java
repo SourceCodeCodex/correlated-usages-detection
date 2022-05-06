@@ -7,6 +7,6 @@ import upt.ac.cti.coverage.model.Writing;
 
 public interface IWritingsCombiner<J extends IJavaElement> {
 
-  public List<Pair<Writing, Writing>> combine(J javaElement1, J javaElement2);
+  public List<Pair<Writing<J>, Writing<J>>> combine(J javaElement1, J javaElement2);
 
 }

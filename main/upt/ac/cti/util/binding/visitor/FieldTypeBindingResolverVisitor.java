@@ -7,14 +7,14 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 public class FieldTypeBindingResolverVisitor extends ABindingResolverVisitor<IField, ITypeBinding> {
 
-  public FieldTypeBindingResolverVisitor(IField member) {
-    super(member);
+  public FieldTypeBindingResolverVisitor(IField field) {
+    super(field);
   }
 
   @Override
   public boolean visit(VariableDeclarationFragment node) {
     var variableBinding = node.resolveBinding();
-    if (member.equals(variableBinding.getJavaElement())) {
+    if (javaElement.equals(variableBinding.getJavaElement())) {
       this.binding = Optional.ofNullable(variableBinding.getType());
       return false;
     }

@@ -17,7 +17,7 @@ public class SusceptibleTypeValidator implements Predicate<IType> {
 
         if (atLeast2Fields || atLeast1Method2Params) {
           var mClass = Factory.getInstance().createMClass(type);
-          var atLeast1FieldPair = mClass.fieldPairs().getElements().size() != 0;
+          var atLeast1FieldPair = mClass.susceptibleFieldPairs().getElements().size() != 0;
           // var atLeast1ParameterPair = mClass.fieldPairs().getElements().size() !=
           // 0;
           if (atLeast1FieldPair) {

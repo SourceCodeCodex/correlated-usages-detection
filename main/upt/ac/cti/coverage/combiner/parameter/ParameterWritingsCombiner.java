@@ -5,9 +5,9 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.combiner.IWritingsCombiner;
 import upt.ac.cti.coverage.model.Writing;
-import upt.ac.cti.coverage.parsing.CodeParser;
-import upt.ac.cti.coverage.search.JavaEntitySearcher;
 import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
+import upt.ac.cti.util.parsing.CodeParser;
+import upt.ac.cti.util.search.JavaEntitySearcher;
 import upt.ac.cti.util.validation.IsJavaElementCollection;
 
 public class ParameterWritingsCombiner implements IWritingsCombiner<ILocalVariable> {
@@ -25,7 +25,7 @@ public class ParameterWritingsCombiner implements IWritingsCombiner<ILocalVariab
 
 
   @Override
-  public List<Pair<Writing, Writing>> combine(ILocalVariable param1,
+  public List<Pair<Writing<ILocalVariable>, Writing<ILocalVariable>>> combine(ILocalVariable param1,
       ILocalVariable param2) {
     return List.of();
   }

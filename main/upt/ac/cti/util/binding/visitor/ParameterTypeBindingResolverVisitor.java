@@ -15,7 +15,7 @@ public class ParameterTypeBindingResolverVisitor
   @Override
   public boolean visit(SingleVariableDeclaration node) {
     var variableBinding = node.resolveBinding();
-    if (member.equals(variableBinding.getJavaElement())) {
+    if (javaElement.equals(variableBinding.getJavaElement())) {
       this.binding = Optional.ofNullable(variableBinding.getType());
       return false;
     }

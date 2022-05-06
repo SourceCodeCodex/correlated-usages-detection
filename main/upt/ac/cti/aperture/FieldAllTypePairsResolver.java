@@ -10,8 +10,8 @@ import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
 public class FieldAllTypePairsResolver extends AAllTypePairsResolver<IField> {
 
   public FieldAllTypePairsResolver(FieldTypeBindingResolver fieldTypeBindingResolver,
-      ConcreteDescendantsResolver hierarchyResolver) {
-    super(fieldTypeBindingResolver, hierarchyResolver);
+      ConcreteDescendantsResolver concreteDescendantsResolver) {
+    super(fieldTypeBindingResolver, concreteDescendantsResolver);
   }
 
   @Override

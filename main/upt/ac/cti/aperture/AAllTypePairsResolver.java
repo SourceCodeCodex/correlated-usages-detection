@@ -1,5 +1,6 @@
 package upt.ac.cti.aperture;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,26 +12,25 @@ import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
 import upt.ac.cti.util.validation.IsTypeBindingCollection;
 
-abstract class AAllTypePairsResolver<J extends IJavaElement> {
-  private final ConcreteDescendantsResolver hierarchyResolver;
+public abstract class AAllTypePairsResolver<J extends IJavaElement> {
+  private final ConcreteDescendantsResolver concreteDescendantsResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
 
   public AAllTypePairsResolver(ABindingResolver<J, ITypeBinding> aBindingResolver,
-
-      ConcreteDescendantsResolver hierarchyResolver) {
+      ConcreteDescendantsResolver concreteDescendantsResolver) {
+    this.concreteDescendantsResolver = concreteDescendantsResolver;
     this.aBindingResolver = aBindingResolver;
-    this.hierarchyResolver = hierarchyResolver;
   }
 
-  protected Set<Pair<IType, IType>> resolve(J javaElement1, J javaElement2) {
-    var types1 = concreteTypes(javaElement1);
-    var types2 = concreteTypes(javaElement2);
+  public Set<Pair<IType, IType>> resolve(J javaElement1, J javaElement2) {
+    var types1 = resolve(javaElement1);
+    var types2 = resolve(javaElement2);
 
     return new HashSet<>(product(types1, types2));
   }
 
 
-  private List<IType> concreteTypes(J javaElement) {
+  public List<IType> resolve(J javaElement) {
     var typeBindingOpt = aBindingResolver.resolve(javaElement);
     if (typeBindingOpt.isEmpty()) {
       return List.of();
@@ -51,12 +51,10 @@ abstract class AAllTypePairsResolver<J extends IJavaElement> {
     }
 
 
-    return hierarchyResolver.resolve(type);
+    return concreteDescendantsResolver.resolve(type);
   }
 
-  private <T> List<Pair<T, T>> product(List<T> s1, List<T> s2) {
+  public static <T, C extends Collection<T>> List<Pair<T, T>> product(C s1, C s2) {
     return s1.stream().flatMap(it -> s2.stream().map(el -> Pair.with(it, el))).toList();
   }
-
-
 }
