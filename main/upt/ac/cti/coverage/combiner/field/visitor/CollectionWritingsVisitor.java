@@ -2,7 +2,6 @@ package upt.ac.cti.coverage.combiner.field.visitor;
 
 import java.util.Optional;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -10,8 +9,8 @@ import upt.ac.cti.coverage.model.Writing;
 
 public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
 
-  public CollectionWritingsVisitor(IField field, IMethod scope) {
-    super(field, scope);
+  public CollectionWritingsVisitor(IField field) {
+    super(field);
   }
 
   @Override
@@ -23,8 +22,7 @@ public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
       switch (node.getName().getIdentifier()) {
         case "add": {
           var fieldWrite =
-              new Writing<>(field, (Expression) node.arguments().get(0), Optional.empty(),
-                  scope);
+              new Writing<>(field, (Expression) node.arguments().get(0), Optional.empty());
           result.add(fieldWrite);
         }
       }

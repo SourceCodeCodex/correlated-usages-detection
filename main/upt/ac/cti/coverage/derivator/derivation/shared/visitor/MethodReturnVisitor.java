@@ -1,4 +1,4 @@
-package upt.ac.cti.coverage.derivator.derivation.simple.visitors;
+package upt.ac.cti.coverage.derivator.derivation.shared.visitor;
 
 import java.util.ArrayList;
 import java.util.List;

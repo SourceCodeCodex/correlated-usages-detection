@@ -6,13 +6,14 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.dom.Name;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.derivator.derivation.IWritingsDerivator;
-import upt.ac.cti.coverage.derivator.derivation.simple.visitors.LocalVariableAssignmentVisitor;
+import upt.ac.cti.coverage.derivator.derivation.simple.visitor.LocalVariableAssignmentVisitor;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
-final class NameLocalVariableDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
+final class NameLocalVariableDerivator<J extends IJavaElement>
+    implements IWritingsDerivator<J> {
 
   private final JavaEntitySearcher javaEntitySearcher;
   private final CodeParser codeParser;

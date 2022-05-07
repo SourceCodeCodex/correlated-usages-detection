@@ -1,9 +1,9 @@
-package upt.ac.cti.coverage.derivator.derivation.simple.algorithm;
+package upt.ac.cti.coverage.derivator.derivation.shared.algorithm;
 
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.derivator.derivation.simple.visitors.MethodReturnVisitor;
+import upt.ac.cti.coverage.derivator.derivation.shared.visitor.MethodReturnVisitor;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.parsing.CodeParser;

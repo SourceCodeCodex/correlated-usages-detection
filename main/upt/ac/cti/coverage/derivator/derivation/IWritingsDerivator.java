@@ -6,6 +6,6 @@ import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 
 public interface IWritingsDerivator<J extends IJavaElement> {
 
-  public abstract NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant);
+  public abstract NewWritingPairs<J> derive(Writing<J> w1, Writing<J> w2);
 
 }

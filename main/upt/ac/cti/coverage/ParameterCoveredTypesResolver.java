@@ -1,6 +1,7 @@
 package upt.ac.cti.coverage;
 
 import static upt.ac.cti.dependencies.DependencyUtils.newParameterAllTypePairsResolver;
+import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IType;
@@ -26,7 +27,7 @@ public final class ParameterCoveredTypesResolver extends ACoveredTypesResolver<I
   }
 
   @Override
-  public Set<Pair<IType, IType>> resolve(ILocalVariable param1, ILocalVariable param2) {
+  public Optional<Set<Pair<IType, IType>>> resolve(ILocalVariable param1, ILocalVariable param2) {
     return super.resolve(param1, param2);
   }
 

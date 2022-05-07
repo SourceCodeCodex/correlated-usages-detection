@@ -1,4 +1,4 @@
-package upt.ac.cti.coverage.derivator.derivation.simple.visitors;
+package upt.ac.cti.coverage.derivator.derivation.shared.visitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +33,9 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
   @Override
   public boolean visit(ClassInstanceCreation node) {
     var binding = node.resolveConstructorBinding();
-    if (binding != null && localVar.getDeclaringMember().equals(binding.getJavaElement())) {
+    var je = binding.getJavaElement();
+    if (binding != null && je != null
+        && je.equals(localVar.getDeclaringMember())) {
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
@@ -51,7 +53,9 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
   @Override
   public boolean visit(MethodInvocation node) {
     var binding = node.resolveMethodBinding();
-    if (binding != null && localVar.getDeclaringMember().equals(binding.getJavaElement())) {
+    var je = binding.getJavaElement();
+    if (binding != null && je != null
+        && je.equals(localVar.getDeclaringMember())) {
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
@@ -73,7 +77,9 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
   @Override
   public boolean visit(SuperMethodInvocation node) {
     var binding = node.resolveMethodBinding();
-    if (binding != null && localVar.getDeclaringMember().equals(binding.getJavaElement())) {
+    var je = binding.getJavaElement();
+    if (binding != null && je != null
+        && je.equals(localVar.getDeclaringMember())) {
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);

@@ -12,8 +12,8 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MFieldP
     var aperture = (double) mFieldPair.aperture();
     var coverage = (double) mFieldPair.coverage();
 
-    if (coverage == 0.0 || aperture == 0.0) {
-      return Double.NaN;
+    if (coverage < 0) {
+      return coverage;
     }
 
     return coverage / aperture;

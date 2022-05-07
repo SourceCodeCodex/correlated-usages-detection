@@ -1,6 +1,5 @@
 package upt.ac.cti.aperture;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +7,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
+import upt.ac.cti.util.CartesianProduct;
 import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
 import upt.ac.cti.util.validation.IsTypeBindingCollection;
@@ -26,7 +26,7 @@ public abstract class AAllTypePairsResolver<J extends IJavaElement> {
     var types1 = resolve(javaElement1);
     var types2 = resolve(javaElement2);
 
-    return new HashSet<>(product(types1, types2));
+    return new HashSet<>(CartesianProduct.product(types1, types2));
   }
 
 
@@ -52,9 +52,5 @@ public abstract class AAllTypePairsResolver<J extends IJavaElement> {
 
 
     return concreteDescendantsResolver.resolve(type);
-  }
-
-  public static <T, C extends Collection<T>> List<Pair<T, T>> product(C s1, C s2) {
-    return s1.stream().flatMap(it -> s2.stream().map(el -> Pair.with(it, el))).toList();
   }
 }

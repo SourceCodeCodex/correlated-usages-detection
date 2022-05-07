@@ -1,6 +1,6 @@
 package upt.ac.cti.coverage;
 
-import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -37,7 +37,7 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
     this.aAllTypePairsResolver = aAllTypePairsResolver;
   }
 
-  protected Set<Pair<IType, IType>> resolve(J javaElement1, J javaElement2) {
+  protected Optional<Set<Pair<IType, IType>>> resolve(J javaElement1, J javaElement2) {
 
     var writingPairs = writingsCombiner.combine(javaElement1, javaElement2);
 
@@ -52,13 +52,7 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
             codeParser,
             aAllTypePairsResolver);
 
-    var bindingPairs = deriver.derive(writingPairs);
-
-    var coveredTypes = bindingPairs.stream()
-        .map(p -> Pair.with(p.getValue0(), p.getValue1()))
-        .toList();
-
-    return new HashSet<>(coveredTypes);
+    return deriver.derive(writingPairs);
   }
 
 }

@@ -90,9 +90,9 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
     AFieldWritingsVisitor visitor;
 
     if (!isCollection.test(field)) {
-      visitor = new ReferenceWritingsVisitor(field, method);
+      visitor = new ReferenceWritingsVisitor(field);
     } else {
-      visitor = new CollectionWritingsVisitor(field, method);
+      visitor = new CollectionWritingsVisitor(field);
     }
 
 
@@ -111,8 +111,7 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
       var variableDeclarationFragmentOpt = parser.parse(field);
       return variableDeclarationFragmentOpt
           .flatMap(vdf -> Optional.ofNullable(vdf.getInitializer()))
-          .map(initializer -> new Writing<>(field, initializer, Optional.empty(),
-              field.getDeclaringType()));
+          .map(initializer -> new Writing<>(field, initializer, Optional.empty()));
     }
     return Optional.empty();
 

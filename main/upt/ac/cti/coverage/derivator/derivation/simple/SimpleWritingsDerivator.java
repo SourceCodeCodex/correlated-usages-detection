@@ -4,13 +4,18 @@ import java.util.logging.Logger;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.ASTNode;
 import upt.ac.cti.coverage.derivator.derivation.IWritingsDerivator;
+import upt.ac.cti.coverage.derivator.derivation.shared.FieldAccessDerivator;
+import upt.ac.cti.coverage.derivator.derivation.shared.MethodInvocationDerivator;
+import upt.ac.cti.coverage.derivator.derivation.shared.SuperFieldAccessDerivator;
+import upt.ac.cti.coverage.derivator.derivation.shared.SuperMethodInvocationDerivator;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
-final public class SimpleWritingsDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
+final public class SimpleWritingsDerivator<J extends IJavaElement>
+    implements IWritingsDerivator<J> {
 
   private final FieldAccessDerivator<J> fa;
   private final MethodInvocationDerivator<J> mi;
@@ -69,7 +74,6 @@ final public class SimpleWritingsDerivator<J extends IJavaElement> implements IW
       case ASTNode.SIMPLE_NAME:
       case ASTNode.QUALIFIED_NAME: {
         return n.derive(deriver, constant);
-
       }
       default: {
         logger.warning("No derivation is possible for " + deriver + ". Writing expression type is "

@@ -25,8 +25,11 @@ public class CoveredTypePairs implements IRelationBuilder<MTypePair, MParameterP
 
     var factory = Factory.getInstance();
 
-    resolver.resolve(pair.getValue0(), pair.getValue1())
-        .forEach(it -> group.add(factory.createMTypePair(it)));
+    var analysisResult = resolver.resolve(pair.getValue0(), pair.getValue1());
+
+    if (analysisResult.isPresent()) {
+      analysisResult.get().forEach(it -> group.add(factory.createMTypePair(it)));
+    }
 
     return group;
   }

@@ -13,6 +13,7 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
 
   @Override
   public Double compute(MClass mClass) {
+    logger.info("Start calculating class Aperture Coverage for: " + mClass.toString());
     var fieldApertureCoverage = mClass.fieldApertureCoverage();
     // var parameterApertureCoverage = mClass.parameterApertureCoverage();
     // var result = Double.min(fieldApertureCoverage, parameterApertureCoverage);

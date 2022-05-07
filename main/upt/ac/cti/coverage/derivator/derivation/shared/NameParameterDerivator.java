@@ -1,4 +1,4 @@
-package upt.ac.cti.coverage.derivator.derivation.simple;
+package upt.ac.cti.coverage.derivator.derivation.shared;
 
 import java.util.stream.Stream;
 import org.eclipse.jdt.core.IJavaElement;
@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.Name;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.derivator.derivation.IWritingsDerivator;
-import upt.ac.cti.coverage.derivator.derivation.simple.visitors.ArgumentMethodInvocationVisitor;
+import upt.ac.cti.coverage.derivator.derivation.shared.visitor.ArgumentMethodInvocationVisitor;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.parsing.CodeParser;

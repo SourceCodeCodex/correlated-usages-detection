@@ -3,7 +3,6 @@ package upt.ac.cti.coverage.combiner.field.visitor;
 import java.util.Optional;
 import java.util.logging.Logger;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.FieldAccess;
@@ -18,8 +17,8 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
 
   private static final Logger logger = RLogger.get();
 
-  public ReferenceWritingsVisitor(IField field, IMethod scope) {
-    super(field, scope);
+  public ReferenceWritingsVisitor(IField field) {
+    super(field);
   }
 
   @Override
@@ -33,7 +32,7 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
         if (binding instanceof IVariableBinding varBinding) {
           if (field.equals(varBinding.getJavaElement())) {
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(), Optional.empty(), scope);
+                new Writing<>(field, node.getRightHandSide(), Optional.empty());
             result.add(fieldWrite);
           }
         }
@@ -46,7 +45,7 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
         if (binding instanceof IVariableBinding varBinding) {
           if (field.equals(varBinding.getJavaElement())) {
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(), Optional.of(qualifier), scope);
+                new Writing<>(field, node.getRightHandSide(), Optional.of(qualifier));
             result.add(fieldWrite);
           }
         }
@@ -57,7 +56,7 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
         var binding = ((SuperFieldAccess) left).resolveFieldBinding();
         if (field.equals(binding.getJavaElement())) {
           var fieldWrite =
-              new Writing<>(field, node.getRightHandSide(), Optional.empty(), scope);
+              new Writing<>(field, node.getRightHandSide(), Optional.empty());
           result.add(fieldWrite);
         }
         return true;
@@ -70,14 +69,13 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
           var accessExpression = ((FieldAccess) left).getExpression();
           if (accessExpression.getNodeType() == ASTNode.THIS_EXPRESSION) {
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(), Optional.empty(), scope);
+                new Writing<>(field, node.getRightHandSide(), Optional.empty());
             result.add(fieldWrite);
           } else {
             // Although the field access expression can have a manifold of posibilities, we take
             // into consideration only the most plausible scenarios.
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(), Optional.of(accessExpression),
-                    scope);
+                new Writing<>(field, node.getRightHandSide(), Optional.of(accessExpression));
             result.add(fieldWrite);
           }
         }

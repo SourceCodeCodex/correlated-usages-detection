@@ -1,6 +1,7 @@
 package upt.ac.cti.coverage;
 
 import static upt.ac.cti.dependencies.DependencyUtils.newFieldAllTypePairsResolver;
+import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
@@ -26,7 +27,7 @@ public final class FieldCoveredTypesResolver extends ACoveredTypesResolver<IFiel
   }
 
   @Override
-  public Set<Pair<IType, IType>> resolve(IField field1, IField field2) {
+  public Optional<Set<Pair<IType, IType>>> resolve(IField field1, IField field2) {
     return super.resolve(field1, field2);
   }
 

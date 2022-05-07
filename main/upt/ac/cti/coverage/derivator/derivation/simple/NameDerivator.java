@@ -4,6 +4,8 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Name;
 import upt.ac.cti.coverage.derivator.derivation.IWritingsDerivator;
+import upt.ac.cti.coverage.derivator.derivation.shared.NameFieldDerivator;
+import upt.ac.cti.coverage.derivator.derivation.shared.NameParameterDerivator;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.parsing.CodeParser;

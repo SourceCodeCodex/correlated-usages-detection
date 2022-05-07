@@ -1,4 +1,4 @@
-package upt.ac.cti.coverage.derivator.derivation.simple.algorithm;
+package upt.ac.cti.coverage.derivator.derivation.shared.algorithm;
 
 import java.util.LinkedList;
 import java.util.Optional;
@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.derivator.derivation.simple.visitors.FieldAssignmentVisitor;
+import upt.ac.cti.coverage.derivator.derivation.shared.visitor.FieldAssignmentVisitor;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.parsing.CodeParser;
