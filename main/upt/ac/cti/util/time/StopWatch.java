@@ -5,18 +5,18 @@ import java.time.Instant;
 
 public class StopWatch {
 
-  private Instant start = Instant.now(), end = Instant.now();
+  private Instant start = Instant.now(), stop = Instant.now();
 
   public void start() {
     start = Instant.now();
   }
 
-  public void end() {
-    end = Instant.now();
+  public void stop() {
+    stop = Instant.now();
   }
 
   public Duration getDuration() {
-    return Duration.between(start, end);
+    return Duration.between(start, stop);
   }
 
 }

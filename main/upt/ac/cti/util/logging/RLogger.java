@@ -41,7 +41,7 @@ public class RLogger {
 
     builder.append(ANSI_CYAN);
     builder.append(ANSI_BOLD_ON);
-    builder.append("%4$-4s");
+    builder.append("%4$.4s");
     builder.append(ANSI_BOLD_OFF);
     builder.append(ANSI_WHITE);
 

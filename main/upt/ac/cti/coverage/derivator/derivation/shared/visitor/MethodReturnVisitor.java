@@ -24,7 +24,7 @@ public class MethodReturnVisitor<J extends IJavaElement> extends ASTVisitor {
   @Override
   public boolean visit(ReturnStatement node) {
     derivations.add(deriver.withWritingExpression(node.getExpression()));
-    return true;
+    return false;
   }
 
 }

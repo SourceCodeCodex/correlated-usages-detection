@@ -1,6 +1,5 @@
 package upt.ac.cti.core.pair.parameter.group;
 
-import static upt.ac.cti.dependencies.DependencyUtils.newParameterAllTypePairsResolver;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
@@ -9,13 +8,14 @@ import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
+import upt.ac.cti.dependency.Dependencies;
 
 @RelationBuilder
 public final class AllTypePairs implements IRelationBuilder<MTypePair, MParameterPair> {
 
   @Override
   public Group<MTypePair> buildGroup(MParameterPair mParamterPair) {
-    var resolver = newParameterAllTypePairsResolver();
+    var resolver = Dependencies.getParameterAllTypePairsResolver();
 
     var group = new Group<MTypePair>();
 

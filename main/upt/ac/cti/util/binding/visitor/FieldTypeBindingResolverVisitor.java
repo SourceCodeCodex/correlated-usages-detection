@@ -16,9 +16,8 @@ public class FieldTypeBindingResolverVisitor extends ABindingResolverVisitor<IFi
     var variableBinding = node.resolveBinding();
     if (javaElement.equals(variableBinding.getJavaElement())) {
       this.binding = Optional.ofNullable(variableBinding.getType());
-      return false;
     }
-    return true;
+    return false;
   }
 
 }

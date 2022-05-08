@@ -1,19 +1,53 @@
 package upt.ac.cti.util.validation;
 
+import java.util.function.Predicate;
 import org.eclipse.jdt.core.ILocalVariable;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
-import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.hierarchy.HierarchyResolver;
 
-public final class ParameterValidator extends VariableValidator<ILocalVariable> {
+public final class ParameterValidator implements Predicate<ILocalVariable> {
+
+  private final ParameterTypeBindingResolver parameterTypeBindingResolver;
+  private final HierarchyResolver hierarchyResolver;
 
   public ParameterValidator(ParameterTypeBindingResolver parameterTypeBindingResolver,
-      ConcreteDescendantsResolver concreteDescendantsResolver) {
-    super(parameterTypeBindingResolver, concreteDescendantsResolver);
+      HierarchyResolver hierarchyResolver) {
+    this.parameterTypeBindingResolver = parameterTypeBindingResolver;
+    this.hierarchyResolver = hierarchyResolver;
   }
 
   @Override
-  public boolean test(ILocalVariable parameter) {
-    return super.test(parameter);
+  public boolean test(ILocalVariable t) {
+    var typeBinding = parameterTypeBindingResolver.resolve(t);
+    if (typeBinding.isEmpty()) {
+      return false;
+    }
+    return testInternal(typeBinding.get());
+  }
+
+  private boolean testInternal(ITypeBinding binding) {
+    return !binding.isPrimitive() &&
+        !binding.isArray() &&
+        !binding.isSynthetic() &&
+        binding.isFromSource() &&
+        hasTypeDescendants(binding) &&
+        isNotCollection(binding);
+  }
+
+
+  private boolean hasTypeDescendants(ITypeBinding binding) {
+    var javaType = (IType) binding.getJavaElement();
+    if (javaType == null) {
+      return false;
+    }
+    return hierarchyResolver.resolveConcrete(javaType)
+        .size() >= 1;
+  }
+
+  private boolean isNotCollection(ITypeBinding binding) {
+    return !new IsTypeBindingCollection().test(binding);
   }
 
 

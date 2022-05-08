@@ -7,7 +7,7 @@ import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.CartesianProduct;
 
-public abstract class AComposedDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
+abstract class AComposedDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
 
   private final IEntityDerivator<J> ed1;
   private final IEntityDerivator<J> ed2;
@@ -23,11 +23,9 @@ public abstract class AComposedDerivator<J extends IJavaElement> implements IWri
 
     var w1Derivations = ed1.derive(w1).writingPairs().stream()
         .map(Pair::getValue0)
-        .map(Writing::increaseDepth)
         .toList();
     var w2Derivations = ed2.derive(w2).writingPairs().stream()
         .map(Pair::getValue0)
-        .map(Writing::increaseDepth)
         .toList();
 
     var complexDerivation = CartesianProduct.product(w1Derivations, w2Derivations);

@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import upt.ac.cti.coverage.model.Writing;
+import upt.ac.cti.util.Either;
 
 public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends ASTVisitor {
 
@@ -40,14 +41,15 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
         var arg = (Expression) node.arguments().get(index);
-        var derivation = deriver.withWritingExpression(arg).withAccessExpression(node);
+        var derivation =
+            deriver.withWritingExpression(arg).withAccessExpression(Either.right(node));
         derivations.add(derivation);
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
 
     }
-    return true;
+    return false;
   }
 
   @Override
@@ -63,7 +65,7 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
         var derivation =
             deriver.withWritingExpression(arg);
         if (node.getExpression() != null) {
-          derivation = derivation.withAccessExpression(node.getExpression());
+          derivation = derivation.withAccessExpression(Either.right(node.getExpression()));
         }
         derivations.add(derivation);
       } catch (JavaModelException e) {
@@ -71,7 +73,7 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
       }
 
     }
-    return true;
+    return false;
   }
 
   @Override
@@ -90,7 +92,7 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
         e.printStackTrace();
       }
     }
-    return true;
+    return false;
   }
 
 }

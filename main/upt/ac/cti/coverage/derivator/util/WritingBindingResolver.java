@@ -1,8 +1,10 @@
 package upt.ac.cti.coverage.derivator.util;
 
 import java.util.logging.Logger;
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.coverage.model.Writing;
@@ -11,7 +13,7 @@ import upt.ac.cti.coverage.model.binding.ResolvedBinding;
 import upt.ac.cti.coverage.model.binding.WritingBinding;
 import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.logging.RLogger;
 
 public final class WritingBindingResolver<J extends IJavaElement> {
@@ -21,12 +23,12 @@ public final class WritingBindingResolver<J extends IJavaElement> {
 
   private static final Logger logger = RLogger.get();
 
-  private final ConcreteDescendantsResolver concreteDescendantsResolver;
+  private final HierarchyResolver hierarchyResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
 
-  public WritingBindingResolver(ConcreteDescendantsResolver concreteDescendantsResolver,
+  public WritingBindingResolver(HierarchyResolver hierarchyResolver,
       ABindingResolver<J, ITypeBinding> aBindingResolver) {
-    this.concreteDescendantsResolver = concreteDescendantsResolver;
+    this.hierarchyResolver = hierarchyResolver;
     this.aBindingResolver = aBindingResolver;
   }
 
@@ -35,7 +37,6 @@ public final class WritingBindingResolver<J extends IJavaElement> {
     if (cached.isPresent()) {
       return cached.get();
     }
-
 
     if (writing.writingExpression().getNodeType() == ASTNode.NULL_LITERAL) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
@@ -68,23 +69,42 @@ public final class WritingBindingResolver<J extends IJavaElement> {
       return resolved;
     }
 
+    if (writing.writingExpression().getNodeType() == ASTNode.THIS_EXPRESSION) {
+      try {
+        var flags = type.getFlags();
+        if (Flags.isAbstract(flags) || Flags.isInterface(flags)) {
+          return WritingBinding.INCONCLUSIVE;
+        }
 
-    if (concreteDescendantsResolver.resolve(type).size() == 1) {
+        var resolved = new ResolvedBinding(writingExpressionBinding);
+        cache.put(writing, resolved);
+        return resolved;
+      } catch (JavaModelException e) {
+        e.printStackTrace();
+        return WritingBinding.INCONCLUSIVE;
+      }
+    }
+
+
+    var hierarchy = hierarchyResolver.resolveConcrete(type);
+    if (hierarchy.size() == 1 && hierarchy.contains(type)) {
       var resolved = new ResolvedBinding(writingExpressionBinding);
       cache.put(writing, resolved);
       return resolved;
     }
 
     var jBinding = aBindingResolver.resolve(writing.element());
-    var jType = (IType) jBinding.get().getJavaElement();
-    var hierarchy = concreteDescendantsResolver.resolve(jType);
-    if (jBinding.isPresent() && hierarchy.contains(type)) {
-      var notALeaf = new NotLeafBinding(writingExpressionBinding);
-      cache.put(writing, notALeaf);
-      return notALeaf;
+    if (jBinding.isPresent()) {
+      var jType = (IType) jBinding.get().getJavaElement();
+      hierarchy = hierarchyResolver.resolve(jType);
+      if (hierarchy.contains(type)) {
+        var notALeaf = new NotLeafBinding(writingExpressionBinding);
+        cache.put(writing, notALeaf);
+        return notALeaf;
+      }
     }
 
-    logger.warning("Expression's binding is inconclusive: " + writing);
+    logger.warning("Writing's binding is inconclusive: " + writing);
     cache.put(writing, WritingBinding.INCONCLUSIVE);
     return WritingBinding.INCONCLUSIVE;
   }

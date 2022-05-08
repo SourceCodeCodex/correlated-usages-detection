@@ -56,6 +56,7 @@ final public class NameParameterDerivator<J extends IJavaElement> implements IWr
     });
 
     var newWritingPairs = derivations
+        .map(Writing::increaseDepth)
         .map(derivation -> Pair.with(derivation, constant))
         .toList();
 

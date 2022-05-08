@@ -3,26 +3,24 @@ package upt.ac.cti.ui;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.ui.IStartup;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.insider.view.ToolRegistration;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.logging.RLogger;
 
 public final class Startup implements IStartup {
 
   @Override
   public void earlyStartup() {
+    Dependencies.init();
     System.setProperty("java.util.logging.SimpleFormatter.format",
         RLogger.format());
     ToolRegistration.getInstance().registerXEntityConverter(element -> {
       if (element instanceof IJavaProject) {
         return Factory.getInstance().createMProject(element);
-      }
-      if (element instanceof IMethod) {
-        return Factory.getInstance().createMMethod(element);
       }
       if (element instanceof IType) {
         return Factory.getInstance().createMClass(element);

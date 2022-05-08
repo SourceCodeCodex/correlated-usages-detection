@@ -15,9 +15,8 @@ public class VariableDeclarationFragmentResolverVisitor
   public boolean visit(VariableDeclarationFragment node) {
     if (member.equals(node.resolveBinding().getJavaElement())) {
       result = Optional.of(node);
-      return false;
     }
-    return true;
+    return false;
   }
 
 }

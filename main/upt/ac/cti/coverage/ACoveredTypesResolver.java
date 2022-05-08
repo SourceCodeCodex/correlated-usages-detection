@@ -11,7 +11,8 @@ import upt.ac.cti.coverage.combiner.IWritingsCombiner;
 import upt.ac.cti.coverage.derivator.DerivationManager;
 import upt.ac.cti.coverage.derivator.util.WritingBindingResolver;
 import upt.ac.cti.util.binding.ABindingResolver;
-import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.cache.Cache;
+import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
@@ -23,6 +24,7 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
   private final IWritingsCombiner<J> writingsCombiner;
   private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
+  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache = new Cache<>();
 
   public ACoveredTypesResolver(
       IWritingsCombiner<J> writingsCombiner,
@@ -38,12 +40,16 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
   }
 
   protected Optional<Set<Pair<IType, IType>>> resolve(J javaElement1, J javaElement2) {
+    var cached = cache.get(Pair.with(javaElement1, javaElement2));
+    if (cached.isPresent()) {
+      return cached.get();
+    }
 
     var writingPairs = writingsCombiner.combine(javaElement1, javaElement2);
 
-    var concreteDescendantsResolver = new ConcreteDescendantsResolver();
+    var hierarchyResolver = new HierarchyResolver();
     var assignmentBindingResolver =
-        new WritingBindingResolver<>(concreteDescendantsResolver, aBindingResolver);
+        new WritingBindingResolver<>(hierarchyResolver, aBindingResolver);
 
     var deriver =
         new DerivationManager<>(
@@ -51,6 +57,9 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
             javaEntitySearcher,
             codeParser,
             aAllTypePairsResolver);
+
+    var result = deriver.derive(writingPairs);
+    cache.put(Pair.with(javaElement1, javaElement2), result);
 
     return deriver.derive(writingPairs);
   }

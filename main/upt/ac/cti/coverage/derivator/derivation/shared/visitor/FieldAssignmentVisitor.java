@@ -48,7 +48,7 @@ public class FieldAssignmentVisitor<J extends IJavaElement> extends ASTVisitor {
 
           }
         }
-        return true;
+        break;
       }
 
       case ASTNode.QUALIFIED_NAME: {
@@ -59,7 +59,7 @@ public class FieldAssignmentVisitor<J extends IJavaElement> extends ASTVisitor {
             derivations.add(deriver.withWritingExpression(node.getRightHandSide()));
           }
         }
-        return true;
+        break;
       }
 
       case ASTNode.SUPER_FIELD_ACCESS: {
@@ -68,7 +68,7 @@ public class FieldAssignmentVisitor<J extends IJavaElement> extends ASTVisitor {
         if (binding != null && field.equals(binding.getJavaElement())) {
           derivations.add(deriver.withWritingExpression(node.getRightHandSide()));
         }
-        return true;
+        break;
       }
 
       case ASTNode.FIELD_ACCESS: {
@@ -77,19 +77,19 @@ public class FieldAssignmentVisitor<J extends IJavaElement> extends ASTVisitor {
         if (binding != null && field.equals(binding.getJavaElement())) {
           derivations.add(deriver.withWritingExpression(node.getRightHandSide()));
         }
-        return true;
+        break;
       }
 
       case ASTNode.ARRAY_ACCESS: {
-        return true;
+        break;
       }
 
       default: {
         logger.warning(
             "Assignment discarded as left hand side type is not resolved yet: "
                 + left.getNodeType());
-        return true;
       }
     }
+    return false;
   }
 }

@@ -5,13 +5,13 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
 import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
-import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.hierarchy.HierarchyResolver;
 
 public class ParameterAllTypePairsResolver extends AAllTypePairsResolver<ILocalVariable> {
 
   public ParameterAllTypePairsResolver(ParameterTypeBindingResolver parameterTypeBindingResolver,
-      ConcreteDescendantsResolver concreteDescendantsResolver) {
-    super(parameterTypeBindingResolver, concreteDescendantsResolver);
+      HierarchyResolver hierarchyResolver) {
+    super(parameterTypeBindingResolver, hierarchyResolver);
   }
 
   @Override

@@ -1,28 +1,35 @@
 package upt.ac.cti.util.cache;
 
-
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import org.apache.commons.collections4.map.LRUMap;
 
 public final class Cache<K, T> implements ICache<K, T> {
 
-  private final ConcurrentHashMap<K, T> map = new ConcurrentHashMap<>();
+  private static final int DEFAULT_CACHE_SIZE = 4096;
+
+  private final LRUMap<K, T> map;
 
 
   public Cache() {
+    map = new LRUMap<>(DEFAULT_CACHE_SIZE);
+  }
 
+  public Cache(int size) {
+    map = new LRUMap<>(size);
   }
 
   @Override
-  public void put(K key, T value) {
+  public synchronized void put(K key, T value) {
     map.put(key, value);
 
   }
 
   @Override
   public Optional<T> get(K key) {
-
-    var c = map.get(key);
+    T c;
+    synchronized (this) {
+      c = map.get(key);
+    }
 
     if (c == null) {
       return Optional.empty();
@@ -34,13 +41,13 @@ public final class Cache<K, T> implements ICache<K, T> {
 
 
   @Override
-  public void remove(K key) {
+  public synchronized void remove(K key) {
     map.remove(key);
   }
 
 
   @Override
-  public void clear() {
+  public synchronized void clear() {
     map.clear();
   }
 }

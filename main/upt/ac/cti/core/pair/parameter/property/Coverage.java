@@ -1,11 +1,11 @@
 package upt.ac.cti.core.pair.parameter.property;
 
-import static upt.ac.cti.dependencies.DependencyUtils.newParameterCoveredTypesResolver;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
+import upt.ac.cti.dependency.Dependencies;
 
 @PropertyComputer
 public final class Coverage implements IPropertyComputer<Integer, MParameterPair> {
@@ -15,7 +15,7 @@ public final class Coverage implements IPropertyComputer<Integer, MParameterPair
     @SuppressWarnings("unchecked")
     var pair = (Pair<ILocalVariable, ILocalVariable>) mParameterPair.getUnderlyingObject();
 
-    var resolver = newParameterCoveredTypesResolver();
+    var resolver = Dependencies.getParameterCoveredTypesResolver();
 
     var analysisResult = resolver.resolve(pair.getValue0(), pair.getValue1());
 

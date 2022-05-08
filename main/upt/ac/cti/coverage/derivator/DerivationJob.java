@@ -1,6 +1,5 @@
 package upt.ac.cti.coverage.derivator;
 
-import java.util.logging.Logger;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
@@ -8,8 +7,8 @@ import upt.ac.cti.aperture.AAllTypePairsResolver;
 import upt.ac.cti.coverage.derivator.derivation.complex.ComplexWritingsDerivator;
 import upt.ac.cti.coverage.derivator.derivation.simple.SimpleWritingsDerivator;
 import upt.ac.cti.coverage.derivator.util.DerivationPrioritizer;
-import upt.ac.cti.coverage.derivator.util.SameAccessExpressionValidator;
 import upt.ac.cti.coverage.derivator.util.WritingBindingResolver;
+import upt.ac.cti.coverage.derivator.util.access.SameAccessExpressionValidator;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.binding.Inconclusive;
 import upt.ac.cti.coverage.model.binding.NotLeafBinding;
@@ -17,7 +16,6 @@ import upt.ac.cti.coverage.model.binding.ResolvedBinding;
 import upt.ac.cti.coverage.model.derivation.DerivationResult;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.coverage.model.derivation.ResolvedTypePairs;
-import upt.ac.cti.util.logging.RLogger;
 
 class DerivationJob<J extends IJavaElement> {
 
@@ -30,8 +28,6 @@ class DerivationJob<J extends IJavaElement> {
   private final SimpleWritingsDerivator<J> simpleDerivator;
   private final ComplexWritingsDerivator<J> complexDerivator;
   private final AAllTypePairsResolver<J> aAllTypePairsResolver;
-
-  private static final Logger logger = RLogger.get();
 
   public DerivationJob(
       WritingBindingResolver<J> assignmentBindingResolver,
@@ -48,8 +44,6 @@ class DerivationJob<J extends IJavaElement> {
 
   public DerivationResult<J> derive() {
 
-    logger.info("Deriving pair: " + writingPair);
-
     var w1 = writingPair.getValue0();
     var w2 = writingPair.getValue1();
 
@@ -57,7 +51,7 @@ class DerivationJob<J extends IJavaElement> {
         assignmentBindingResolver.resolveBinding(w1);
 
     var w2Binding =
-        assignmentBindingResolver.resolveBinding(writingPair.getValue1());
+        assignmentBindingResolver.resolveBinding(w2);
 
     if (w1Binding instanceof ResolvedBinding r1 && w2Binding instanceof ResolvedBinding r2) {
       if (sameAccessExpressionValidator.test(writingPair)) {
@@ -69,7 +63,6 @@ class DerivationJob<J extends IJavaElement> {
     }
 
     if (w1Binding instanceof Inconclusive && w2Binding instanceof Inconclusive) {
-      logger.info("Inconclusive field pair: " + writingPair);
       return new upt.ac.cti.coverage.model.derivation.Inconclusive<>();
     }
 

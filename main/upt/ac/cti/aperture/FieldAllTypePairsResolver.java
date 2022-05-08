@@ -5,13 +5,13 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
-import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.hierarchy.HierarchyResolver;
 
 public class FieldAllTypePairsResolver extends AAllTypePairsResolver<IField> {
 
   public FieldAllTypePairsResolver(FieldTypeBindingResolver fieldTypeBindingResolver,
-      ConcreteDescendantsResolver concreteDescendantsResolver) {
-    super(fieldTypeBindingResolver, concreteDescendantsResolver);
+      HierarchyResolver hierarchyResolver) {
+    super(fieldTypeBindingResolver, hierarchyResolver);
   }
 
   @Override

@@ -9,24 +9,33 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
 import upt.ac.cti.util.CartesianProduct;
 import upt.ac.cti.util.binding.ABindingResolver;
-import upt.ac.cti.util.hierarchy.ConcreteDescendantsResolver;
+import upt.ac.cti.util.cache.Cache;
+import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.validation.IsTypeBindingCollection;
 
 public abstract class AAllTypePairsResolver<J extends IJavaElement> {
-  private final ConcreteDescendantsResolver concreteDescendantsResolver;
+  private final HierarchyResolver hierarchyResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
+  private final Cache<Pair<J, J>, Set<Pair<IType, IType>>> cache = new Cache<>();
 
   public AAllTypePairsResolver(ABindingResolver<J, ITypeBinding> aBindingResolver,
-      ConcreteDescendantsResolver concreteDescendantsResolver) {
-    this.concreteDescendantsResolver = concreteDescendantsResolver;
+      HierarchyResolver hierarchyResolver) {
+    this.hierarchyResolver = hierarchyResolver;
     this.aBindingResolver = aBindingResolver;
   }
 
   public Set<Pair<IType, IType>> resolve(J javaElement1, J javaElement2) {
+    var cached = cache.get(Pair.with(javaElement1, javaElement2));
+    if (cached.isPresent()) {
+      return cached.get();
+    }
+
     var types1 = resolve(javaElement1);
     var types2 = resolve(javaElement2);
 
-    return new HashSet<>(CartesianProduct.product(types1, types2));
+    var result = new HashSet<>(CartesianProduct.product(types1, types2));
+    cache.put(Pair.with(javaElement1, javaElement2), result);
+    return result;
   }
 
 
@@ -51,6 +60,6 @@ public abstract class AAllTypePairsResolver<J extends IJavaElement> {
     }
 
 
-    return concreteDescendantsResolver.resolve(type);
+    return hierarchyResolver.resolveConcrete(type);
   }
 }

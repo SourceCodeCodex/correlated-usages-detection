@@ -25,6 +25,7 @@ public class InvocationDerivatorAlgorithm<J extends IJavaElement> {
     node.get().accept(visitor);
 
     var newWritingPairs = visitor.derivations().stream()
+        .map(Writing::increaseDepth)
         .map(derivation -> Pair.with(derivation, constant))
         .toList();;
 

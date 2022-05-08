@@ -8,7 +8,7 @@ public class ReferencesRequestor extends AMatchesResolverRequestor<IMethod> {
 
   @Override
   public void acceptSearchMatch(SearchMatch match) {
-    if (match instanceof FieldReferenceMatch ref) {
+    if (match instanceof FieldReferenceMatch ref && match.getElement() instanceof IMethod) {
       var method = (IMethod) match.getElement();
       matches.add(method);
     }

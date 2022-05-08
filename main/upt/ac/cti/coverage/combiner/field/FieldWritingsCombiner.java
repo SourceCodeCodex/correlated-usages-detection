@@ -13,6 +13,7 @@ import upt.ac.cti.coverage.combiner.field.visitor.AFieldWritingsVisitor;
 import upt.ac.cti.coverage.combiner.field.visitor.CollectionWritingsVisitor;
 import upt.ac.cti.coverage.combiner.field.visitor.ReferenceWritingsVisitor;
 import upt.ac.cti.coverage.model.Writing;
+import upt.ac.cti.util.Either;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
@@ -111,7 +112,8 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
       var variableDeclarationFragmentOpt = parser.parse(field);
       return variableDeclarationFragmentOpt
           .flatMap(vdf -> Optional.ofNullable(vdf.getInitializer()))
-          .map(initializer -> new Writing<>(field, initializer, Optional.empty()));
+          .map(initializer -> new Writing<>(field, initializer,
+              Either.left(field.getDeclaringType())));
     }
     return Optional.empty();
 

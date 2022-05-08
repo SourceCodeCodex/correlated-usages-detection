@@ -9,9 +9,23 @@ import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 import upt.ac.cti.util.cache.Cache;
 
-public final class ConcreteDescendantsResolver {
+public final class HierarchyResolver {
 
   private final Cache<IType, ITypeHierarchy> cache = new Cache<>();
+
+  public List<IType> resolveConcrete(IType type) {
+    var concrete = resolve(type).parallelStream().filter(it -> {
+      try {
+        var flags = it.getFlags();
+        return !(Flags.isAbstract(flags) || Flags.isInterface(flags));
+      } catch (JavaModelException e) {
+        e.printStackTrace();
+        return false;
+      }
+    }).toList();
+
+    return concrete;
+  }
 
   public List<IType> resolve(IType type) {
     ITypeHierarchy hierarchy;
@@ -33,18 +47,6 @@ public final class ConcreteDescendantsResolver {
     var subtypes = new ArrayList<>(List.of(hierarchy.getAllSubtypes(type)));
     subtypes.add(type);
 
-    var concrete = subtypes.parallelStream().filter(it -> {
-      try {
-        var flags = it.getFlags();
-        return !(Flags.isAbstract(flags) || Flags.isInterface(flags));
-      } catch (JavaModelException e) {
-        e.printStackTrace();
-
-        return false;
-      }
-    }).toList();
-
-    return concrete;
+    return subtypes;
   }
-
 }

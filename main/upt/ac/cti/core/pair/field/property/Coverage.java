@@ -1,11 +1,11 @@
 package upt.ac.cti.core.pair.field.property;
 
-import static upt.ac.cti.dependencies.DependencyUtils.newFieldCoveredTypesResolver;
 import org.eclipse.jdt.core.IField;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
+import upt.ac.cti.dependency.Dependencies;
 
 @PropertyComputer
 public final class Coverage implements IPropertyComputer<Integer, MFieldPair> {
@@ -15,7 +15,7 @@ public final class Coverage implements IPropertyComputer<Integer, MFieldPair> {
     @SuppressWarnings("unchecked")
     var pair = (Pair<IField, IField>) mFieldPair.getUnderlyingObject();
 
-    var resolver = newFieldCoveredTypesResolver();
+    var resolver = Dependencies.getFieldCoveredTypesResolver();
 
     var analysisResult = resolver.resolve(pair.getValue0(), pair.getValue1());
 

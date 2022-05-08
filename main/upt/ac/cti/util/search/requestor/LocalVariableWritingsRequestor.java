@@ -9,12 +9,14 @@ import org.eclipse.jdt.core.search.SearchMatch;
 public class LocalVariableWritingsRequestor extends AMatchesResolverRequestor<IMethod> {
   @Override
   public void acceptSearchMatch(SearchMatch match) {
-    if (match instanceof LocalVariableReferenceMatch ref && ref.isWriteAccess()) {
+    if (match instanceof LocalVariableReferenceMatch ref && ref.isWriteAccess()
+        && ref.getElement() instanceof IMethod) {
       var method = (IMethod) ref.getElement();
       matches.add(method);
     }
 
-    if (match instanceof LocalVariableDeclarationMatch dec) {
+    if (match instanceof LocalVariableDeclarationMatch dec
+        && dec.getElement() instanceof ILocalVariable) {
       var method = (IMethod) ((ILocalVariable) dec.getElement()).getDeclaringMember();
       matches.add(method);
     }

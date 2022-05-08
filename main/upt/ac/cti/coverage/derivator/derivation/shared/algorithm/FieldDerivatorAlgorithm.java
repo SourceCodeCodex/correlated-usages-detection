@@ -34,7 +34,7 @@ public final class FieldDerivatorAlgorithm<J extends IJavaElement> {
           var visitor = new FieldAssignmentVisitor<>(deriver, field);
           var node = methodDeclaration.getBody();
           node.accept(visitor);
-          return visitor.derivations().stream();
+          return visitor.derivations().stream().map(Writing::increaseDepth);
         });
 
     var derivations = new LinkedList<>(derivationsStream.toList());

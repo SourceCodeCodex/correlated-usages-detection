@@ -15,10 +15,8 @@ public class MethodDeclarationResolverVisitor
   public boolean visit(MethodDeclaration node) {
     if (member.equals(node.resolveBinding().getJavaElement())) {
       result = Optional.of(node);
-      return false;
     }
-    return true;
-
+    return false;
   }
 
 }

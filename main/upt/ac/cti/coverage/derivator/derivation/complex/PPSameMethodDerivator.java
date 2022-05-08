@@ -12,7 +12,7 @@ import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
-public class PPSameMethodDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
+class PPSameMethodDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
 
   private final JavaEntitySearcher javaEntitySearcher;
   private final CodeParser codeParser;
@@ -26,7 +26,6 @@ public class PPSameMethodDerivator<J extends IJavaElement> implements IWritingsD
   public NewWritingPairs<J> derive(Writing<J> w1, Writing<J> w2) {
     var p1 = (ILocalVariable) ((Name) w1.writingExpression()).resolveBinding().getJavaElement();
     var p2 = (ILocalVariable) ((Name) w2.writingExpression()).resolveBinding().getJavaElement();
-
 
     var invocations =
         javaEntitySearcher.searchMethodInvocations((IMethod) p1.getDeclaringMember());

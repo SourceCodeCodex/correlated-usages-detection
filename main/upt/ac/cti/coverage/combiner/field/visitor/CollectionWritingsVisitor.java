@@ -1,11 +1,11 @@
 package upt.ac.cti.coverage.combiner.field.visitor;
 
-import java.util.Optional;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import upt.ac.cti.coverage.model.Writing;
+import upt.ac.cti.util.Either;
 
 public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
 
@@ -22,12 +22,13 @@ public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
       switch (node.getName().getIdentifier()) {
         case "add": {
           var fieldWrite =
-              new Writing<>(field, (Expression) node.arguments().get(0), Optional.empty());
+              new Writing<>(field, (Expression) node.arguments().get(0),
+                  Either.left(field.getDeclaringType()));
           result.add(fieldWrite);
         }
       }
     }
-    return true;
+    return false;
   }
 
 

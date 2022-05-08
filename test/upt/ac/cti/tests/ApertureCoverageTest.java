@@ -40,7 +40,7 @@ public class ApertureCoverageTest {
     var mClass = findClass(className);
     assertNotNull(mClass);
 
-    assertEquals(expected, mClass.fieldApertureCoverage());
+    assertEquals(expected, mClass.apertureCoverage());
   }
 
 }

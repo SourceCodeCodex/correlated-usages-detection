@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.model.Writing;
+import upt.ac.cti.util.Either;
 
 public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTVisitor {
   private final Writing<J> w1, w2;
@@ -50,8 +51,10 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
         var arg1 = (Expression) node.arguments().get(index1);
         var arg2 = (Expression) node.arguments().get(index2);
 
-        var derivation1 = w1.withWritingExpression(arg1).withAccessExpression(node).increaseDepth();
-        var derivation2 = w2.withWritingExpression(arg2).withAccessExpression(node).increaseDepth();
+        var derivation1 =
+            w1.withWritingExpression(arg1).withAccessExpression(Either.right(node)).increaseDepth();
+        var derivation2 =
+            w2.withWritingExpression(arg2).withAccessExpression(Either.right(node)).increaseDepth();
 
         newPairings.add(
             Pair.with(derivation1, derivation2));
@@ -60,7 +63,7 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
       }
 
     }
-    return true;
+    return false;
   }
 
   @Override
@@ -80,10 +83,12 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
         var arg1 = (Expression) node.arguments().get(index1);
         var arg2 = (Expression) node.arguments().get(index2);
 
-        var derivation1 = w1.withWritingExpression(arg1).withAccessExpression(node.getExpression())
-            .increaseDepth();
-        var derivation2 = w2.withWritingExpression(arg2).withAccessExpression(node.getExpression())
-            .increaseDepth();
+        var derivation1 =
+            w1.withWritingExpression(arg1).withAccessExpression(Either.right(node.getExpression()))
+                .increaseDepth();
+        var derivation2 =
+            w2.withWritingExpression(arg2).withAccessExpression(Either.right(node.getExpression()))
+                .increaseDepth();
 
         newPairings.add(
             Pair.with(derivation1, derivation2));
@@ -93,7 +98,7 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
       }
 
     }
-    return true;
+    return false;
   }
 
   @Override
@@ -125,7 +130,7 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
         e.printStackTrace();
       }
     }
-    return true;
+    return false;
   }
 
 

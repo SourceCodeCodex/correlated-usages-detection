@@ -37,7 +37,7 @@ public class LocalVariableAssignmentVisitor<J extends IJavaElement> extends ASTV
         derivations.add(deriver.withWritingExpression(node.getInitializer()));
       }
     }
-    return true;
+    return false;
   }
 
   @Override
@@ -54,7 +54,7 @@ public class LocalVariableAssignmentVisitor<J extends IJavaElement> extends ASTV
         }
       }
     }
-    return true;
+    return false;
   }
 
 

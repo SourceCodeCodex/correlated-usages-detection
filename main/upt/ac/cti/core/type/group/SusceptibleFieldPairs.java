@@ -1,7 +1,5 @@
 package upt.ac.cti.core.type.group;
 
-import static upt.ac.cti.dependencies.DependencyUtils.newFieldTypeBindingResolver;
-import static upt.ac.cti.dependencies.DependencyUtils.newFieldValidator;
 import java.util.List;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
@@ -13,6 +11,7 @@ import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
+import upt.ac.cti.dependency.Dependencies;
 
 @RelationBuilder
 public final class SusceptibleFieldPairs implements IRelationBuilder<MFieldPair, MClass> {
@@ -31,8 +30,8 @@ public final class SusceptibleFieldPairs implements IRelationBuilder<MFieldPair,
       fields = List.of();
     }
 
-    var fieldTypeBindingResolver = newFieldTypeBindingResolver();
-    var fieldValidator = newFieldValidator(fieldTypeBindingResolver);
+    var fieldTypeBindingResolver = Dependencies.getFieldTypeBindingResolver();
+    var fieldValidator = Dependencies.getFieldValidator();
 
     var validFields = fields.parallelStream()
         .filter(fieldValidator)

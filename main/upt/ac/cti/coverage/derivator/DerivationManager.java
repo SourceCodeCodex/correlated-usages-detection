@@ -23,7 +23,7 @@ import upt.ac.cti.util.search.JavaEntitySearcher;
 
 public class DerivationManager<J extends IJavaElement> implements IDerivationManager<J> {
 
-  private static final int DEPTH_THRESHOLD = 10;
+  private static final int DEPTH_THRESHOLD = 0;
 
   private final LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>> writingPairs =
       new LinkedBlockingQueue<>();
@@ -56,14 +56,14 @@ public class DerivationManager<J extends IJavaElement> implements IDerivationMan
 
     while (!writingPairs.isEmpty()) {
 
-      var allExcededDepth = writingPairs.parallelStream()
+      var allExcededDepth = writingPairs.stream()
           .allMatch(this::isAboveThreshold);
 
       if (allExcededDepth) {
         return Optional.of(typePairs);
       }
 
-      var results = writingPairs.stream()
+      var results = writingPairs.parallelStream()
           .filter(this::isBelowThreshold)
           .map(
               p -> new DerivationJob<>(writingBindingResolver, simpleDerivator, complexDerivator,
