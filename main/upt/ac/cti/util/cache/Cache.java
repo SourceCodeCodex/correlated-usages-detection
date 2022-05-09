@@ -5,7 +5,7 @@ import org.apache.commons.collections4.map.LRUMap;
 
 public final class Cache<K, T> implements ICache<K, T> {
 
-  private static final int DEFAULT_CACHE_SIZE = 4096;
+  private static final int DEFAULT_CACHE_SIZE = 1024;
 
   private final LRUMap<K, T> map;
 

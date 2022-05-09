@@ -20,7 +20,7 @@ public abstract class ABindingResolver<J extends IJavaElement, B extends IBindin
   private static final ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
 
   private final Cache<J, B> bindingCache = new Cache<>();
-  private final Cache<ICompilationUnit, ASTNode> astCache = new Cache<>();
+  private final Cache<ICompilationUnit, ASTNode> astCache = new Cache<>(1024);
 
   public abstract Optional<B> resolve(J member);
 

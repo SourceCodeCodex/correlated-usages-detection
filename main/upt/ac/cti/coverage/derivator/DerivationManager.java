@@ -23,7 +23,7 @@ import upt.ac.cti.util.search.JavaEntitySearcher;
 
 public class DerivationManager<J extends IJavaElement> implements IDerivationManager<J> {
 
-  private static final int DEPTH_THRESHOLD = 0;
+  private static final int DEPTH_THRESHOLD = 1;
 
   private final LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>> writingPairs =
       new LinkedBlockingQueue<>();

@@ -19,7 +19,7 @@ import upt.ac.cti.util.logging.RLogger;
 public final class WritingBindingResolver<J extends IJavaElement> {
 
   private final Cache<Writing<J>, WritingBinding> cache =
-      new Cache<>();
+      new Cache<>(1024);
 
   private static final Logger logger = RLogger.get();
 
@@ -45,8 +45,6 @@ public final class WritingBindingResolver<J extends IJavaElement> {
 
     var writingExpressionBinding = writing.writingExpression().resolveTypeBinding();
     if (writingExpressionBinding == null) {
-      logger
-          .warning("Could not resolve ITypeBinding for writing expression: " + writing);
       cache.put(writing, WritingBinding.INCONCLUSIVE);
       return WritingBinding.INCONCLUSIVE;
     }
@@ -58,7 +56,6 @@ public final class WritingBindingResolver<J extends IJavaElement> {
 
     var type = (IType) writingExpressionBinding.getJavaElement();
     if (type == null) {
-      logger.warning("Could not resolve IType for field writing expression: " + writing);
       cache.put(writing, WritingBinding.INCONCLUSIVE);
       return WritingBinding.INCONCLUSIVE;
     }

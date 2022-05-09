@@ -1,5 +1,6 @@
 package upt.ac.cti.core.type.property;
 
+import java.util.List;
 import java.util.logging.Logger;
 import familypolymorphismdetection.metamodel.entity.MClass;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
@@ -20,17 +21,51 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
     var stopWatch = new StopWatch();
 
     stopWatch.start();
-    logger.info("Start Aperture Coverage analysis: " + mClass.toString());
+    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
+    // accessExpression=Left(DimensionLookup), depth=0]
+
+    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
+    // accessExpression=Left(MergeJoin), depth=0]
+
+    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
+    // accessExpression=Left(MonetDBBulkLoader), depth=0]
+
+    // No derivation is possible for Writing [element=currentRowSet,
+    // writingExpression=data.rowSets[0], accessExpression=Right(data), depth=0]. Writing expression
+    // type is 2
+
+    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
+    // accessExpression=Left(TableInput), depth=0]
+
+    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
+    // accessExpression=Left(TableOutput), depth=0]
+
+    // Writing's binding is inconclusive: Writing [element=data, writingExpression=sdi,
+    // accessExpression=Left(TextFileOutput), depth=0]
+
+    // Writing's binding is inconclusive: Writing [element=variablizedStepMeta,
+    // writingExpression=stepMetaInterface, accessExpression=Left(BaseStreamStep), depth=0]
+
+    // Writing's binding is inconclusive: Writing [element=variablizedStepMeta,
+    // writingExpression=variablizedStepMeta.withVariables(this),
+    // accessExpression=Left(BaseStreamStep), depth=0]
 
     var fieldApertureCoverage = fieldApertureCoverage(mClass);
-    // var parameterApertureCoverage = mClass.parameterApertureCoverage();
-    // var result = Double.min(fieldApertureCoverage, parameterApertureCoverage);
-    var result = fieldApertureCoverage;
-    stopWatch.stop();
-    logger.info("Aperture Coverage (" + stopWatch.getDuration().toMillis() + "ms" + "): "
-        + mClass.toString() + ": " + result);
+    var parameterApertureCoverage = parameterApertureCoverage(mClass);
 
-    return result;
+    var apertureCoverage =
+        ApertureCoverageUtil.combine(List.of(fieldApertureCoverage, parameterApertureCoverage));
+    stopWatch.stop();
+
+    var log = String.format("(\u001B[1mAC: %.5f\u001B[22m, F: %.5f, P: %.5f): %s in %d ms",
+        apertureCoverage,
+        fieldApertureCoverage,
+        parameterApertureCoverage,
+        mClass.toString(),
+        stopWatch.getDuration().toMillis());
+    logger.info(log);
+
+    return apertureCoverage;
   }
 
   private Double fieldApertureCoverage(MClass mClass) {

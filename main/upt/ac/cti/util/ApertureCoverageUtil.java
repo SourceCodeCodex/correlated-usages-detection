@@ -17,7 +17,7 @@ public class ApertureCoverageUtil {
     return apertureCoverages.stream()
         .filter(d -> d > 0)
         .min(Comparator.naturalOrder())
-        .orElse(-1.);
+        .orElse(0.0);
   }
 
 }

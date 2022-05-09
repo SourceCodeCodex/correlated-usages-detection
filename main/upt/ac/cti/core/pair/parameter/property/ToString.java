@@ -15,7 +15,11 @@ public final class ToString implements IPropertyComputer<String, MParameterPair>
     var iPair = (Pair<ILocalVariable, ILocalVariable>) mParameterPair.getUnderlyingObject();
     var _1 = iPair.getValue0();
     var _2 = iPair.getValue1();
-    return String.format("(%s, %s)", _1.getElementName(), _2.getElementName());
+    return String.format("(%s - %s, %s - %a)",
+        _1.getDeclaringMember().getElementName(),
+        _1.getElementName(),
+        _2.getDeclaringMember().getElementName(),
+        _2.getElementName());
   }
 
 }

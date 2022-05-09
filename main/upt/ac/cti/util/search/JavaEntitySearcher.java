@@ -31,7 +31,7 @@ public final class JavaEntitySearcher {
 
   private final SearchEngine searchEngine = new SearchEngine();
 
-  private final Cache<IJavaElement, Set<IJavaElement>> cache = new Cache<>();
+  private final Cache<IJavaElement, Set<IJavaElement>> cache = new Cache<>(512);
 
   public Set<IMethod> searchFieldWritings(IField field) {
     var requestor = new WritingsRequestor();

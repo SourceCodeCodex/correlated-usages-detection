@@ -24,7 +24,7 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
   private final IWritingsCombiner<J> writingsCombiner;
   private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
-  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache = new Cache<>();
+  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache = new Cache<>(256);
 
   public ACoveredTypesResolver(
       IWritingsCombiner<J> writingsCombiner,

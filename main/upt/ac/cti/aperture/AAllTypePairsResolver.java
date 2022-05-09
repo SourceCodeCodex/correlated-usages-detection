@@ -16,7 +16,7 @@ import upt.ac.cti.util.validation.IsTypeBindingCollection;
 public abstract class AAllTypePairsResolver<J extends IJavaElement> {
   private final HierarchyResolver hierarchyResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
-  private final Cache<Pair<J, J>, Set<Pair<IType, IType>>> cache = new Cache<>();
+  private final Cache<Pair<J, J>, Set<Pair<IType, IType>>> cache = new Cache<>(256);
 
   public AAllTypePairsResolver(ABindingResolver<J, ITypeBinding> aBindingResolver,
       HierarchyResolver hierarchyResolver) {

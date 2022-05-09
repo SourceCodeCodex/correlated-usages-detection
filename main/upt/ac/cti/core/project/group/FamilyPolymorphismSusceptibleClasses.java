@@ -76,11 +76,13 @@ public final class FamilyPolymorphismSusceptibleClasses
         .peek(l -> {
           synchronized (processed) {
             logger.info("Searching susceptible classes progress: "
-                + 100 * (processed.incrementAndGet()) / chunks + "%");
+                + 100 * (processed.getAndIncrement()) / chunks + "%");
           }
         })
         .flatMap(l -> l)
         .toList();
+
+    logger.info("Searching susceptible classes progress: 100%");
 
     group.addAll(mClasses);
 
