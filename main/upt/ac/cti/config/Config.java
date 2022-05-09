@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
-  public static final int MAX_DEPTH_THRESHOLD = 5;
+  public static final int MAX_DEPTH_THRESHOLD = 1;
   public static final int MIN_HIERARCHY_SIZE = 1;
 
   public static Map<String, String> asStrings() {

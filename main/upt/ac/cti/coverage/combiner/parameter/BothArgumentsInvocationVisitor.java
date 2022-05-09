@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.eclipse.jdt.core.ILocalVariable;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -76,8 +77,12 @@ public class BothArgumentsInvocationVisitor extends ASTVisitor {
         var arg1 = (Expression) node.arguments().get(index1);
         var arg2 = (Expression) node.arguments().get(index2);
 
-        var derivation1 = new Writing<>(p1, arg1, Either.right(node.getExpression()));
-        var derivation2 = new Writing<>(p2, arg2, Either.right(node.getExpression()));
+        Either<IMember, Expression> accesExpression =
+            node.getExpression() != null ? Either.right(node.getExpression())
+                : Either.left(method.getDeclaringType());
+
+        var derivation1 = new Writing<>(p1, arg1, accesExpression);
+        var derivation2 = new Writing<>(p2, arg2, accesExpression);
 
         newPairings.add(Pair.with(derivation1, derivation2));
 

@@ -14,7 +14,7 @@ import upt.ac.cti.util.logging.RLogger;
 @ActionPerformer
 public class ExportReport implements IActionPerformer<Void, MProject, HListEmpty> {
 
-  private final int CHUNK_SIZE = 16;
+  private final int CHUNK_SIZE = 8;
 
   private final Logger logger = RLogger.get();
 
@@ -40,7 +40,7 @@ public class ExportReport implements IActionPerformer<Void, MProject, HListEmpty
 
     ReportUtil.createReport(mProject.toString(), stream);
     logger.info("Export progress: 100%");
-    logger.info("Report exported succesfully: ");
+    logger.info("Report exported succesfully");
     return null;
   }
 

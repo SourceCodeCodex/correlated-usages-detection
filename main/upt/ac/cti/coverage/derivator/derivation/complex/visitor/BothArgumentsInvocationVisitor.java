@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ILocalVariable;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -83,11 +84,15 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
         var arg1 = (Expression) node.arguments().get(index1);
         var arg2 = (Expression) node.arguments().get(index2);
 
+        Either<IMember, Expression> accesExpression;
+        accesExpression = node.getExpression() != null ? Either.right(node.getExpression())
+            : Either.left(method.getDeclaringType());
+
         var derivation1 =
-            w1.withWritingExpression(arg1).withAccessExpression(Either.right(node.getExpression()))
+            w1.withWritingExpression(arg1).withAccessExpression(accesExpression)
                 .increaseDepth();
         var derivation2 =
-            w2.withWritingExpression(arg2).withAccessExpression(Either.right(node.getExpression()))
+            w2.withWritingExpression(arg2).withAccessExpression(accesExpression)
                 .increaseDepth();
 
         newPairings.add(
