@@ -9,7 +9,9 @@ Bundle-ClassPath: .,
  lib/javatuples-1.2.jar,
  lib/commons-collections4-4.4.jar,
  lib/commons-collections4-4.4-javadoc.jar,
- lib/commons-collections4-4.4-sources.jar
+ lib/commons-collections4-4.4-sources.jar,
+ lib/commons-csv-1.9.0.jar,
+ lib/commons-csv-1.9.0-sources.jar
 Import-Package: ro.lrg.xcore.metametamodel
 Require-Bundle: org.eclipse.jdt.core;bundle-version="3.27.0",
  ro.lrg.insider;bundle-version="2.3.1",

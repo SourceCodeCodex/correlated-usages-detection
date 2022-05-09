@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
 import upt.ac.cti.aperture.AAllTypePairsResolver;
+import upt.ac.cti.config.Config;
 import upt.ac.cti.coverage.derivator.derivation.complex.ComplexWritingsDerivator;
 import upt.ac.cti.coverage.derivator.derivation.simple.SimpleWritingsDerivator;
 import upt.ac.cti.coverage.derivator.util.WritingBindingResolver;
@@ -23,7 +24,7 @@ import upt.ac.cti.util.search.JavaEntitySearcher;
 
 public class DerivationManager<J extends IJavaElement> implements IDerivationManager<J> {
 
-  private static final int DEPTH_THRESHOLD = 1;
+  private static final int DEPTH_THRESHOLD = Config.MAX_DEPTH_THRESHOLD;
 
   private final LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>> writingPairs =
       new LinkedBlockingQueue<>();

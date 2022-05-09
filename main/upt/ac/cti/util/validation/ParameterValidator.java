@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import upt.ac.cti.config.Config;
 import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 
@@ -43,7 +44,7 @@ public final class ParameterValidator implements Predicate<ILocalVariable> {
       return false;
     }
     return hierarchyResolver.resolveConcrete(javaType)
-        .size() >= 1;
+        .size() >= Config.MIN_HIERARCHY_SIZE;
   }
 
   private boolean isNotCollection(ITypeBinding binding) {

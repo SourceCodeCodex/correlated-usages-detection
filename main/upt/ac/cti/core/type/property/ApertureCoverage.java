@@ -57,7 +57,7 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
         ApertureCoverageUtil.combine(List.of(fieldApertureCoverage, parameterApertureCoverage));
     stopWatch.stop();
 
-    var log = String.format("(\u001B[1mAC: %.5f\u001B[22m, F: %.5f, P: %.5f): %s in %d ms",
+    var log = String.format("(\u001B[1mAC: %.10f\u001B[22m, F: %.7f, P: %.7f): %s in %d ms",
         apertureCoverage,
         fieldApertureCoverage,
         parameterApertureCoverage,
