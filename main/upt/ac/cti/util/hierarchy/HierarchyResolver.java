@@ -11,7 +11,7 @@ import upt.ac.cti.util.cache.Cache;
 
 public final class HierarchyResolver {
 
-  private final Cache<IType, ITypeHierarchy> cache = new Cache<>(2048);
+  private final Cache<IType, ITypeHierarchy> cache = new Cache<>();
 
   public List<IType> resolveConcrete(IType type) {
     var concrete = resolve(type).parallelStream().filter(it -> {

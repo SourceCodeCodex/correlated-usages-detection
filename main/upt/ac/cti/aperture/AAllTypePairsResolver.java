@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
 import upt.ac.cti.util.CartesianProduct;
@@ -16,7 +17,7 @@ import upt.ac.cti.util.validation.IsTypeBindingCollection;
 public abstract class AAllTypePairsResolver<J extends IJavaElement> {
   private final HierarchyResolver hierarchyResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
-  private final Cache<Pair<J, J>, Set<Pair<IType, IType>>> cache = new Cache<>(256);
+  private final Cache<Pair<J, J>, Set<Pair<IType, IType>>> cache = new Cache<>();
 
   public AAllTypePairsResolver(ABindingResolver<J, ITypeBinding> aBindingResolver,
       HierarchyResolver hierarchyResolver) {
@@ -30,10 +31,27 @@ public abstract class AAllTypePairsResolver<J extends IJavaElement> {
       return cached.get();
     }
 
-    var types1 = resolve(javaElement1);
-    var types2 = resolve(javaElement2);
+    var types1 = resolve(javaElement1).stream().filter(t -> {
+      try {
+        return !t.isAnonymous();
+      } catch (JavaModelException e) {
+        e.printStackTrace();
+        return false;
+      }
+    }).toList();
+
+    var types2 = resolve(javaElement2).stream().filter(t -> {
+      try {
+        return !t.isAnonymous();
+      } catch (JavaModelException e) {
+        e.printStackTrace();
+        return false;
+      }
+    }).toList();;
 
     var result = new HashSet<>(CartesianProduct.product(types1, types2));
+
+
     cache.put(Pair.with(javaElement1, javaElement2), result);
     return result;
   }
@@ -48,18 +66,18 @@ public abstract class AAllTypePairsResolver<J extends IJavaElement> {
 
     var isCollection = new IsTypeBindingCollection();
 
-    IType type;
+    IJavaElement type;
     if (isCollection.test(typeBinding)) {
-      type = (IType) typeBinding.getTypeArguments()[0].getJavaElement();
+      type = typeBinding.getTypeArguments()[0].getJavaElement();
     } else {
-      type = (IType) typeBinding.getJavaElement();
+      type = typeBinding.getJavaElement();
     }
 
-    if (type == null) {
+    if (type == null || !(type instanceof IType)) {
       return List.of();
     }
 
 
-    return hierarchyResolver.resolveConcrete(type);
+    return hierarchyResolver.resolveConcrete((IType) type);
   }
 }

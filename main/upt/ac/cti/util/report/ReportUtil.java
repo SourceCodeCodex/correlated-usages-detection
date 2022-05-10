@@ -1,4 +1,4 @@
-package upt.ac.cti.core.project.action;
+package upt.ac.cti.util.report;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +19,7 @@ import org.javatuples.Pair;
 import upt.ac.cti.config.Config;
 import upt.ac.cti.util.time.StopWatch;
 
-class ReportUtil {
+public class ReportUtil {
 
   public static void createReport(String projectName, Stream<Pair<String, Double>> results) {
     var formatter = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");

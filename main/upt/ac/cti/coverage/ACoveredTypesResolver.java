@@ -2,8 +2,10 @@ package upt.ac.cti.coverage;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
 import upt.ac.cti.aperture.AAllTypePairsResolver;
@@ -24,7 +26,7 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
   private final IWritingsCombiner<J> writingsCombiner;
   private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
-  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache = new Cache<>(256);
+  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache = new Cache<>();
 
   public ACoveredTypesResolver(
       IWritingsCombiner<J> writingsCombiner,
@@ -58,10 +60,18 @@ abstract class ACoveredTypesResolver<J extends IJavaElement> {
             codeParser,
             aAllTypePairsResolver);
 
-    var result = deriver.derive(writingPairs);
+    var result = deriver.derive(writingPairs).map(s -> s.stream()
+        .filter(p -> {
+          try {
+            return !(p.getValue0().isAnonymous() || p.getValue1().isAnonymous());
+          } catch (JavaModelException e) {
+            e.printStackTrace();
+            return false;
+          }
+        }).collect(Collectors.toSet()));
     cache.put(Pair.with(javaElement1, javaElement2), result);
 
-    return deriver.derive(writingPairs);
+    return result;
   }
 
 }

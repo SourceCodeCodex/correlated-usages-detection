@@ -7,7 +7,7 @@ import ro.lrg.xcore.metametamodel.IActionPerformer;
 import upt.ac.cti.dependency.Dependencies;
 
 @ActionPerformer
-public final class ResetCache implements IActionPerformer<Void, MProject, HListEmpty> {
+public final class ClearCache implements IActionPerformer<Void, MProject, HListEmpty> {
 
   @Override
   public Void performAction(MProject mProject, HListEmpty hList) {

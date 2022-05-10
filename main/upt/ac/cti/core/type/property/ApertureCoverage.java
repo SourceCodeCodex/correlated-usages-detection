@@ -21,34 +21,6 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
     var stopWatch = new StopWatch();
 
     stopWatch.start();
-    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
-    // accessExpression=Left(DimensionLookup), depth=0]
-
-    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
-    // accessExpression=Left(MergeJoin), depth=0]
-
-    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
-    // accessExpression=Left(MonetDBBulkLoader), depth=0]
-
-    // No derivation is possible for Writing [element=currentRowSet,
-    // writingExpression=data.rowSets[0], accessExpression=Right(data), depth=0]. Writing expression
-    // type is 2
-
-    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
-    // accessExpression=Left(TableInput), depth=0]
-
-    // Writing's binding is inconclusive: Writing [element=meta, writingExpression=smi,
-    // accessExpression=Left(TableOutput), depth=0]
-
-    // Writing's binding is inconclusive: Writing [element=data, writingExpression=sdi,
-    // accessExpression=Left(TextFileOutput), depth=0]
-
-    // Writing's binding is inconclusive: Writing [element=variablizedStepMeta,
-    // writingExpression=stepMetaInterface, accessExpression=Left(BaseStreamStep), depth=0]
-
-    // Writing's binding is inconclusive: Writing [element=variablizedStepMeta,
-    // writingExpression=variablizedStepMeta.withVariables(this),
-    // accessExpression=Left(BaseStreamStep), depth=0]
 
     var fieldApertureCoverage = fieldApertureCoverage(mClass);
     var parameterApertureCoverage = parameterApertureCoverage(mClass);

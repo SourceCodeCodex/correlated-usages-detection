@@ -2,20 +2,15 @@ package upt.ac.cti.util.cache;
 
 import java.util.Optional;
 import org.apache.commons.collections4.map.LRUMap;
+import upt.ac.cti.config.Config;
 
 public final class Cache<K, T> implements ICache<K, T> {
-
-  private static final int DEFAULT_CACHE_SIZE = 1024;
 
   private final LRUMap<K, T> map;
 
 
   public Cache() {
-    map = new LRUMap<>(DEFAULT_CACHE_SIZE);
-  }
-
-  public Cache(int size) {
-    map = new LRUMap<>(size);
+    map = new LRUMap<>(Config.MAX_CACHE_SIZE);
   }
 
   @Override

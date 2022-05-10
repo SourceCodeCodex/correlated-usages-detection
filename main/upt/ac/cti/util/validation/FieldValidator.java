@@ -50,11 +50,11 @@ public final class FieldValidator implements Predicate<IField> {
   }
 
   private boolean hasTypeDescendants(ITypeBinding binding) {
-    var javaType = (IType) binding.getJavaElement();
-    if (javaType == null) {
+    var javaType = binding.getJavaElement();
+    if (javaType == null || !(javaType instanceof IType)) {
       return false;
     }
-    return hierarchyResolver.resolveConcrete(javaType)
+    return hierarchyResolver.resolveConcrete((IType) javaType)
         .size() >= Config.MIN_HIERARCHY_SIZE;
   }
 

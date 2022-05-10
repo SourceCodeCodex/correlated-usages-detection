@@ -48,6 +48,7 @@ class DerivationJob<J extends IJavaElement> {
     var w2 = writingPair.getValue1();
 
     var w1Binding =
+
         assignmentBindingResolver.resolveBinding(w1);
 
     var w2Binding =
@@ -55,9 +56,11 @@ class DerivationJob<J extends IJavaElement> {
 
     if (w1Binding instanceof ResolvedBinding r1 && w2Binding instanceof ResolvedBinding r2) {
       if (sameAccessExpressionValidator.test(writingPair)) {
-        var t1 = (IType) r1.typeBinding().getJavaElement();
-        var t2 = (IType) r2.typeBinding().getJavaElement();
-        return ResolvedTypePairs.of(Pair.with(t1, t2));
+        var t1 = r1.typeBinding().getJavaElement();
+        var t2 = r2.typeBinding().getJavaElement();
+        if (t1 instanceof IType it1 && t2 instanceof IType it2) {
+          return ResolvedTypePairs.of(Pair.with(it1, it2));
+        }
       }
       return NewWritingPairs.NULL();
     }
@@ -67,17 +70,21 @@ class DerivationJob<J extends IJavaElement> {
     }
 
     if (w1Binding instanceof ResolvedBinding r && w2Binding instanceof Inconclusive) {
-      var t = (IType) r.typeBinding().getJavaElement();
-      var possibleTypes = aAllTypePairsResolver.resolve(w2.element());
-      var pairs = possibleTypes.stream().map(pt -> Pair.with(t, pt)).toList();
-      return new ResolvedTypePairs<>(pairs);
+      if (r.typeBinding().getJavaElement() instanceof IType t) {
+        var possibleTypes = aAllTypePairsResolver.resolve(w2.element());
+        var pairs = possibleTypes.stream().map(pt -> Pair.with(t, pt)).toList();
+        return new ResolvedTypePairs<>(pairs);
+      }
+      return NewWritingPairs.NULL();
     }
 
     if (w1Binding instanceof Inconclusive && w2Binding instanceof ResolvedBinding r) {
-      var t = (IType) r.typeBinding().getJavaElement();
-      var possibleTypes = aAllTypePairsResolver.resolve(w1.element());
-      var pairs = possibleTypes.stream().map(pt -> Pair.with(pt, t)).toList();
-      return new ResolvedTypePairs<>(pairs);
+      if (r.typeBinding().getJavaElement() instanceof IType t) {
+        var possibleTypes = aAllTypePairsResolver.resolve(w1.element());
+        var pairs = possibleTypes.stream().map(pt -> Pair.with(pt, t)).toList();
+        return new ResolvedTypePairs<>(pairs);
+      }
+      return NewWritingPairs.NULL();
     }
 
     if (w1Binding instanceof NotLeafBinding && !(w2Binding instanceof NotLeafBinding)) {

@@ -36,7 +36,9 @@ public final record Writing<T extends IJavaElement> (
     return "Writing [element=" + element.getElementName() + ", writingExpression="
         + writingExpression
         + ", accessExpression=" + accessExpression.mapLeft(IMember::getElementName).mapRight(e -> e)
-        + ", depth=" + depth + "]";
+        + ", depth=" + depth
+        + ", binding=" + writingExpression.resolveTypeBinding().getQualifiedName() +
+        "]";
   }
 
 

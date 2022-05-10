@@ -21,7 +21,7 @@ import upt.ac.cti.util.parsing.visitor.VariableDeclarationFragmentResolverVisito
 
 public final class CodeParser {
 
-  private final Cache<IJavaElement, ASTNode> cache = new Cache<>(512);
+  private final Cache<IJavaElement, ASTNode> cache = new Cache<>();
 
   public Optional<CompilationUnit> parse(ICompilationUnit compilationUnit) {
     var cachedCU = cache.get(compilationUnit);

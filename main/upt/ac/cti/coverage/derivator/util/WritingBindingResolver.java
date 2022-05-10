@@ -1,6 +1,5 @@
 package upt.ac.cti.coverage.derivator.util;
 
-import java.util.logging.Logger;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -14,14 +13,11 @@ import upt.ac.cti.coverage.model.binding.WritingBinding;
 import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.cache.Cache;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
-import upt.ac.cti.util.logging.RLogger;
 
 public final class WritingBindingResolver<J extends IJavaElement> {
 
   private final Cache<Writing<J>, WritingBinding> cache =
-      new Cache<>(1024);
-
-  private static final Logger logger = RLogger.get();
+      new Cache<>();
 
   private final HierarchyResolver hierarchyResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
@@ -43,6 +39,11 @@ public final class WritingBindingResolver<J extends IJavaElement> {
       return WritingBinding.INCONCLUSIVE;
     }
 
+    if (writing.writingExpression().getNodeType() == ASTNode.ARRAY_ACCESS) {
+      cache.put(writing, WritingBinding.INCONCLUSIVE);
+      return WritingBinding.INCONCLUSIVE;
+    }
+
     var writingExpressionBinding = writing.writingExpression().resolveTypeBinding();
     if (writingExpressionBinding == null) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
@@ -54,11 +55,13 @@ public final class WritingBindingResolver<J extends IJavaElement> {
       return WritingBinding.INCONCLUSIVE;
     }
 
-    var type = (IType) writingExpressionBinding.getJavaElement();
-    if (type == null) {
+    var javaEl = writingExpressionBinding.getJavaElement();
+    if (javaEl == null || !(javaEl instanceof IType)) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
       return WritingBinding.INCONCLUSIVE;
     }
+
+    var type = (IType) writingExpressionBinding.getJavaElement();
 
     if (writing.writingExpression().getNodeType() == ASTNode.CLASS_INSTANCE_CREATION) {
       var resolved = new ResolvedBinding(writingExpressionBinding);
@@ -101,7 +104,6 @@ public final class WritingBindingResolver<J extends IJavaElement> {
       }
     }
 
-    logger.warning("Writing's binding is inconclusive: " + writing);
     cache.put(writing, WritingBinding.INCONCLUSIVE);
     return WritingBinding.INCONCLUSIVE;
   }
