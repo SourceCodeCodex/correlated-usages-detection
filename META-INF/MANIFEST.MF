@@ -11,7 +11,9 @@ Bundle-ClassPath: .,
  lib/commons-collections4-4.4-javadoc.jar,
  lib/commons-collections4-4.4-sources.jar,
  lib/commons-csv-1.9.0.jar,
- lib/commons-csv-1.9.0-sources.jar
+ lib/commons-csv-1.9.0-sources.jar,
+ lib/commons-jcs3-core-3.1.jar,
+ lib/commons-jcs3-core-3.1-sources.jar
 Import-Package: ro.lrg.xcore.metametamodel
 Require-Bundle: org.eclipse.jdt.core,
  org.eclipse.core.resources,
