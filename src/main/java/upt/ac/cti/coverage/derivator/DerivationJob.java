@@ -7,7 +7,7 @@ import upt.ac.cti.aperture.AAllTypePairsResolver;
 import upt.ac.cti.coverage.derivator.derivation.complex.ComplexWritingsDerivator;
 import upt.ac.cti.coverage.derivator.derivation.simple.SimpleWritingsDerivator;
 import upt.ac.cti.coverage.derivator.util.DerivationPrioritizer;
-import upt.ac.cti.coverage.derivator.util.WritingBindingResolver;
+import upt.ac.cti.coverage.derivator.util.AWritingBindingResolver;
 import upt.ac.cti.coverage.derivator.util.access.SameAccessExpressionValidator;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.binding.Inconclusive;
@@ -24,13 +24,13 @@ class DerivationJob<J extends IJavaElement> {
   private final DerivationPrioritizer<J> derivationPrioritizer = new DerivationPrioritizer<>();
   private final SameAccessExpressionValidator<J> sameAccessExpressionValidator =
       new SameAccessExpressionValidator<>();
-  private final WritingBindingResolver<J> assignmentBindingResolver;
+  private final AWritingBindingResolver<J> assignmentBindingResolver;
   private final SimpleWritingsDerivator<J> simpleDerivator;
   private final ComplexWritingsDerivator<J> complexDerivator;
   private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
   public DerivationJob(
-      WritingBindingResolver<J> assignmentBindingResolver,
+      AWritingBindingResolver<J> assignmentBindingResolver,
       SimpleWritingsDerivator<J> simpleDerivator,
       ComplexWritingsDerivator<J> complexDerivator,
       AAllTypePairsResolver<J> aAllTypePairsResolver,

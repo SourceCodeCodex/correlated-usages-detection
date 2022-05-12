@@ -12,7 +12,7 @@ import org.javatuples.Pair;
 import upt.ac.cti.aperture.AAllTypePairsResolver;
 import upt.ac.cti.coverage.derivator.derivation.complex.ComplexWritingsDerivator;
 import upt.ac.cti.coverage.derivator.derivation.simple.SimpleWritingsDerivator;
-import upt.ac.cti.coverage.derivator.util.WritingBindingResolver;
+import upt.ac.cti.coverage.derivator.util.AWritingBindingResolver;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.DerivationResult;
 import upt.ac.cti.coverage.model.derivation.Inconclusive;
@@ -25,6 +25,7 @@ import upt.ac.cti.util.search.JavaEntitySearcher;
 public class DerivationManager<J extends IJavaElement> implements IDerivationManager<J> {
 
   private static final int DEPTH_THRESHOLD = Dependencies.getConfig().MAX_DEPTH_THRESHOLD;
+  private static final int DEPTH_DIFF = Dependencies.getConfig().MAX_DEPTH_DIFF;
 
   private final LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>> writingPairs =
       new LinkedBlockingQueue<>();
@@ -33,13 +34,13 @@ public class DerivationManager<J extends IJavaElement> implements IDerivationMan
   private final Set<Pair<IType, IType>> typePairs =
       Collections.synchronizedSet(new HashSet<>());;
 
-  private final WritingBindingResolver<J> writingBindingResolver;
+  private final AWritingBindingResolver<J> writingBindingResolver;
   private final SimpleWritingsDerivator<J> simpleDerivator;
   private final ComplexWritingsDerivator<J> complexDerivator;
   private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
   public DerivationManager(
-      WritingBindingResolver<J> writingBindingResolver,
+      AWritingBindingResolver<J> writingBindingResolver,
       JavaEntitySearcher javaEntitySearcher,
       CodeParser codeParser,
       AAllTypePairsResolver<J> aAllTypePairsResolver) {
@@ -101,7 +102,8 @@ public class DerivationManager<J extends IJavaElement> implements IDerivationMan
 
   private boolean isBelowThreshold(Pair<Writing<J>, Writing<J>> p) {
     return p.getValue0().depth() <= DEPTH_THRESHOLD &&
-        p.getValue1().depth() <= DEPTH_THRESHOLD;
+        p.getValue1().depth() <= DEPTH_THRESHOLD &&
+        Math.abs(p.getValue0().depth() - p.getValue1().depth()) <= DEPTH_DIFF;
   }
 
 }

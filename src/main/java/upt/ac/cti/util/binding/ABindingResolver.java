@@ -18,10 +18,8 @@ import upt.ac.cti.util.logging.RLogger;
 public abstract class ABindingResolver<J extends IJavaElement, B extends IBinding> {
 
   private static final Logger logger = RLogger.get();
-  private static final ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
 
-  private final Cache<J, B> bindingCache = new Cache<>(CacheRegions.BINDING);
-  private final Cache<ICompilationUnit, ASTNode> astCache = new Cache<>(CacheRegions.B_AST);
+  private final Cache<ICompilationUnit, ASTNode> astCache = new Cache<>(CacheRegions.BINDING);
 
   public abstract Optional<B> resolve(J member);
 
@@ -29,11 +27,6 @@ public abstract class ABindingResolver<J extends IJavaElement, B extends IBindin
       IJavaProject project,
       ICompilationUnit compilationUnit,
       ABindingResolverVisitor<J, B> visitor) {
-    var cachedBinding = bindingCache.get(member);
-    if (cachedBinding.isPresent()) {
-      return cachedBinding;
-    }
-
 
     if (project == null || compilationUnit == null) {
       var log = String.format(
@@ -51,22 +44,19 @@ public abstract class ABindingResolver<J extends IJavaElement, B extends IBindin
     if (cachedCuAST.isPresent()) {
       cuAST = cachedCuAST.get();
     } else {
-      synchronized (parser) {
+      var parser = ASTParser.newParser(AST.getJLSLatest());
 
-        parser.setSource(compilationUnit);
-        parser.setProject(project);
-        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-        parser.setResolveBindings(true);
-        parser.setIgnoreMethodBodies(true);
+      parser.setSource(compilationUnit);
+      parser.setProject(project);
+      parser.setKind(ASTParser.K_COMPILATION_UNIT);
+      parser.setResolveBindings(true);
+      parser.setIgnoreMethodBodies(true);
 
-        cuAST = parser.createAST(new NullProgressMonitor());
-      }
-
+      cuAST = parser.createAST(new NullProgressMonitor());
       astCache.put(compilationUnit, cuAST);
     }
 
     cuAST.accept(visitor);
-
     return visitor.binding();
   }
 }

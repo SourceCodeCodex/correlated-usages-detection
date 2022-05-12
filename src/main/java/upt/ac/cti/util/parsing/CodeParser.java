@@ -22,12 +22,12 @@ import upt.ac.cti.util.parsing.visitor.VariableDeclarationFragmentResolverVisito
 
 public final class CodeParser {
 
-  private final Cache<IJavaElement, ASTNode> cache = new Cache<>(CacheRegions.PARSER);
+  private final Cache<IJavaElement, Optional<ASTNode>> cache = new Cache<>(CacheRegions.PARSER);
 
   public Optional<CompilationUnit> parse(ICompilationUnit compilationUnit) {
     var cachedCU = cache.get(compilationUnit);
     if (cachedCU.isPresent()) {
-      return cachedCU.map(cu -> (CompilationUnit) cu);
+      return cachedCU.get().map(cu -> (CompilationUnit) cu);
     }
 
     if (compilationUnit.getJavaProject() == null) {
@@ -42,7 +42,7 @@ public final class CodeParser {
 
     var cu = (CompilationUnit) parser.createAST(new NullProgressMonitor());
 
-    cache.put(compilationUnit, cu);
+    cache.put(compilationUnit, Optional.ofNullable(cu));
     return Optional.of(cu);
   }
 
@@ -62,7 +62,7 @@ public final class CodeParser {
       AASTNodeResolverVisitor<? extends IMember, T> visitor) {
     var cached = cache.get(member);
     if (cached.isPresent()) {
-      return cached.map(node -> (T) node);
+      return cached.get().map(node -> (T) node);
     }
 
     var compilationUnit = member.getCompilationUnit();
@@ -79,7 +79,7 @@ public final class CodeParser {
     });
 
     if (nodeOpt.isPresent()) {
-      cache.put(member, nodeOpt.get());
+      cache.put(member, Optional.ofNullable(nodeOpt.get()));
     }
 
     return nodeOpt;

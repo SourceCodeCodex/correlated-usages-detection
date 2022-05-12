@@ -7,23 +7,22 @@ import org.eclipse.jdt.core.IType;
 import org.javatuples.Pair;
 import upt.ac.cti.aperture.ParameterAllTypePairsResolver;
 import upt.ac.cti.coverage.combiner.parameter.ParameterWritingsCombiner;
-import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
-import upt.ac.cti.util.hierarchy.HierarchyResolver;
+import upt.ac.cti.coverage.derivator.util.ParameterWritingBindingResolver;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
 public final class ParameterCoveredTypesResolver extends ACoveredTypesResolver<ILocalVariable> {
 
-  public ParameterCoveredTypesResolver(CodeParser codeParser,
+  public ParameterCoveredTypesResolver(
+      CodeParser codeParser,
       JavaEntitySearcher javaEntitySearcher,
-      ParameterTypeBindingResolver parameterTypeBindingResolver,
-      HierarchyResolver hierarchyResolver,
+      ParameterWritingBindingResolver parameterWritingBindingResolver,
       ParameterAllTypePairsResolver parameterAllTypePairsResolver) {
     super(new ParameterWritingsCombiner(codeParser, javaEntitySearcher),
         codeParser,
         javaEntitySearcher,
-        parameterTypeBindingResolver,
-        parameterAllTypePairsResolver);
+        parameterAllTypePairsResolver,
+        parameterWritingBindingResolver);
   }
 
   @Override

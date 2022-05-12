@@ -33,7 +33,7 @@ public final class SusceptibleFieldPairs implements IRelationBuilder<MFieldPair,
     var fieldTypeBindingResolver = Dependencies.getFieldTypeBindingResolver();
     var fieldValidator = Dependencies.getFieldValidator();
 
-    var validFields = fields.parallelStream()
+    var validFields = fields.stream()
         .filter(fieldValidator)
         .toList();
 

@@ -33,7 +33,7 @@ public class ReportUtil {
       var url = Platform.getBundle("FamilyPolymorphismDetection").getEntry("/");
       url = FileLocator.resolve(url);
 
-      var reportsPathFragment = url.getPath() + "reports/" + projectName + "-" + timestamp;
+      var reportsPathFragment = url.getPath() + "target/" + projectName + "-" + timestamp;
       var resultsPath = reportsPathFragment + "-results.csv";
       var configPath = reportsPathFragment + "-config.csv";
       var zipPath = reportsPathFragment + ".zip";

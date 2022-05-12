@@ -24,7 +24,7 @@ public class TestUtil {
     try {
       var url = Platform.getBundle("FamilyPolymorphismDetection").getEntry("/");
       url = FileLocator.resolve(url);
-      var path = url.getPath() + "res/testdata/";
+      var path = url.getPath() + "target/test/resources/";
       var theFile = new ZipFile(new File(path + fileName));
       var zp = new ZipFileStructureProvider(theFile);
 

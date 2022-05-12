@@ -6,6 +6,7 @@
 
 .metadata
 bin/
+target/
 xmetamodel/
 tmp/
 *.tmp
@@ -120,6 +121,6 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/java,macos,eclipse
-/metamodel/
+*/metamodel/*
 /reports/
-/metamodel_tests/
+/src/

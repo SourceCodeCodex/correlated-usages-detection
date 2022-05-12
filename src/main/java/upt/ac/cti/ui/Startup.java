@@ -1,5 +1,7 @@
 package upt.ac.cti.ui;
 
+import org.apache.commons.jcs3.JCS;
+import org.apache.commons.jcs3.log.LogManager;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
@@ -8,6 +10,7 @@ import org.eclipse.ui.IStartup;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.insider.view.ToolRegistration;
+import upt.ac.cti.config.CacheConfig;
 import upt.ac.cti.config.Config;
 import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.logging.RLogger;
@@ -16,11 +19,8 @@ public final class Startup implements IStartup {
 
   @Override
   public void earlyStartup() {
-    Dependencies.init(new Config());
-
     System.setProperty("java.util.logging.SimpleFormatter.format",
         RLogger.format());
-
     ToolRegistration.getInstance().registerXEntityConverter(element -> {
       if (element instanceof IJavaProject) {
         return Factory.getInstance().createMProject(element);
@@ -52,6 +52,11 @@ public final class Startup implements IStartup {
       }
       return null;
     });
+    JCS.setConfigProperties(new CacheConfig().getProperties());
+    JCS.setLogSystem(LogManager.LOGSYSTEM_JAVA_UTIL_LOGGING);
+
+    Dependencies.init(new Config());
+
   }
 
 }

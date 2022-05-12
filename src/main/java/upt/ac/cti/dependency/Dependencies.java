@@ -5,8 +5,11 @@ import upt.ac.cti.aperture.ParameterAllTypePairsResolver;
 import upt.ac.cti.config.Config;
 import upt.ac.cti.coverage.FieldCoveredTypesResolver;
 import upt.ac.cti.coverage.ParameterCoveredTypesResolver;
+import upt.ac.cti.coverage.derivator.util.FieldWritingBindingResolver;
+import upt.ac.cti.coverage.derivator.util.ParameterWritingBindingResolver;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
 import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
+import upt.ac.cti.util.cache.Cache;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
@@ -35,7 +38,11 @@ public class Dependencies {
   private static ParameterValidator parameterValidator;
   private static SusceptibleTypeValidator susceptibleTypeValidator;
 
+  private static FieldWritingBindingResolver fieldWritingBindingResolver;
+  private static ParameterWritingBindingResolver parameterWritingBindingResolver;
+
   public static void init(Config config) {
+    Cache.clearAllCache();
     Dependencies.config = config;
     hierarchyResolver = new HierarchyResolver();
     codeParser = new CodeParser();
@@ -50,10 +57,16 @@ public class Dependencies {
     parameterAllTypePairsResolver =
         new ParameterAllTypePairsResolver(parameterTypeBindingResolver,
             hierarchyResolver);
+    fieldWritingBindingResolver =
+        new FieldWritingBindingResolver(hierarchyResolver, fieldTypeBindingResolver);
+    parameterWritingBindingResolver =
+        new ParameterWritingBindingResolver(hierarchyResolver, parameterTypeBindingResolver);
+
     fieldCoveredTypesResolver = new FieldCoveredTypesResolver(codeParser, javaEntitySearcher,
-        fieldTypeBindingResolver, hierarchyResolver, fieldAllTypePairsResolver);
+        fieldWritingBindingResolver, fieldAllTypePairsResolver);
+
     parameterCoveredTypesResolver = new ParameterCoveredTypesResolver(codeParser,
-        javaEntitySearcher, parameterTypeBindingResolver, hierarchyResolver,
+        javaEntitySearcher, parameterWritingBindingResolver,
         parameterAllTypePairsResolver);
   }
 

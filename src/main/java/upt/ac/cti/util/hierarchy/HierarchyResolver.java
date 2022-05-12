@@ -15,7 +15,7 @@ public final class HierarchyResolver {
   private final Cache<IType, ITypeHierarchy> cache = new Cache<>(CacheRegions.HIERARCHY);
 
   public List<IType> resolveConcrete(IType type) {
-    var concrete = resolve(type).parallelStream().filter(it -> {
+    var concrete = resolve(type).stream().filter(it -> {
       try {
         var flags = it.getFlags();
         return !(Flags.isAbstract(flags) || Flags.isInterface(flags));

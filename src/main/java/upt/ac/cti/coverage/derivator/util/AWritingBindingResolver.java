@@ -16,15 +16,15 @@ import upt.ac.cti.util.cache.CacheRegions;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.logging.RLogger;
 
-public final class WritingBindingResolver<J extends IJavaElement> {
+public abstract class AWritingBindingResolver<J extends IJavaElement> {
 
-  private final Cache<Writing<J>, WritingBinding> cache =
+  private final Cache<Writing<? extends IJavaElement>, WritingBinding> cache =
       new Cache<>(CacheRegions.W_BINDING);
 
   private final HierarchyResolver hierarchyResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
 
-  public WritingBindingResolver(HierarchyResolver hierarchyResolver,
+  public AWritingBindingResolver(HierarchyResolver hierarchyResolver,
       ABindingResolver<J, ITypeBinding> aBindingResolver) {
     this.hierarchyResolver = hierarchyResolver;
     this.aBindingResolver = aBindingResolver;

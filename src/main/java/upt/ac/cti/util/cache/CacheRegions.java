@@ -2,7 +2,7 @@ package upt.ac.cti.util.cache;
 
 public enum CacheRegions {
   HIERARCHY("hierarchy"), BINDING("binding"), PARSER("parsing"), SEARCH("search"), ALL_TYPES(
-      "alltypes"), COVERED_TYPES("coveredtypes"), W_BINDING("writingbinding"), B_AST("bindingast");
+      "alltypes"), COVERED_TYPES("coveredtypes"), W_BINDING("writingbinding");
 
 
 

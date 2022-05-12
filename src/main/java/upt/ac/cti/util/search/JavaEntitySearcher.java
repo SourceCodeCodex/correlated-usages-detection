@@ -30,7 +30,8 @@ public final class JavaEntitySearcher {
 
   private static final Logger logger = RLogger.get();
 
-  private final Cache<IJavaElement, Set<IJavaElement>> cache = new Cache<>(CacheRegions.SEARCH);
+  private final Cache<IJavaElement, Set<IJavaElement>> cache =
+      new Cache<>(CacheRegions.SEARCH);
 
   public Set<IMethod> searchFieldWritings(IField field) {
     var requestor = new WritingsRequestor();

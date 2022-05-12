@@ -1,31 +1,45 @@
 package upt.ac.cti.config;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
+
+// Writing binding inconclusive for unknown reason: Writing [element=variables,
+// writingExpression=parentObject, accessExpression=Left(Database), depth=1,
+// binding=org.pentaho.di.core.logging.LoggingObjectInterface]
+// Writing binding inconclusive for unknown reason: Writing [element=variables,
+// writingExpression=parentObject, accessExpression=Left(Database), depth=1,
+// binding=org.pentaho.di.core.logging.LoggingObjectInterface]
+// Writing binding inconclusive for unknown reason: Writing [element=variableSpace,
+// writingExpression=meta, accessExpression=Right(delegates.partitions), depth=3,
+// binding=org.pentaho.di.core.EngineMetaInterface]
+// Writing binding inconclusive for unknown reason: Writing [element=variables,
+// writingExpression=parentObject, accessExpression=Right(databaseMeta), depth=2,
+// binding=org.pentaho.di.core.logging.LoggingObjectInterface]
+// Writing binding inconclusive for unknown reason: Writing [element=baseStepMeta,
+// writingExpression=baseStepMeta, accessExpression=Left(BaseStepDialog), depth=0,
+// binding=org.pentaho.di.trans.step.BaseStepMeta]
+
+/*
+ * No derivation is possible for Writing [element=varDisabledListener, writingExpression=rowNr -> {
+ * paramRowNum=rowNr; paramColNum=PARAM_COL_1; return false; } ,
+ * accessExpression=Left(ParameterTableHelper), depth=0,
+ * binding=org.pentaho.di.ui.core.widget.FieldDisabledListener]. Writing expression type is 86
+ */
 
 public class Config {
   public final int MAX_DEPTH_THRESHOLD;
   public final int MIN_HIERARCHY_SIZE;
-  public final int MAX_CACHE_SIZE;
-
+  public final int MAX_DEPTH_DIFF;
 
   public Config() {
 
     var config = new Properties();
 
     try {
-      var url = Platform.getBundle("FamilyPolymorphismDetection").getEntry("/");
-      url = FileLocator.resolve(url);
-
-      var configFile = url.getPath() + "res/config.properties";
-
-      var fis = new FileInputStream(configFile);
+      var fis = getClass().getClassLoader().getResourceAsStream("../resources/config.properties");
 
       config.load(fis);
 
@@ -38,8 +52,8 @@ public class Config {
         .parseInt(Optional.ofNullable(config.getProperty("MAX_DEPTH_THRESHOLD")).orElse("1"));
     MIN_HIERARCHY_SIZE = Integer
         .parseInt(Optional.ofNullable(config.getProperty("MIN_HIERARCHY_SIZE")).orElse("1"));
-    MAX_CACHE_SIZE =
-        Integer.parseInt(Optional.ofNullable(config.getProperty("MAX_CACHE_SIZE")).orElse("256"));
+    MAX_DEPTH_DIFF = Integer
+        .parseInt(Optional.ofNullable(config.getProperty("MAX_DEPTH_DIFF")).orElse("2"));
 
   }
 
@@ -48,7 +62,7 @@ public class Config {
 
     map.put("MAX_DEPTH_THRESHOLD", "" + MAX_DEPTH_THRESHOLD);
     map.put("MIN_HIERARCHY_SIZE", "" + MIN_HIERARCHY_SIZE);
-    map.put("MAX_CACHE_SIZE", "" + MAX_CACHE_SIZE);
+    map.put("MAX_DEPTH_DIFF", "" + MAX_DEPTH_DIFF);
 
     return map;
   }
