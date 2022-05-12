@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" output="target/main/classes" path="src/main/java"/>
 	<classpathentry kind="src" output="target/main/resources" path="src/main/resources"/>
-		<classpathentry kind="src" output="target/main/metamodel" path="src/main/metamodel">
+	<classpathentry kind="src" output="target/main/metamodel" path="src/main/metamodel">
 		<attributes>
 			<attribute name="optional" value="true"/>
 		</attributes>
@@ -32,9 +32,6 @@
 	<classpathentry kind="lib" path="lib/commons-jcs3-core-3.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-csv-1.9.0.jar" sourcepath="lib/commons-csv-1.9.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-csv-1.9.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections4-4.4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections4-4.4-javadoc.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections4-4.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/javatuples-1.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="target"/>

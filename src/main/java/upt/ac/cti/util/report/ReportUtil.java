@@ -15,11 +15,20 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.javatuples.Pair;
 import upt.ac.cti.config.Config;
 import upt.ac.cti.util.time.StopWatch;
 
 public class ReportUtil {
+
+  private ReportUtil() {
+
+  }
+
+  public static final MutexRule MUTEX_RULE = new MutexRule();
 
   public static void createReport(String projectName, Stream<Pair<String, Double>> results,
       Config config) {
@@ -109,6 +118,15 @@ public class ReportUtil {
       e.printStackTrace();
     }
 
+  }
+
+  public static void diplayNotPermittedBox() {
+    var box = new MessageBox(Display.getCurrent().getActiveShell(), SWT.CANCEL | SWT.OK);
+    box.setText("Export Aperture Coverage Report: Operation not permited");
+    box.setMessage(
+        "There is an export ongoing, which is a highly demanding in terms of memory. The operation you currently requested was canceled. Wait for the export to finish, or cancel it.");
+
+    box.open();
   }
 }
 

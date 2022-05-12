@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.ui.IStartup;
+import org.eclipse.ui.IWorkingSet;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.insider.view.ToolRegistration;
@@ -22,6 +23,9 @@ public final class Startup implements IStartup {
     System.setProperty("java.util.logging.SimpleFormatter.format",
         RLogger.format());
     ToolRegistration.getInstance().registerXEntityConverter(element -> {
+      if (element instanceof IWorkingSet) {
+        return Factory.getInstance().createMWorkingSet(element);
+      }
       if (element instanceof IJavaProject) {
         return Factory.getInstance().createMProject(element);
       }
