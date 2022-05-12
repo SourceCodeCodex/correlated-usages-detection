@@ -121,6 +121,6 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/java,macos,eclipse
-*/metamodel/*
+src/main/metamodel/
+src/test/metamodel/
 /reports/
-/src/
