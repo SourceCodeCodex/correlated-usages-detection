@@ -1,19 +1,19 @@
 jcs.default=
 jcs.default.cacheattributes=org.apache.commons.jcs3.engine.CompositeCacheAttributes
-jcs.default.cacheattributes.MaxObjects=128
+jcs.default.cacheattributes.MaxObjects=1024
 jcs.default.cacheattributes.MemoryCacheName=org.apache.commons.jcs3.engine.memory.lru.LRUMemoryCache
 
-jcs.region.hierarchy.cacheattributes.MaxObjects=128
-jcs.region.binding.cacheattributes.MaxObjects=128
-jcs.region.parsing.cacheattributes.MaxObjects=128
-jcs.region.search.cacheattributes.MaxObjects=128
-jcs.region.writingbinding.cacheattributes.MaxObjects=32
-jcs.region.alltypes.cacheattributes.MaxObjects=32
-jcs.region.coveredtypes.cacheattributes.MaxObjects=32
+jcs.region.hierarchy.cacheattributes.MaxObjects=1024
+jcs.region.binding.cacheattributes.MaxObjects=1024
+jcs.region.parsing.cacheattributes.MaxObjects=1024
+jcs.region.search.cacheattributes.MaxObjects=1024
+jcs.region.writingbinding.cacheattributes.MaxObjects=512
+jcs.region.alltypes.cacheattributes.MaxObjects=512
+jcs.region.coveredtypes.cacheattributes.MaxObjects=64
 
 jcs.default.cacheattributes.UseMemoryShrinker=true
 jcs.default.cacheattributes.MaxMemoryIdleTimeSeconds=120
 jcs.default.cacheattributes.ShrinkerIntervalSeconds=60
-jcs.default.cacheattributes.MaxSpoolPerRun=128
+jcs.default.cacheattributes.MaxSpoolPerRun=512
 jcs.default.elementattributes=org.apache.commons.jcs3.engine.ElementAttributes
 jcs.default.elementattributes.IsEternal=false

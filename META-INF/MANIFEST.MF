@@ -7,6 +7,7 @@ Automatic-Module-Name: FamilyPolymorphismDetection
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ClassPath: .,
  lib/javatuples-1.2.jar,
+ lib/javatuples-1.2-sources.jar,
  lib/commons-csv-1.9.0.jar,
  lib/commons-csv-1.9.0-sources.jar,
  lib/commons-jcs3-core-3.1.jar,

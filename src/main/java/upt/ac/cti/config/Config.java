@@ -30,42 +30,44 @@ import java.util.Properties;
  */
 
 public class Config {
-  public final int MAX_DEPTH_THRESHOLD;
-  public final int MIN_HIERARCHY_SIZE;
-  public final int MAX_DEPTH_DIFF;
+	public final int MAX_DEPTH_THRESHOLD;
+	public final int MIN_HIERARCHY_SIZE;
+	public final int MAX_DEPTH_DIFF;
+	public final int CLASS_ANALYSIS_PARALLELISM;
 
-  public Config() {
+	public Config() {
 
-    var config = new Properties();
+		var config = new Properties();
 
-    try {
-      var fis = getClass().getClassLoader().getResourceAsStream("../resources/config.properties");
+		try {
+			var fis = getClass().getClassLoader().getResourceAsStream("../resources/config.properties");
 
-      config.load(fis);
+			config.load(fis);
 
-      fis.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+			fis.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-    MAX_DEPTH_THRESHOLD = Integer
-        .parseInt(Optional.ofNullable(config.getProperty("MAX_DEPTH_THRESHOLD")).orElse("1"));
-    MIN_HIERARCHY_SIZE = Integer
-        .parseInt(Optional.ofNullable(config.getProperty("MIN_HIERARCHY_SIZE")).orElse("1"));
-    MAX_DEPTH_DIFF = Integer
-        .parseInt(Optional.ofNullable(config.getProperty("MAX_DEPTH_DIFF")).orElse("2"));
+		MAX_DEPTH_THRESHOLD = Integer
+				.parseInt(Optional.ofNullable(config.getProperty("MAX_DEPTH_THRESHOLD")).orElse("1"));
+		MIN_HIERARCHY_SIZE = Integer
+				.parseInt(Optional.ofNullable(config.getProperty("MIN_HIERARCHY_SIZE")).orElse("1"));
+		MAX_DEPTH_DIFF = Integer.parseInt(Optional.ofNullable(config.getProperty("MAX_DEPTH_DIFF")).orElse("2"));
+		CLASS_ANALYSIS_PARALLELISM = Integer
+				.parseInt(Optional.ofNullable(config.getProperty("CLASS_ANALYSIS_PARALLELISM")).orElse("4"));
 
-  }
+	}
 
-  public Map<String, String> asStrings() {
-    var map = new HashMap<String, String>();
+	public Map<String, String> asStrings() {
+		var map = new HashMap<String, String>();
 
-    map.put("MAX_DEPTH_THRESHOLD", "" + MAX_DEPTH_THRESHOLD);
-    map.put("MIN_HIERARCHY_SIZE", "" + MIN_HIERARCHY_SIZE);
-    map.put("MAX_DEPTH_DIFF", "" + MAX_DEPTH_DIFF);
+		map.put("MAX_DEPTH_THRESHOLD", "" + MAX_DEPTH_THRESHOLD);
+		map.put("MIN_HIERARCHY_SIZE", "" + MIN_HIERARCHY_SIZE);
+		map.put("MAX_DEPTH_DIFF", "" + MAX_DEPTH_DIFF);
+		map.put("CLASS_ANALYSIS_PARALLELISM", "" + CLASS_ANALYSIS_PARALLELISM);
 
-    return map;
-  }
-
+		return map;
+	}
 
 }

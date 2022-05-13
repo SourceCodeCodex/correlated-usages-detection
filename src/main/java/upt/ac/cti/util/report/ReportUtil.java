@@ -32,7 +32,7 @@ public class ReportUtil {
 
   public static void createReport(String projectName, Stream<Pair<String, Double>> results,
       Config config) {
-    var formatter = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+    var formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
     var date = new Date();
     var timestamp = formatter.format(date);
 
@@ -46,9 +46,15 @@ public class ReportUtil {
       var resultsPath = reportsPathFragment + "-results.csv";
       var configPath = reportsPathFragment + "-config.csv";
       var zipPath = reportsPathFragment + ".zip";
+      
+      var rFile = new File(resultsPath);
+      rFile.createNewFile();
+      
+      var cFile = new File(configPath);
+      cFile.createNewFile();
 
-      var rOut = new FileWriter(resultsPath);
-      var cOut = new FileWriter(configPath);
+      var rOut = new FileWriter(rFile);
+      var cOut = new FileWriter(cFile);
 
       var rFormat = CSVFormat.Builder.create()
           .setHeader("Class", "Aperture Coverage")
@@ -90,12 +96,15 @@ public class ReportUtil {
 
         cPrinter.flush();
         rPrinter.flush();
+        rPrinter.close();
+        cPrinter.close();
+        rOut.close();
+        cOut.close();
 
         var zipOutStream = new FileOutputStream(zipPath);
         var zipOut = new ZipOutputStream(zipOutStream);
 
-        for (String path : List.of(resultsPath, configPath)) {
-          var file = new File(path);
+        for (File file : List.of(rFile, cFile)) {
           var stream = new FileInputStream(file);
           var zipEntry = new ZipEntry(file.getName());
           zipOut.putNextEntry(zipEntry);
@@ -109,9 +118,9 @@ public class ReportUtil {
           file.delete();
         }
 
+
         zipOut.close();
         zipOutStream.close();
-
       }
 
     } catch (IOException e) {
