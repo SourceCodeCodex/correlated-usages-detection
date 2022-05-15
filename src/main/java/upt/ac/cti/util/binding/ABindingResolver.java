@@ -1,7 +1,6 @@
 package upt.ac.cti.util.binding;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -13,11 +12,8 @@ import org.eclipse.jdt.core.dom.IBinding;
 import upt.ac.cti.util.binding.visitor.ABindingResolverVisitor;
 import upt.ac.cti.util.cache.Cache;
 import upt.ac.cti.util.cache.CacheRegions;
-import upt.ac.cti.util.logging.RLogger;
 
 public abstract class ABindingResolver<J extends IJavaElement, B extends IBinding> {
-
-  private static final Logger logger = RLogger.get();
 
   private final Cache<ICompilationUnit, ASTNode> astCache = new Cache<>(CacheRegions.BINDING);
 
@@ -29,12 +25,6 @@ public abstract class ABindingResolver<J extends IJavaElement, B extends IBindin
       ABindingResolverVisitor<J, B> visitor) {
 
     if (project == null || compilationUnit == null) {
-      var log = String.format(
-          "Could not resolve type binding: %s. Type: %d. Reason: %s",
-          member.getElementName(),
-          member.getElementType(),
-          "Java Project or Compilation Unit is null");
-      logger.warning(log);
       return Optional.empty();
     }
 

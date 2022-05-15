@@ -45,13 +45,15 @@ public class BothArgumentsInvocationVisitor extends ASTVisitor {
         var index1 = Arrays.asList(method.getParameters()).indexOf(p1);
         var index2 = Arrays.asList(method.getParameters()).indexOf(p2);
 
-        var arg1 = (Expression) node.arguments().get(index1);
-        var arg2 = (Expression) node.arguments().get(index2);
+        if (index1 >= 0 && index2 >= 0) {
+          var arg1 = (Expression) node.arguments().get(index1);
+          var arg2 = (Expression) node.arguments().get(index2);
 
-        var derivation1 = new Writing<>(p1, arg1, Either.right(node));
-        var derivation2 = new Writing<>(p2, arg2, Either.right(node));
+          var derivation1 = new Writing<>(p1, arg1, Either.right(node));
+          var derivation2 = new Writing<>(p2, arg2, Either.right(node));
 
-        newPairings.add(Pair.with(derivation1, derivation2));
+          newPairings.add(Pair.with(derivation1, derivation2));
+        }
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -74,18 +76,19 @@ public class BothArgumentsInvocationVisitor extends ASTVisitor {
         var index1 = Arrays.asList(method.getParameters()).indexOf(p1);
         var index2 = Arrays.asList(method.getParameters()).indexOf(p2);
 
-        var arg1 = (Expression) node.arguments().get(index1);
-        var arg2 = (Expression) node.arguments().get(index2);
+        if (index1 >= 0 && index2 >= 0) {
+          var arg1 = (Expression) node.arguments().get(index1);
+          var arg2 = (Expression) node.arguments().get(index2);
 
-        Either<IMember, Expression> accesExpression =
-            node.getExpression() != null ? Either.right(node.getExpression())
-                : Either.left(method.getDeclaringType());
+          Either<IMember, Expression> accesExpression =
+              node.getExpression() != null ? Either.right(node.getExpression())
+                  : Either.left(method.getDeclaringType());
 
-        var derivation1 = new Writing<>(p1, arg1, accesExpression);
-        var derivation2 = new Writing<>(p2, arg2, accesExpression);
+          var derivation1 = new Writing<>(p1, arg1, accesExpression);
+          var derivation2 = new Writing<>(p2, arg2, accesExpression);
 
-        newPairings.add(Pair.with(derivation1, derivation2));
-
+          newPairings.add(Pair.with(derivation1, derivation2));
+        }
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -108,13 +111,15 @@ public class BothArgumentsInvocationVisitor extends ASTVisitor {
         var index1 = Arrays.asList(method.getParameters()).indexOf(p1);
         var index2 = Arrays.asList(method.getParameters()).indexOf(p2);
 
-        var arg1 = (Expression) node.arguments().get(index1);
-        var arg2 = (Expression) node.arguments().get(index2);
+        if (index1 >= 0 && index2 >= 0) {
+          var arg1 = (Expression) node.arguments().get(index1);
+          var arg2 = (Expression) node.arguments().get(index2);
 
-        var derivation1 = new Writing<>(p1, arg1, Either.left(method.getDeclaringType()));
-        var derivation2 = new Writing<>(p2, arg2, Either.left(method.getDeclaringType()));
+          var derivation1 = new Writing<>(p1, arg1, Either.left(method.getDeclaringType()));
+          var derivation2 = new Writing<>(p2, arg2, Either.left(method.getDeclaringType()));
 
-        newPairings.add(Pair.with(derivation1, derivation2));
+          newPairings.add(Pair.with(derivation1, derivation2));
+        }
 
       } catch (JavaModelException e) {
         e.printStackTrace();

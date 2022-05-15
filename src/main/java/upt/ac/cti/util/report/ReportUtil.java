@@ -30,8 +30,7 @@ public class ReportUtil {
 
   public static final MutexRule MUTEX_RULE = new MutexRule();
 
-  public static void createReport(String projectName, Stream<Pair<String, Double>> results,
-      Config config) {
+  public static void createReport(String projectName, Stream<Pair<String, Double>> results) {
     var formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
     var date = new Date();
     var timestamp = formatter.format(date);
@@ -46,10 +45,10 @@ public class ReportUtil {
       var resultsPath = reportsPathFragment + "-results.csv";
       var configPath = reportsPathFragment + "-config.csv";
       var zipPath = reportsPathFragment + ".zip";
-      
+
       var rFile = new File(resultsPath);
       rFile.createNewFile();
-      
+
       var cFile = new File(configPath);
       cFile.createNewFile();
 
@@ -80,12 +79,11 @@ public class ReportUtil {
           }
         });
 
-        config.asStrings().entrySet().stream()
+        Config.asStrings().entrySet().stream()
             .forEach(e -> {
               try {
                 cPrinter.printRecord(e.getKey(), e.getValue());
               } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
               }
             });

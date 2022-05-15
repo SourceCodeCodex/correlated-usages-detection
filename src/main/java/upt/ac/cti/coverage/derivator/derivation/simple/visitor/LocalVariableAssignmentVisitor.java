@@ -54,7 +54,7 @@ public class LocalVariableAssignmentVisitor<J extends IJavaElement> extends ASTV
         }
       }
     }
-    return false;
+    return true;
   }
 
 

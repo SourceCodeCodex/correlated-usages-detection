@@ -23,20 +23,22 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
     stopWatch.start();
 
     var fieldApertureCoverage = fieldApertureCoverage(mClass);
+
+    if (fieldApertureCoverage > 0 && fieldApertureCoverage < 1) {
+      stopWatch.stop();
+      logResult(fieldApertureCoverage, fieldApertureCoverage, Double.NaN, mClass, stopWatch);
+
+      return fieldApertureCoverage;
+    }
+
     var parameterApertureCoverage = parameterApertureCoverage(mClass);
 
     var apertureCoverage =
         ApertureCoverageUtil.combine(List.of(fieldApertureCoverage, parameterApertureCoverage));
     stopWatch.stop();
 
-    var log = String.format("(\u001B[1mAC: %.10f\u001B[22m, F: %.7f, P: %.7f): %s in %d ms",
-        apertureCoverage,
-        fieldApertureCoverage,
-        parameterApertureCoverage,
-        mClass.toString(),
-        stopWatch.getDuration().toMillis());
-    logger.info(log);
-
+    logResult(apertureCoverage, fieldApertureCoverage, parameterApertureCoverage, mClass,
+        stopWatch);
     return apertureCoverage;
   }
 
@@ -56,6 +58,21 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
         .toList();
 
     return ApertureCoverageUtil.combine(apertureCoverages);
+  }
+
+  private void logResult(
+      Double apertureCoverage,
+      Double fieldApertureCoverage,
+      Double parameterApertureCoverage,
+      MClass mClass,
+      StopWatch stopWatch) {
+    var log = String.format("(\u001B[1mAC: %.10f\u001B[22m, F: %.7f, P: %.7f): %s in %d ms",
+        apertureCoverage,
+        fieldApertureCoverage,
+        parameterApertureCoverage,
+        mClass.toString(),
+        stopWatch.getDuration().toMillis());
+    logger.info(log);
   }
 
 }

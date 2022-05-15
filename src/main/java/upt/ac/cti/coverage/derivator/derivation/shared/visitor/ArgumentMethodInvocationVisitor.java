@@ -40,10 +40,12 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
-        var arg = (Expression) node.arguments().get(index);
-        var derivation =
-            deriver.withWritingExpression(arg).withAccessExpression(Either.right(node));
-        derivations.add(derivation);
+        if (index >= 0) {
+          var arg = (Expression) node.arguments().get(index);
+          var derivation =
+              deriver.withWritingExpression(arg).withAccessExpression(Either.right(node));
+          derivations.add(derivation);
+        }
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -61,13 +63,15 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
-        var arg = (Expression) node.arguments().get(index);
-        var derivation =
-            deriver.withWritingExpression(arg);
-        if (node.getExpression() != null) {
-          derivation = derivation.withAccessExpression(Either.right(node.getExpression()));
+        if (index >= 0) {
+          var arg = (Expression) node.arguments().get(index);
+          var derivation =
+              deriver.withWritingExpression(arg);
+          if (node.getExpression() != null) {
+            derivation = derivation.withAccessExpression(Either.right(node.getExpression()));
+          }
+          derivations.add(derivation);
         }
-        derivations.add(derivation);
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -85,9 +89,11 @@ public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends AST
       try {
         var method = (IMethod) localVar.getDeclaringMember();
         var index = Arrays.asList(method.getParameters()).indexOf(localVar);
-        var arg = (Expression) node.arguments().get(index);
-        var derivation = deriver.withWritingExpression(arg);
-        derivations.add(derivation);
+        if (index >= 0) {
+          var arg = (Expression) node.arguments().get(index);
+          var derivation = deriver.withWritingExpression(arg);
+          derivations.add(derivation);
+        }
       } catch (JavaModelException e) {
         e.printStackTrace();
       }

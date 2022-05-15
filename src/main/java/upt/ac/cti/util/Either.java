@@ -2,7 +2,6 @@ package upt.ac.cti.util;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class Either<L, R> {
@@ -22,23 +21,12 @@ public final class Either<L, R> {
     right = r;
   }
 
-  public <T> T map(
-      Function<? super L, ? extends T> lFunc,
-      Function<? super R, ? extends T> rFunc) {
-    return left.<T>map(lFunc).orElseGet(() -> right.map(rFunc).get());
-  }
-
   public <T> Either<T, R> mapLeft(Function<? super L, ? extends T> lFunc) {
     return new Either<>(left.map(lFunc), right);
   }
 
   public <T> Either<L, T> mapRight(Function<? super R, ? extends T> rFunc) {
     return new Either<>(left, right.map(rFunc));
-  }
-
-  public void apply(Consumer<? super L> lFunc, Consumer<? super R> rFunc) {
-    left.ifPresent(lFunc);
-    right.ifPresent(rFunc);
   }
 
   public boolean isRight() {

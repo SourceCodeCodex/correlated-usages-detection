@@ -13,7 +13,6 @@ import upt.ac.cti.dependency.Dependencies;
 @RelationBuilder
 public class CoveredTypePairs implements IRelationBuilder<MTypePair, MParameterPair> {
 
-
   @Override
   public Group<MTypePair> buildGroup(MParameterPair mParamterPair) {
     var group = new Group<MTypePair>();

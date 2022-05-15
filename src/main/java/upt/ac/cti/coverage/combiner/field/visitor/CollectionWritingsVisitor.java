@@ -20,7 +20,8 @@ public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
         && fa.resolveFieldBinding() != null
         && field.equals(fa.resolveFieldBinding().getJavaElement())) {
       switch (node.getName().getIdentifier()) {
-        case "add": {
+        case "add":
+        case "addAll": {
           var fieldWrite =
               new Writing<>(field, (Expression) node.arguments().get(0),
                   Either.left(field.getDeclaringType()));

@@ -90,6 +90,6 @@ public class FieldAssignmentVisitor<J extends IJavaElement> extends ASTVisitor {
                 + left.getNodeType());
       }
     }
-    return false;
+    return true;
   }
 }

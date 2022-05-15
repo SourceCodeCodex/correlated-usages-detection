@@ -56,11 +56,19 @@ public final class Startup implements IStartup {
       }
       return null;
     });
-    JCS.setConfigProperties(new CacheConfig().getProperties());
+
+    init();
+
+  }
+
+  public static void init() {
+    CacheConfig.init();
+    Config.init();
+
+    JCS.setConfigProperties(CacheConfig.getProperties());
     JCS.setLogSystem(LogManager.LOGSYSTEM_JAVA_UTIL_LOGGING);
 
-    Dependencies.init(new Config());
-
+    Dependencies.init();
   }
 
 }

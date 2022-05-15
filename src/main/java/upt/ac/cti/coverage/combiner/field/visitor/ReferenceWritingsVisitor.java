@@ -74,8 +74,6 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
                     Either.left(field.getDeclaringType()));
             result.add(fieldWrite);
           } else {
-            // Although the field access expression can have a manifold of posibilities, we take
-            // into consideration only the most plausible scenarios.
             var fieldWrite =
                 new Writing<>(field, node.getRightHandSide(), Either.right(accessExpression));
             result.add(fieldWrite);
@@ -94,7 +92,7 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
                 + left.getNodeType());
       }
     }
-    return false;
+    return true;
   }
 
 }

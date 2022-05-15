@@ -1,9 +1,7 @@
 package upt.ac.cti.coverage.derivator.util;
 
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.coverage.model.Writing;
@@ -14,7 +12,7 @@ import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.cache.Cache;
 import upt.ac.cti.util.cache.CacheRegions;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
-import upt.ac.cti.util.logging.RLogger;
+import upt.ac.cti.util.validation.IsTypeBindingCollection;
 
 public abstract class AWritingBindingResolver<J extends IJavaElement> {
 
@@ -23,6 +21,8 @@ public abstract class AWritingBindingResolver<J extends IJavaElement> {
 
   private final HierarchyResolver hierarchyResolver;
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
+
+  private static final IsTypeBindingCollection isTBCollection = new IsTypeBindingCollection();
 
   public AWritingBindingResolver(HierarchyResolver hierarchyResolver,
       ABindingResolver<J, ITypeBinding> aBindingResolver) {
@@ -47,12 +47,14 @@ public abstract class AWritingBindingResolver<J extends IJavaElement> {
     }
 
     var writingExpressionBinding = writing.writingExpression().resolveTypeBinding();
+
     if (writingExpressionBinding == null) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
       return WritingBinding.INCONCLUSIVE;
     }
 
-    if (writingExpressionBinding.isArray() || !writingExpressionBinding.isFromSource()) {
+    if (writingExpressionBinding.isArray() || isTBCollection.test(writingExpressionBinding)
+        || !writingExpressionBinding.isFromSource()) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
       return WritingBinding.INCONCLUSIVE;
     }
@@ -72,19 +74,10 @@ public abstract class AWritingBindingResolver<J extends IJavaElement> {
     }
 
     if (writing.writingExpression().getNodeType() == ASTNode.THIS_EXPRESSION) {
-      try {
-        var flags = expressionType.getFlags();
-        if (Flags.isAbstract(flags) || Flags.isInterface(flags)) {
-          return WritingBinding.INCONCLUSIVE;
-        }
+      var resolved = new ResolvedBinding(writingExpressionBinding);
+      cache.put(writing, resolved);
+      return resolved;
 
-        var resolved = new ResolvedBinding(writingExpressionBinding);
-        cache.put(writing, resolved);
-        return resolved;
-      } catch (JavaModelException e) {
-        e.printStackTrace();
-        return WritingBinding.INCONCLUSIVE;
-      }
     }
 
     var expressionHierarchy = hierarchyResolver.resolveConcrete(expressionType);
@@ -94,21 +87,22 @@ public abstract class AWritingBindingResolver<J extends IJavaElement> {
       return resolved;
     }
 
-    var fieldBinding = aBindingResolver.resolve(writing.element());
-    if (fieldBinding.isPresent()) {
-      var fieldType = (IType) fieldBinding.get().getJavaElement();
-      var fieldHierarchy = hierarchyResolver.resolve(fieldType);
-      expressionHierarchy = hierarchyResolver.resolve(expressionType);
-      if (fieldHierarchy.contains(expressionType) || expressionHierarchy.contains(fieldType)) {
-        var notALeaf = new NotLeafBinding(writingExpressionBinding);
-        cache.put(writing, notALeaf);
-        return notALeaf;
+    var fieldBindingOpt = aBindingResolver.resolve(writing.element());
+    if (fieldBindingOpt.isPresent()) {
+      var fieldBinding = fieldBindingOpt.get();
+      if (isTBCollection.test(fieldBinding)) {
+        fieldBinding = fieldBinding.getTypeArguments()[0];
+        if (fieldBinding.getJavaElement() == null
+            || !(fieldBinding.getJavaElement() instanceof IType)) {
+          cache.put(writing, WritingBinding.INCONCLUSIVE);
+          return WritingBinding.INCONCLUSIVE;
+        }
       }
     }
 
-    RLogger.get().warning("Writing binding inconclusive for unknown reason: " + writing);
-    cache.put(writing, WritingBinding.INCONCLUSIVE);
-    return WritingBinding.INCONCLUSIVE;
+    var notALeaf = new NotLeafBinding(writingExpressionBinding);
+    cache.put(writing, notALeaf);
+    return notALeaf;
   }
 
 }

@@ -75,6 +75,9 @@ final public class SimpleWritingsDerivator<J extends IJavaElement>
       case ASTNode.QUALIFIED_NAME: {
         return n.derive(deriver, constant);
       }
+      case ASTNode.LAMBDA_EXPRESSION: {
+        return NewWritingPairs.NULL();
+      }
       default: {
         logger.warning("No derivation is possible for " + deriver + ". Writing expression type is "
             + expressionType);

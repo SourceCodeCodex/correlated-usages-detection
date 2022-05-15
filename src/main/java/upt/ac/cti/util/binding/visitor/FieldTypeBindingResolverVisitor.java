@@ -14,7 +14,7 @@ public class FieldTypeBindingResolverVisitor extends ABindingResolverVisitor<IFi
   @Override
   public boolean visit(VariableDeclarationFragment node) {
     var variableBinding = node.resolveBinding();
-    if (javaElement.equals(variableBinding.getJavaElement())) {
+    if (variableBinding != null && javaElement.equals(variableBinding.getJavaElement())) {
       this.binding = Optional.ofNullable(variableBinding.getType());
     }
     return false;

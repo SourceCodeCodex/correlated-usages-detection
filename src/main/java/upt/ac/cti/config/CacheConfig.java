@@ -5,18 +5,20 @@ import java.util.Properties;
 
 public class CacheConfig {
 
-  private final Properties properties;
+  private static final Properties properties = new Properties();
 
-  public Properties getProperties() {
+  private CacheConfig() {
+
+  }
+
+  public static Properties getProperties() {
     return properties;
   }
 
-  public CacheConfig() {
-
-    this.properties = new Properties();
+  public static void init() {
 
     try {
-      var fis = getClass().getClassLoader().getResourceAsStream("../resources/cache.ccf");
+      var fis = CacheConfig.class.getClassLoader().getResourceAsStream("../resources/cache.ccf");
 
       properties.load(fis);
 

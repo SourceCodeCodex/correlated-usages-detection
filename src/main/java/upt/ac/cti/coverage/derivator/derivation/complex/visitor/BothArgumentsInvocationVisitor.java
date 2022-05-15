@@ -49,16 +49,20 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
         var index1 = Arrays.asList(method.getParameters()).indexOf(p1);
         var index2 = Arrays.asList(method.getParameters()).indexOf(p2);
 
-        var arg1 = (Expression) node.arguments().get(index1);
-        var arg2 = (Expression) node.arguments().get(index2);
+        if (index1 >= 0 && index2 >= 0) {
+          var arg1 = (Expression) node.arguments().get(index1);
+          var arg2 = (Expression) node.arguments().get(index2);
 
-        var derivation1 =
-            w1.withWritingExpression(arg1).withAccessExpression(Either.right(node)).increaseDepth();
-        var derivation2 =
-            w2.withWritingExpression(arg2).withAccessExpression(Either.right(node)).increaseDepth();
+          var derivation1 =
+              w1.withWritingExpression(arg1).withAccessExpression(Either.right(node))
+                  .increaseDepth();
+          var derivation2 =
+              w2.withWritingExpression(arg2).withAccessExpression(Either.right(node))
+                  .increaseDepth();
 
-        newPairings.add(
-            Pair.with(derivation1, derivation2));
+          newPairings.add(
+              Pair.with(derivation1, derivation2));
+        }
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -81,23 +85,24 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
         var index1 = Arrays.asList(method.getParameters()).indexOf(p1);
         var index2 = Arrays.asList(method.getParameters()).indexOf(p2);
 
-        var arg1 = (Expression) node.arguments().get(index1);
-        var arg2 = (Expression) node.arguments().get(index2);
+        if (index1 >= 0 && index2 >= 0) {
+          var arg1 = (Expression) node.arguments().get(index1);
+          var arg2 = (Expression) node.arguments().get(index2);
 
-        Either<IMember, Expression> accesExpression;
-        accesExpression = node.getExpression() != null ? Either.right(node.getExpression())
-            : Either.left(method.getDeclaringType());
+          Either<IMember, Expression> accesExpression;
+          accesExpression = node.getExpression() != null ? Either.right(node.getExpression())
+              : Either.left(method.getDeclaringType());
 
-        var derivation1 =
-            w1.withWritingExpression(arg1).withAccessExpression(accesExpression)
-                .increaseDepth();
-        var derivation2 =
-            w2.withWritingExpression(arg2).withAccessExpression(accesExpression)
-                .increaseDepth();
+          var derivation1 =
+              w1.withWritingExpression(arg1).withAccessExpression(accesExpression)
+                  .increaseDepth();
+          var derivation2 =
+              w2.withWritingExpression(arg2).withAccessExpression(accesExpression)
+                  .increaseDepth();
 
-        newPairings.add(
-            Pair.with(derivation1, derivation2));
-
+          newPairings.add(
+              Pair.with(derivation1, derivation2));
+        }
       } catch (JavaModelException e) {
         e.printStackTrace();
       }
@@ -120,17 +125,18 @@ public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTV
         var index1 = Arrays.asList(method.getParameters()).indexOf(p1);
         var index2 = Arrays.asList(method.getParameters()).indexOf(p2);
 
-        var arg1 = (Expression) node.arguments().get(index1);
-        var arg2 = (Expression) node.arguments().get(index2);
+        if (index1 >= 0 && index2 >= 0) {
+          var arg1 = (Expression) node.arguments().get(index1);
+          var arg2 = (Expression) node.arguments().get(index2);
 
-        var derivation1 = w1.withWritingExpression(arg1)
-            .increaseDepth();
-        var derivation2 = w2.withWritingExpression(arg2)
-            .increaseDepth();
+          var derivation1 = w1.withWritingExpression(arg1)
+              .increaseDepth();
+          var derivation2 = w2.withWritingExpression(arg2)
+              .increaseDepth();
 
-        newPairings.add(
-            Pair.with(derivation1, derivation2));
-
+          newPairings.add(
+              Pair.with(derivation1, derivation2));
+        }
       } catch (JavaModelException e) {
         e.printStackTrace();
       }

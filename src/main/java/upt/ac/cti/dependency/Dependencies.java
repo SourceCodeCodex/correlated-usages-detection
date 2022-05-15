@@ -2,7 +2,6 @@ package upt.ac.cti.dependency;
 
 import upt.ac.cti.aperture.FieldAllTypePairsResolver;
 import upt.ac.cti.aperture.ParameterAllTypePairsResolver;
-import upt.ac.cti.config.Config;
 import upt.ac.cti.coverage.FieldCoveredTypesResolver;
 import upt.ac.cti.coverage.ParameterCoveredTypesResolver;
 import upt.ac.cti.coverage.derivator.util.FieldWritingBindingResolver;
@@ -18,8 +17,6 @@ import upt.ac.cti.util.validation.ParameterValidator;
 import upt.ac.cti.util.validation.SusceptibleTypeValidator;
 
 public class Dependencies {
-
-  private static Config config;
 
   private static FieldAllTypePairsResolver fieldAllTypePairsResolver;
   private static ParameterAllTypePairsResolver parameterAllTypePairsResolver;
@@ -41,9 +38,8 @@ public class Dependencies {
   private static FieldWritingBindingResolver fieldWritingBindingResolver;
   private static ParameterWritingBindingResolver parameterWritingBindingResolver;
 
-  public static void init(Config config) {
+  public static void init() {
     Cache.clearAllCache();
-    Dependencies.config = config;
     hierarchyResolver = new HierarchyResolver();
     codeParser = new CodeParser();
     javaEntitySearcher = new JavaEntitySearcher();
@@ -70,9 +66,6 @@ public class Dependencies {
         parameterAllTypePairsResolver);
   }
 
-  public static Config getConfig() {
-    return config;
-  }
 
   public static FieldAllTypePairsResolver getFieldAllTypePairsResolver() {
     return fieldAllTypePairsResolver;

@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import upt.ac.cti.dependency.Dependencies;
+import upt.ac.cti.config.Config;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 
@@ -31,12 +31,15 @@ public final class FieldValidator implements Predicate<IField> {
   }
 
   private boolean testInternal(ITypeBinding binding) {
+    return ifCollectionAndValid(binding) || testInternal1(binding);
+  }
+
+  private boolean testInternal1(ITypeBinding binding) {
     return !binding.isPrimitive() &&
         !binding.isArray() &&
         !binding.isSynthetic() &&
         binding.isFromSource() &&
-        hasTypeDescendants(binding) &&
-        ifCollectionAndValid(binding);
+        hasTypeDescendants(binding);
   }
 
   private final boolean isNotStatic(IField field) {
@@ -55,15 +58,15 @@ public final class FieldValidator implements Predicate<IField> {
       return false;
     }
     return hierarchyResolver.resolveConcrete((IType) javaType)
-        .size() >= Dependencies.getConfig().MIN_HIERARCHY_SIZE;
+        .size() >= Config.MIN_HIERARCHY_SIZE;
   }
 
   private boolean ifCollectionAndValid(ITypeBinding binding) {
     if (new IsTypeBindingCollection().test(binding)) {
       var typeParamBinding = binding.getTypeArguments()[0];
-      return testInternal(typeParamBinding);
+      return testInternal1(typeParamBinding);
     }
-    return true;
+    return false;
   }
 }
 

@@ -1,9 +1,9 @@
 package upt.ac.cti.util.search;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -19,7 +19,6 @@ import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import upt.ac.cti.util.cache.Cache;
 import upt.ac.cti.util.cache.CacheRegions;
-import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.search.requestor.AMatchesResolverRequestor;
 import upt.ac.cti.util.search.requestor.LocalVariableWritingsRequestor;
 import upt.ac.cti.util.search.requestor.MethodInvocationsRequestor;
@@ -28,9 +27,7 @@ import upt.ac.cti.util.search.requestor.WritingsRequestor;
 
 public final class JavaEntitySearcher {
 
-  private static final Logger logger = RLogger.get();
-
-  private final Cache<IJavaElement, Set<IJavaElement>> cache =
+  private final Cache<IJavaElement, List<IJavaElement>> cache =
       new Cache<>(CacheRegions.SEARCH);
 
   public Set<IMethod> searchFieldWritings(IField field) {
@@ -89,20 +86,19 @@ public final class JavaEntitySearcher {
 
     var scopeOpt = createScope(element);
     if (scopeOpt.isEmpty()) {
-      warnCouldNotSearchProjectNull(element);
       return new HashSet<>();
     }
 
     var scope = scopeOpt.get();
 
-    Set<T> result = useSearchEngine(scope, requestor, pattern);
+    List<T> result = useSearchEngine(scope, requestor, pattern);
 
-    cache.put((IJavaElement) element, (Set<IJavaElement>) result);
+    cache.put((IJavaElement) element, (List<IJavaElement>) result);
 
-    return result;
+    return new HashSet<>(result);
   }
 
-  private <T extends IJavaElement> Set<T> useSearchEngine(IJavaSearchScope scope,
+  private <T extends IJavaElement> List<T> useSearchEngine(IJavaSearchScope scope,
       AMatchesResolverRequestor<T> requestor,
       SearchPattern searchParttern) {
     try {
@@ -113,7 +109,7 @@ public final class JavaEntitySearcher {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    return Set.of();
+    return List.of();
   }
 
   private Optional<IJavaSearchScope> createScope(IJavaElement javaElement) {
@@ -122,11 +118,5 @@ public final class JavaEntitySearcher {
     }
     return Optional
         .of(SearchEngine.createJavaSearchScope(new IJavaElement[] {javaElement.getJavaProject()}));
-  }
-
-  private void warnCouldNotSearchProjectNull(IJavaElement element) {
-    var log = String.format("Could not parse: %s. Type: %d. Reason: %s",
-        element.getElementName(), element.getElementType(), "Java Project is null.");
-    logger.warning(log);
   }
 }

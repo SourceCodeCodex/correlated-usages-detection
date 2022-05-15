@@ -10,6 +10,11 @@ import upt.ac.cti.util.report.ReportUtil;
 @ActionPerformer
 public class ExportReport implements IActionPerformer<Void, MProject, HListEmpty> {
 
+  /**
+   * Used for testing only! Please do not change this value!
+   */
+  public static volatile boolean BLOCKING = false;
+
   @Override
   public Void performAction(MProject mProject, HListEmpty arg1) {
 
@@ -20,6 +25,14 @@ public class ExportReport implements IActionPerformer<Void, MProject, HListEmpty
     job.setSystem(false);
     job.setUser(true);
     job.schedule();
+
+    if (BLOCKING) {
+      try {
+        job.join();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
 
     return null;
   }
