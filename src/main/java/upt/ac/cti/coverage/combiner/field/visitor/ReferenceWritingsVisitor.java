@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import upt.ac.cti.coverage.model.Writing;
-import upt.ac.cti.util.Either;
+import upt.ac.cti.util.computation.Either;
 import upt.ac.cti.util.logging.RLogger;
 
 public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {

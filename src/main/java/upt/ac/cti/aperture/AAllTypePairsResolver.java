@@ -8,10 +8,10 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
-import upt.ac.cti.util.CartesianProduct;
 import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.cache.Cache;
 import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.computation.CartesianProduct;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.validation.IsTypeBindingCollection;
 

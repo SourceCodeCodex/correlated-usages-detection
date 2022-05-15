@@ -5,7 +5,7 @@ import org.javatuples.Pair;
 import upt.ac.cti.coverage.derivator.derivation.IWritingsDerivator;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.CartesianProduct;
+import upt.ac.cti.util.computation.CartesianProduct;
 
 abstract class AComposedDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
 

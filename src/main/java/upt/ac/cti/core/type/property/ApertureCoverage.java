@@ -7,7 +7,7 @@ import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
 import ro.lrg.xcore.metametamodel.IPropertyComputer;
 import ro.lrg.xcore.metametamodel.PropertyComputer;
-import upt.ac.cti.util.ApertureCoverageUtil;
+import upt.ac.cti.util.computation.ApertureCoverageUtil;
 import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.time.StopWatch;
 

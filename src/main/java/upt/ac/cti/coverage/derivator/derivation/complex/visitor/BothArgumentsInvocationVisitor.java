@@ -15,7 +15,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.model.Writing;
-import upt.ac.cti.util.Either;
+import upt.ac.cti.util.computation.Either;
 
 public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTVisitor {
   private final Writing<J> w1, w2;

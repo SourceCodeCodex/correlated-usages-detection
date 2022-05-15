@@ -11,7 +11,8 @@ public class IsTypeBindingCollection implements Predicate<ITypeBinding> {
     var interfaces = List.of(binding.getInterfaces());
 
     var isCollection = interfaces.stream()
-        .anyMatch(bind -> bind.getQualifiedName().startsWith("java.util.Collection"));
+        .anyMatch(bind -> bind.getQualifiedName().startsWith("java.util.Collection")
+            && bind.isParameterizedType());
 
     return isCollection;
 

@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import upt.ac.cti.coverage.model.Writing;
-import upt.ac.cti.util.Either;
+import upt.ac.cti.util.computation.Either;
 
 public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends ASTVisitor {
 

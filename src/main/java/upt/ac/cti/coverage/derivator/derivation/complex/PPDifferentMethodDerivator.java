@@ -10,7 +10,7 @@ import upt.ac.cti.coverage.derivator.derivation.IWritingsDerivator;
 import upt.ac.cti.coverage.derivator.derivation.shared.visitor.ArgumentMethodInvocationVisitor;
 import upt.ac.cti.coverage.model.Writing;
 import upt.ac.cti.coverage.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.CartesianProduct;
+import upt.ac.cti.util.computation.CartesianProduct;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 

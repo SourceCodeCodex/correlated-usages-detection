@@ -1,4 +1,4 @@
-package upt.ac.cti.util;
+package upt.ac.cti.util.computation;
 
 import java.util.Comparator;
 import java.util.List;

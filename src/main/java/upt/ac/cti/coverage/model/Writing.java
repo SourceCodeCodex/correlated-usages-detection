@@ -3,7 +3,7 @@ package upt.ac.cti.coverage.model;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.dom.Expression;
-import upt.ac.cti.util.Either;
+import upt.ac.cti.util.computation.Either;
 
 public final record Writing<T extends IJavaElement> (
     T element,

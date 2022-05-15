@@ -5,7 +5,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import upt.ac.cti.coverage.model.Writing;
-import upt.ac.cti.util.Either;
+import upt.ac.cti.util.computation.Either;
 
 public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
 
