@@ -45,9 +45,8 @@ final class NameLocalVariableDerivator<J extends IJavaElement>
         .map(method -> codeParser.parse(method))
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .flatMap(methodDeclaration -> {
+        .flatMap(node -> {
           var visitor = new LocalVariableAssignmentVisitor<>(deriver, localVariable);
-          var node = methodDeclaration.getBody();
           node.accept(visitor);
           return visitor.derivations().stream();
         }).toList();

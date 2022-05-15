@@ -1,4 +1,4 @@
-package upt.ac.cti.core.project.action;
+package upt.ac.cti.core.workingset.action;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -9,9 +9,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.javatuples.Pair;
-import familypolymorphismdetection.metamodel.entity.MProject;
+import familypolymorphismdetection.metamodel.entity.MWorkingSet;
 import upt.ac.cti.config.Config;
-import upt.ac.cti.core.project.group.FamilyPolymorphismSusceptibleClassesJob;
+import upt.ac.cti.core.workingset.group.WSFamilyPolymorphismSusceptibleClassesJob;
 import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.report.ReportUtil;
@@ -22,24 +22,25 @@ public class ExportApertureCoverageJob extends Job {
 
   private static ForkJoinPool pool = new ForkJoinPool(Config.CLASS_ANALYSIS_PARALLELISM);
 
-  private final MProject mProject;
+  private final MWorkingSet mWorkingSet;
 
-  public ExportApertureCoverageJob(MProject mProject) {
-    super("Export " + mProject + " aperture coverage report");
-    this.mProject = mProject;
+  public ExportApertureCoverageJob(MWorkingSet mWorkingSet) {
+    super("Export " + mWorkingSet + " (working set) aperture coverage report");
+    this.mWorkingSet = mWorkingSet;
   }
 
   @Override
   protected IStatus run(IProgressMonitor monitor) {
     Dependencies.init();
 
-    var mClassesJob = new FamilyPolymorphismSusceptibleClassesJob(mProject);
+    var mClassesJob = new WSFamilyPolymorphismSusceptibleClassesJob(mWorkingSet);
     mClassesJob.setPriority(Job.LONG);
     mClassesJob.setSystem(false);
     mClassesJob.setUser(true);
     mClassesJob.schedule();
 
     try {
+      mClassesJob.join();
 
       var mClasses = mClassesJob.mClasses();
       var subMonitor = SubMonitor.convert(monitor, mClasses.size());
@@ -52,7 +53,7 @@ public class ExportApertureCoverageJob extends Job {
           return Pair.with(mClass.toString(), -2.);
         }
       }).peek(l -> subMonitor.split(1))).get();
-      ReportUtil.createReport(mProject.toString(), stream);
+      ReportUtil.createReport(mWorkingSet.toString(), stream);
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
     }

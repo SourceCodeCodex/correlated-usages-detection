@@ -30,9 +30,8 @@ public final class FieldDerivatorAlgorithm<J extends IJavaElement> {
         .map(method -> codeParser.parse(method))
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .flatMap(methodDeclaration -> {
+        .flatMap(node -> {
           var visitor = new FieldAssignmentVisitor<>(deriver, field);
-          var node = methodDeclaration.getBody();
           node.accept(visitor);
           return visitor.derivations().stream().map(Writing::increaseDepth);
         });

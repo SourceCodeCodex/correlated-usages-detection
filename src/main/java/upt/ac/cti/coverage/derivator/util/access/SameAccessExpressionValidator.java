@@ -82,6 +82,17 @@ public class SameAccessExpressionValidator<J extends IJavaElement>
       root.accept(v1);
       root.accept(v2);
 
+      if (v1.rewriting().isEmpty() && v2.rewriting().isEmpty()) {
+        ASTNode b1 = expr1, b2 = expr2;
+        while (b1.getNodeType() != ASTNode.BLOCK) {
+          b1 = b1.getParent();
+        }
+        while (b2.getNodeType() != ASTNode.BLOCK) {
+          b2 = b2.getParent();
+        }
+        return b1.equals(b2);
+      }
+
       if (v1.rewriting().isPresent() && v2.rewriting().isPresent()) {
         var rw1 = v1.rewriting().get();
         var rw2 = v2.rewriting().get();

@@ -61,6 +61,8 @@ public class DerivationManager<J extends IJavaElement> implements IDerivationMan
       }
 
       var results = writingPairs.parallelStream().filter(this::isBelowThreshold)
+          .filter(p -> p.getValue0().writingExpression().getRoot()
+              .equals(p.getValue1().writingExpression().getRoot()))
           .map(p -> new DerivationJob<>(writingBindingResolver, simpleDerivator, complexDerivator,
               aAllTypePairsResolver, p))
           .map(DerivationJob::derive).toList();

@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 public class MethodDeclarationResolverVisitor
     extends AASTNodeResolverVisitor<IMethod, MethodDeclaration> {
 
+
   public MethodDeclarationResolverVisitor(IMethod method) {
     super(method);
   }
@@ -16,7 +17,7 @@ public class MethodDeclarationResolverVisitor
     if (member.equals(node.resolveBinding().getJavaElement())) {
       result = Optional.of(node);
     }
-    return false;
+    return true;
   }
 
 }

@@ -2,18 +2,17 @@ package upt.ac.cti.util.search;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
@@ -23,7 +22,7 @@ import upt.ac.cti.util.search.requestor.AMatchesResolverRequestor;
 import upt.ac.cti.util.search.requestor.LocalVariableWritingsRequestor;
 import upt.ac.cti.util.search.requestor.MethodInvocationsRequestor;
 import upt.ac.cti.util.search.requestor.ReferencesRequestor;
-import upt.ac.cti.util.search.requestor.WritingsRequestor;
+import upt.ac.cti.util.search.requestor.FieldWritingsRequestor;
 
 public final class JavaEntitySearcher {
 
@@ -31,10 +30,10 @@ public final class JavaEntitySearcher {
       new Cache<>(CacheRegions.SEARCH);
 
   public Set<IMethod> searchFieldWritings(IField field) {
-    var requestor = new WritingsRequestor();
+    var requestor = new FieldWritingsRequestor();
 
     var searchParttern = SearchPattern.createPattern(field,
-        IJavaSearchConstants.REFERENCES,
+        IJavaSearchConstants.WRITE_ACCESSES,
         SearchPattern.R_EXACT_MATCH);
 
     return searchJavaElement(field, requestor, searchParttern);
@@ -84,27 +83,24 @@ public final class JavaEntitySearcher {
           .collect(Collectors.toSet());
     }
 
-    var scopeOpt = createScope(element);
-    if (scopeOpt.isEmpty()) {
-      return new HashSet<>();
-    }
 
-    var scope = scopeOpt.get();
-
-    List<T> result = useSearchEngine(scope, requestor, pattern);
+    List<T> result = useSearchEngine(requestor, pattern, element.getJavaProject());
 
     cache.put((IJavaElement) element, (List<IJavaElement>) result);
 
     return new HashSet<>(result);
   }
 
-  private <T extends IJavaElement> List<T> useSearchEngine(IJavaSearchScope scope,
+  private <T extends IJavaElement> List<T> useSearchEngine(
       AMatchesResolverRequestor<T> requestor,
-      SearchPattern searchParttern) {
+      SearchPattern searchParttern,
+      IJavaProject project) {
     try {
       new SearchEngine().search(searchParttern,
           new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()},
-          scope, requestor, new NullProgressMonitor());
+          (project == null) ? SearchEngine.createWorkspaceScope()
+              : SearchEngine.createJavaSearchScope(new IJavaElement[] {project}),
+          requestor, new NullProgressMonitor());
       return requestor.getMatches();
     } catch (CoreException e) {
       e.printStackTrace();
@@ -112,11 +108,4 @@ public final class JavaEntitySearcher {
     return List.of();
   }
 
-  private Optional<IJavaSearchScope> createScope(IJavaElement javaElement) {
-    if (javaElement.getJavaProject() == null) {
-      return Optional.empty();
-    }
-    return Optional
-        .of(SearchEngine.createJavaSearchScope(new IJavaElement[] {javaElement.getJavaProject()}));
-  }
 }
