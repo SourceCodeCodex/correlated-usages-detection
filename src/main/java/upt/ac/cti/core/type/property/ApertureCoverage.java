@@ -1,22 +1,19 @@
 package upt.ac.cti.core.type.property;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import familypolymorphismdetection.metamodel.entity.MClass;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
-import ro.lrg.xcore.metametamodel.IPropertyComputer;
-import ro.lrg.xcore.metametamodel.PropertyComputer;
 import upt.ac.cti.util.computation.ApertureCoverageUtil;
 import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.time.StopWatch;
 
-@PropertyComputer
-public final class ApertureCoverage implements IPropertyComputer<Double, MClass> {
+abstract class ApertureCoverage {
 
   private static final Logger logger = RLogger.get();
 
-  @Override
   public Double compute(MClass mClass) {
     var stopWatch = new StopWatch();
 
@@ -42,10 +39,14 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
     return apertureCoverage;
   }
 
+  protected abstract Function<MFieldPair, Double> fieldPairApertureCoverage();
+
+  protected abstract Function<MParameterPair, Double> parameterPairApertureCoverage();
+
   private Double fieldApertureCoverage(MClass mClass) {
     var apertureCoverages = mClass.susceptibleFieldPairs().getElements()
         .stream()
-        .map(MFieldPair::apertureCoverage)
+        .map(fieldPairApertureCoverage())
         .toList();
 
     return ApertureCoverageUtil.combine(apertureCoverages);
@@ -54,7 +55,7 @@ public final class ApertureCoverage implements IPropertyComputer<Double, MClass>
   private Double parameterApertureCoverage(MClass mClass) {
     var apertureCoverages = mClass.susceptibleParameterPairs().getElements()
         .stream()
-        .map(MParameterPair::apertureCoverage)
+        .map(parameterPairApertureCoverage())
         .toList();
 
     return ApertureCoverageUtil.combine(apertureCoverages);

@@ -1,16 +1,15 @@
 package upt.ac.cti.core.pair.parameter.property;
 
+import java.util.function.Function;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
-import ro.lrg.xcore.metametamodel.IPropertyComputer;
-import ro.lrg.xcore.metametamodel.PropertyComputer;
 
-@PropertyComputer
-public final class ApertureCoverage implements IPropertyComputer<Double, MParameterPair> {
+abstract class ApertureCoverage {
 
-  @Override
+  protected abstract Function<MParameterPair, Integer> coverage();
+
   public Double compute(MParameterPair mParameterPair) {
     var aperture = (double) mParameterPair.aperture();
-    var coverage = (double) mParameterPair.coverage();
+    var coverage = (double) coverage().apply(mParameterPair);
 
     if (coverage < 0) {
       return coverage;

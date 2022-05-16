@@ -1,24 +1,21 @@
 package upt.ac.cti.core.project.action;
 
+import java.util.function.Function;
 import org.eclipse.core.runtime.jobs.Job;
+import familypolymorphismdetection.metamodel.entity.MClass;
 import familypolymorphismdetection.metamodel.entity.MProject;
-import ro.lrg.xcore.metametamodel.ActionPerformer;
 import ro.lrg.xcore.metametamodel.HListEmpty;
-import ro.lrg.xcore.metametamodel.IActionPerformer;
+import upt.ac.cti.coverage.CoverageStrategy;
 import upt.ac.cti.util.report.ReportUtil;
 
-@ActionPerformer
-public class ExportReport implements IActionPerformer<Void, MProject, HListEmpty> {
+abstract class ExportReport {
+  protected abstract Function<MClass, Double> apertureCoverage();
 
-  /**
-   * Used for testing only! Please do not change this value!
-   */
-  public static volatile boolean BLOCKING = false;
+  protected abstract CoverageStrategy strategyName();
 
-  @Override
   public Void performAction(MProject mProject, HListEmpty arg1) {
 
-    var job = new ExportApertureCoverageJob(mProject);
+    var job = new ExportApertureCoverageJob(mProject, apertureCoverage(), strategyName());
 
     job.setPriority(Job.LONG);
     job.setRule(ReportUtil.MUTEX_RULE);
@@ -26,15 +23,8 @@ public class ExportReport implements IActionPerformer<Void, MProject, HListEmpty
     job.setUser(true);
     job.schedule();
 
-    if (BLOCKING) {
-      try {
-        job.join();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
-
     return null;
   }
-
 }
+
+

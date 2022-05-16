@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import familypolymorphismdetection.metamodel.entity.MClass;
 import familypolymorphismdetection.metamodel.entity.MProject;
+import upt.ac.cti.config.Config;
 import upt.ac.cti.util.computation.SusceptibleClassesUtil;
 import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.time.StopWatch;
@@ -19,6 +20,8 @@ public class FamilyPolymorphismSusceptibleClassesJob extends Job {
   private static final Logger logger = RLogger.get();
 
   private final MProject mProject;
+
+  private final String jobFamily = Config.JOB_FAMILY;
 
   private final List<MClass> mClasses = new ArrayList<>();
 
@@ -60,6 +63,11 @@ public class FamilyPolymorphismSusceptibleClassesJob extends Job {
         .info("Time to resolve: " + stopWatch.getDuration().toMillis() + "ms");
 
     return Status.OK_STATUS;
+  }
+
+  @Override
+  public boolean belongsTo(Object family) {
+    return this.jobFamily.equals(family);
   }
 
 }

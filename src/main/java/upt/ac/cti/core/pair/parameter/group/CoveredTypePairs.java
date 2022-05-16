@@ -6,21 +6,19 @@ import familypolymorphismdetection.metamodel.entity.MParameterPair;
 import familypolymorphismdetection.metamodel.entity.MTypePair;
 import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.xcore.metametamodel.Group;
-import ro.lrg.xcore.metametamodel.IRelationBuilder;
-import ro.lrg.xcore.metametamodel.RelationBuilder;
-import upt.ac.cti.dependency.Dependencies;
+import upt.ac.cti.coverage.ICoveredTypesResolver;
 
-@RelationBuilder
-public class CoveredTypePairs implements IRelationBuilder<MTypePair, MParameterPair> {
+abstract class CoveredTypePairs {
 
-  @Override
+  protected abstract ICoveredTypesResolver<ILocalVariable> resolver();
+
   public Group<MTypePair> buildGroup(MParameterPair mParamterPair) {
     var group = new Group<MTypePair>();
 
     @SuppressWarnings("unchecked")
     var pair = (Pair<ILocalVariable, ILocalVariable>) mParamterPair.getUnderlyingObject();
 
-    var resolver = Dependencies.getParameterCoveredTypesResolver();
+    var resolver = resolver();
 
     var factory = Factory.getInstance();
 

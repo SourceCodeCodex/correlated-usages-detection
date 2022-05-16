@@ -7,15 +7,19 @@ import java.util.zip.ZipFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.ui.IWorkingSet;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.IOverwriteQuery;
 import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 import org.eclipse.ui.wizards.datatransfer.ZipFileStructureProvider;
+import org.javatuples.Pair;
 
 public class TestUtil {
 
@@ -63,17 +67,25 @@ public class TestUtil {
     }
   }
 
-  public static Optional<IJavaProject> getProject(String projectName) {
+  public static Optional<Pair<IJavaProject, IWorkingSet>> getProjectAndWorkingSet(
+      String projectName) {
     var workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
     var javaModel = JavaCore.create(workspaceRoot);
     var theProject = javaModel.getJavaProject(projectName);
+    var workingSet =
+        PlatformUI.getWorkbench().createLocalWorkingSetManager().createWorkingSet(projectName,
+            new IAdaptable[] {theProject});
 
     try {
       Arrays.toString(theProject.getAllPackageFragmentRoots());
     } catch (JavaModelException e) {
       throw new Error(e);
     }
-    return Optional.ofNullable(theProject);
+    if (theProject == null || workingSet == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(Pair.with(theProject, workingSet));
 
   }
 }

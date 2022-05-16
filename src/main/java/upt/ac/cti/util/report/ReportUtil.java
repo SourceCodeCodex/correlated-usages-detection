@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -20,9 +21,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.javatuples.Pair;
 import upt.ac.cti.config.Config;
+import upt.ac.cti.coverage.CoverageStrategy;
 import upt.ac.cti.util.time.StopWatch;
 
 public class ReportUtil {
+
+  /**
+   * Used only for testing purposes.
+   */
+  public static volatile boolean USE_TEST_PATH = false;
+  public static final String TEST_DIR_NAME = "test_zip";
 
   private ReportUtil() {
 
@@ -30,7 +38,8 @@ public class ReportUtil {
 
   public static final MutexRule MUTEX_RULE = new MutexRule();
 
-  public static void createReport(String projectName, Stream<Pair<String, Double>> results) {
+  public static void createReport(String projectName, CoverageStrategy strategy,
+      Stream<Pair<String, Double>> results) {
     var formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
     var date = new Date();
     var timestamp = formatter.format(date);
@@ -41,7 +50,11 @@ public class ReportUtil {
       var url = Platform.getBundle("FamilyPolymorphismDetection").getEntry("/");
       url = FileLocator.resolve(url);
 
-      var reportsPathFragment = url.getPath() + "target/" + projectName + "-" + timestamp;
+      var dirPath = url.getPath() + "target/" + (USE_TEST_PATH ? TEST_DIR_NAME + "/" : "");
+      var dir = new File(dirPath);
+      dir.mkdirs();
+
+      var reportsPathFragment = dirPath + projectName + "-" + strategy.name + "-" + timestamp;
       var resultsPath = reportsPathFragment + "-results.csv";
       var configPath = reportsPathFragment + "-config.csv";
       var zipPath = reportsPathFragment + ".zip";
@@ -79,7 +92,14 @@ public class ReportUtil {
           }
         });
 
-        Config.asStrings().entrySet().stream()
+        Map<String, String> configs;
+        if (strategy == CoverageStrategy.FLOW_INSENSITIVE) {
+          configs = Config.asStringsFlowInsensitive();
+        } else {
+          configs = Config.asStringsNameSimilarity();
+        }
+
+        configs.entrySet().stream()
             .forEach(e -> {
               try {
                 cPrinter.printRecord(e.getKey(), e.getValue());

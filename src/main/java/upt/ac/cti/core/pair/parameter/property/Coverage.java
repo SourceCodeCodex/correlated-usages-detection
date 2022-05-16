@@ -3,19 +3,17 @@ package upt.ac.cti.core.pair.parameter.property;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.javatuples.Pair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
-import ro.lrg.xcore.metametamodel.IPropertyComputer;
-import ro.lrg.xcore.metametamodel.PropertyComputer;
-import upt.ac.cti.dependency.Dependencies;
+import upt.ac.cti.coverage.ICoveredTypesResolver;
 
-@PropertyComputer
-public final class Coverage implements IPropertyComputer<Integer, MParameterPair> {
+abstract class Coverage {
 
-  @Override
+  protected abstract ICoveredTypesResolver<ILocalVariable> resolver();
+
   public Integer compute(MParameterPair mParameterPair) {
     @SuppressWarnings("unchecked")
     var pair = (Pair<ILocalVariable, ILocalVariable>) mParameterPair.getUnderlyingObject();
 
-    var resolver = Dependencies.getParameterCoveredTypesResolver();
+    var resolver = resolver();
 
     var analysisResult = resolver.resolve(pair.getValue0(), pair.getValue1());
 

@@ -14,7 +14,7 @@ public class MethodDeclarationResolverVisitor
 
   @Override
   public boolean visit(MethodDeclaration node) {
-    if (member.equals(node.resolveBinding().getJavaElement())) {
+    if (node.resolveBinding() != null && member.equals(node.resolveBinding().getJavaElement())) {
       result = Optional.of(node);
     }
     return true;

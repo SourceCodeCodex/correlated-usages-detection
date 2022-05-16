@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.jobs.Job;
 import org.junit.Test;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
-import upt.ac.cti.core.project.action.ExportReport;
+import upt.ac.cti.config.Config;
+import upt.ac.cti.util.report.ReportUtil;
 
 public class FPDTests {
 
@@ -26,90 +27,135 @@ public class FPDTests {
   }
 
   @Test
-  public void exportReportTest() throws IOException {
-    ExportReport.BLOCKING = true;
-    FPDTestSuite.getProject().exportReport();
-    ExportReport.BLOCKING = false;
+  public void exportTests() throws IOException {
+    ReportUtil.USE_TEST_PATH = true;
+
     var url = Platform.getBundle("FamilyPolymorphismDetection").getEntry("/");
-    var path = FileLocator.resolve(url).getPath() + "target/";
 
-    var folder = new File(path);
+    url = FileLocator.resolve(url);
+    var path = url.getPath() + "target/" + ReportUtil.TEST_DIR_NAME + "/";
 
-    assertTrue(Stream.of(folder.listFiles()).anyMatch(f -> f.getName().endsWith(".zip")));
+    var ws = FPDTestSuite.getWorkingSet();
+    ws.exportInOneReportFlowInsensitive();
+    ws.exportInOneReportNameSimilarity();
+    ws.exportReportsFlowInsensitive();
+    ws.exportReportsNameSimilarity();
+
+    var jobMan = Job.getJobManager();
+
+    List.of(jobMan.find(Config.JOB_FAMILY)).stream().forEach(t -> {
+      try {
+        t.join();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    });
+
+    var d = new File(path);
+    assertEquals(4, d.listFiles().length);
+    List.of(d.listFiles()).stream().forEach(File::delete);
+    d.delete();
+    ReportUtil.USE_TEST_PATH = false;
   }
 
   @Test
   public void downcastTest() {
-    assertApertureCoverage("upt.ac.cti.DowncastTest", 1. / 6.);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.DowncastTest", 1. / 6.);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.DowncastTest", 1. / 3.);
   }
 
   @Test
   public void inconclusiveMethodInvocationInitTest() {
-    assertApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest", 0.2);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest", 0.2);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest",
+        2. / 15.);
   }
 
   @Test
   public void listTest() {
-    assertApertureCoverage("upt.ac.cti.ListTest", 0.08);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ListTest", 0.08);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.ListTest", 0.16);
   }
 
   @Test
   public void listTest2() {
-    assertApertureCoverage("upt.ac.cti.ListTest2", 0.2);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ListTest2", 0.2);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.ListTest2", 0.16);
   }
 
   @Test
   public void accessObjectTest() {
-    assertApertureCoverage("upt.ac.cti.AccessObjectTest", 0.12);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.AccessObjectTest", 0.12);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.AccessObjectTest", 0.16);
   }
 
   @Test
   public void thisApertureCoverageTest() {
-    assertApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 1. / 3.);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 1. / 3.);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 0.16);
   }
 
   @Test
   public void simpleDerivationTest() {
-    assertApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
   }
 
   @Test
   public void complexDerivationTest() {
-    assertApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.04);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.04);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.16);
   }
 
   @Test
   public void inheritanceTest() {
-    assertApertureCoverage("upt.ac.cti.InheritanceTest", 0.08);
-    assertApertureCoverage("upt.ac.cti.InheritanceTest1", 0.04);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest", 0.08);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest1", 0.04);
+
+    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest", 0.16);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest1", 0.16);
   }
 
   @Test
   public void inheritanceTest2() {
-    assertApertureCoverage("upt.ac.cti.InheritanceTest2", 0.12);
-    assertApertureCoverage("upt.ac.cti.InheritanceTest21", 0.08);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest2", 0.12);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest21", 0.08);
+
+    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest2", 0.16);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest21", 0.16);
   }
 
   @Test
   public void constructorParametersTest() {
-    assertApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
   }
 
   @Test
   public void partialDerivationTest() {
-    assertApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.2);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.2);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.16);
   }
 
   @Test
   public void partialDerivationTest2() {
-    assertApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.04);
-    assertApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.12);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.04);
+    assertFlowInsensitiveApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.12);
+
+    assertNameSimilarityApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.16);
+    assertNameSimilarityApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.16);
   }
 
-  private void assertApertureCoverage(String className, Double expected) {
+  private void assertFlowInsensitiveApertureCoverage(String className, Double expected) {
     var mClass = findClass(className);
     assertNotNull(mClass);
-    assertEquals(expected, mClass.apertureCoverage());
+    assertEquals(expected, mClass.apertureCoverageFlowInsensitive());
+  }
+
+  private void assertNameSimilarityApertureCoverage(String className, Double expected) {
+    var mClass = findClass(className);
+    assertNotNull(mClass);
+    assertEquals(expected, mClass.apertureCoverageNameSimilarity());
   }
 
   @Test
@@ -127,7 +173,7 @@ public class FPDTests {
             .toList());
 
     var fieldCoverageSum = fieldPairs.stream()
-        .map(MFieldPair::coveredTypePairs)
+        .map(MFieldPair::coveredTypePairsFlowInsensitive)
         .collect(Collectors.summingInt(g -> g.getElements().size()));
 
     assertEquals(0, fieldCoverageSum);
@@ -146,7 +192,7 @@ public class FPDTests {
             .toList());
 
     var parameterCoverageSum = parameterPairs.stream()
-        .map(MParameterPair::coveredTypePairs)
+        .map(MParameterPair::coveredTypePairsFlowInsensitive)
         .collect(Collectors.summingInt(g -> g.getElements().size()));
 
     assertEquals(0, parameterCoverageSum);

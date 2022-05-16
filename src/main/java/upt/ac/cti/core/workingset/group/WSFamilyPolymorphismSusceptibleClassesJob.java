@@ -1,5 +1,6 @@
 package upt.ac.cti.core.workingset.group;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,7 +20,7 @@ public class WSFamilyPolymorphismSusceptibleClassesJob extends Job {
 
   private final MWorkingSet mWorkingSet;
 
-  private final List<MClass> mClasses = List.of();
+  private final List<MClass> mClasses = new ArrayList<>();
 
   public List<MClass> mClasses() {
     return mClasses;

@@ -2,10 +2,12 @@ package upt.ac.cti.dependency;
 
 import upt.ac.cti.aperture.FieldAllTypePairsResolver;
 import upt.ac.cti.aperture.ParameterAllTypePairsResolver;
-import upt.ac.cti.coverage.FieldCoveredTypesResolver;
-import upt.ac.cti.coverage.ParameterCoveredTypesResolver;
-import upt.ac.cti.coverage.derivator.util.FieldWritingBindingResolver;
-import upt.ac.cti.coverage.derivator.util.ParameterWritingBindingResolver;
+import upt.ac.cti.coverage.flow_insensitive.FlowInsensitiveFieldCoveredTypesResolver;
+import upt.ac.cti.coverage.flow_insensitive.FlowInsensitiveParameterCoveredTypesResolver;
+import upt.ac.cti.coverage.flow_insensitive.derivator.util.FieldWritingBindingResolver;
+import upt.ac.cti.coverage.flow_insensitive.derivator.util.ParameterWritingBindingResolver;
+import upt.ac.cti.coverage.name_similarity.NameSimilarityFieldCoveredTypesResolver;
+import upt.ac.cti.coverage.name_similarity.NameSimilarityParameterCoveredTypesResolver;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
 import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
 import upt.ac.cti.util.cache.Cache;
@@ -21,8 +23,11 @@ public class Dependencies {
   private static FieldAllTypePairsResolver fieldAllTypePairsResolver;
   private static ParameterAllTypePairsResolver parameterAllTypePairsResolver;
 
-  private static FieldCoveredTypesResolver fieldCoveredTypesResolver;
-  private static ParameterCoveredTypesResolver parameterCoveredTypesResolver;
+  private static FlowInsensitiveFieldCoveredTypesResolver flowInsensitiveFieldCoveredTypesResolver;
+  private static FlowInsensitiveParameterCoveredTypesResolver flowInsensitiveParameterCoveredTypesResolver;
+
+  private static NameSimilarityFieldCoveredTypesResolver nameSimilarityFieldCoveredTypesResolver;
+  private static NameSimilarityParameterCoveredTypesResolver nameSimilarityParameterCoveredTypesResolver;
 
   private static HierarchyResolver hierarchyResolver;
   private static CodeParser codeParser;
@@ -58,12 +63,22 @@ public class Dependencies {
     parameterWritingBindingResolver =
         new ParameterWritingBindingResolver(hierarchyResolver, parameterTypeBindingResolver);
 
-    fieldCoveredTypesResolver = new FieldCoveredTypesResolver(codeParser, javaEntitySearcher,
-        fieldWritingBindingResolver, fieldAllTypePairsResolver);
+    flowInsensitiveFieldCoveredTypesResolver =
+        new FlowInsensitiveFieldCoveredTypesResolver(codeParser, javaEntitySearcher,
+            fieldWritingBindingResolver, fieldAllTypePairsResolver);
 
-    parameterCoveredTypesResolver = new ParameterCoveredTypesResolver(codeParser,
-        javaEntitySearcher, parameterWritingBindingResolver,
-        parameterAllTypePairsResolver);
+    flowInsensitiveParameterCoveredTypesResolver =
+        new FlowInsensitiveParameterCoveredTypesResolver(codeParser,
+            javaEntitySearcher, parameterWritingBindingResolver,
+            parameterAllTypePairsResolver);
+
+    nameSimilarityFieldCoveredTypesResolver =
+        new NameSimilarityFieldCoveredTypesResolver(
+            fieldAllTypePairsResolver, fieldTypeBindingResolver);
+
+    nameSimilarityParameterCoveredTypesResolver =
+        new NameSimilarityParameterCoveredTypesResolver(parameterAllTypePairsResolver,
+            parameterTypeBindingResolver);
   }
 
 
@@ -75,12 +90,20 @@ public class Dependencies {
     return parameterAllTypePairsResolver;
   }
 
-  public static FieldCoveredTypesResolver getFieldCoveredTypesResolver() {
-    return fieldCoveredTypesResolver;
+  public static FlowInsensitiveFieldCoveredTypesResolver getFlowInsensitiveFieldCoveredTypesResolver() {
+    return flowInsensitiveFieldCoveredTypesResolver;
   }
 
-  public static ParameterCoveredTypesResolver getParameterCoveredTypesResolver() {
-    return parameterCoveredTypesResolver;
+  public static FlowInsensitiveParameterCoveredTypesResolver getFlowInsensitiveParameterCoveredTypesResolver() {
+    return flowInsensitiveParameterCoveredTypesResolver;
+  }
+
+  public static NameSimilarityFieldCoveredTypesResolver getNameSimilarityFieldCoveredTypesResolver() {
+    return nameSimilarityFieldCoveredTypesResolver;
+  }
+
+  public static NameSimilarityParameterCoveredTypesResolver getNameSimilarityParameterCoveredTypesResolver() {
+    return nameSimilarityParameterCoveredTypesResolver;
   }
 
   public static HierarchyResolver getHierarchyResolver() {
