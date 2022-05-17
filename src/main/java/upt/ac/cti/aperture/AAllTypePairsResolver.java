@@ -8,21 +8,22 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.cache.CacheRegion;
 import upt.ac.cti.util.computation.CartesianProduct;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.validation.IsTypeBindingCollection;
 
 public abstract class AAllTypePairsResolver<J extends IJavaElement> {
-  private final HierarchyResolver hierarchyResolver;
-  private final ABindingResolver<J, ITypeBinding> aBindingResolver;
-  private final Cache<J, List<IType>> cache = new Cache<>(CacheRegions.ALL_TYPES);
+  private final Cache<J, List<IType>> cache = new Cache<>(CacheRegion.ALL_TYPES);
 
-  public AAllTypePairsResolver(ABindingResolver<J, ITypeBinding> aBindingResolver,
-      HierarchyResolver hierarchyResolver) {
-    this.hierarchyResolver = hierarchyResolver;
+  private final HierarchyResolver hierarchyResolver = Dependencies.hierarchyResolver;
+
+  private final ABindingResolver<J, ITypeBinding> aBindingResolver;
+
+  public AAllTypePairsResolver(ABindingResolver<J, ITypeBinding> aBindingResolver) {
     this.aBindingResolver = aBindingResolver;
   }
 

@@ -23,7 +23,7 @@ public class FPDTests {
 
   @Test
   public void susceptribleClassesTest() {
-    assertEquals(17, FPDTestSuite.countSusceptibleClasses());
+    assertEquals(18, FPDTestSuite.countSusceptibleClasses());
   }
 
   @Test
@@ -36,10 +36,10 @@ public class FPDTests {
     var path = url.getPath() + "target/" + ReportUtil.TEST_DIR_NAME + "/";
 
     var ws = FPDTestSuite.getWorkingSet();
-    ws.exportInOneReportFlowInsensitive();
-    ws.exportInOneReportNameSimilarity();
-    ws.exportReportsFlowInsensitive();
-    ws.exportReportsNameSimilarity();
+    ws.cFI_ExportReports();
+    ws.cNS_ExportReports();
+    ws.sFI_ExportReports();
+    ws.sNS_ExportReports();
 
     var jobMan = Job.getJobManager();
 
@@ -60,106 +60,166 @@ public class FPDTests {
 
   @Test
   public void downcastTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.DowncastTest", 1. / 6.);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.DowncastTest", 1. / 3.);
+    assertSFIApertureCoverage("upt.ac.cti.DowncastTest", 1. / 6.);
+    assertCFIApertureCoverage("upt.ac.cti.DowncastTest", 1. / 6.);
+    assertSNSApertureCoverage("upt.ac.cti.DowncastTest", 1. / 3.);
+    assertCNSApertureCoverage("upt.ac.cti.DowncastTest", 1. / 3.);
   }
 
   @Test
   public void inconclusiveMethodInvocationInitTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest", 0.2);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest",
+    assertSFIApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest", 0.2);
+    assertCFIApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest", 0.2);
+    assertSNSApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest",
         2. / 15.);
+    assertCNSApertureCoverage("upt.ac.cti.InconclusiveMethodInvocationInitTest", 0.36);
   }
 
   @Test
   public void listTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ListTest", 0.08);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.ListTest", 0.16);
+    assertSFIApertureCoverage("upt.ac.cti.ListTest", 0.08);
+    assertCFIApertureCoverage("upt.ac.cti.ListTest", 0.08);
+    assertSNSApertureCoverage("upt.ac.cti.ListTest", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.ListTest", 0.36);
   }
 
   @Test
   public void listTest2() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ListTest2", 0.2);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.ListTest2", 0.16);
+    assertSFIApertureCoverage("upt.ac.cti.ListTest2", 0.2);
+    assertCFIApertureCoverage("upt.ac.cti.ListTest2", 0.2);
+    assertSNSApertureCoverage("upt.ac.cti.ListTest2", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.ListTest2", 0.36);
   }
 
   @Test
   public void accessObjectTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.AccessObjectTest", 0.12);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.AccessObjectTest", 0.16);
+    assertSFIApertureCoverage("upt.ac.cti.AccessObjectTest", 0.12);
+    assertCFIApertureCoverage("upt.ac.cti.AccessObjectTest", 0.12);
+    assertSNSApertureCoverage("upt.ac.cti.AccessObjectTest", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.AccessObjectTest", 0.36);
   }
 
   @Test
   public void thisApertureCoverageTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 1. / 3.);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 0.16);
-  }
-
-  @Test
-  public void simpleDerivationTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
+    assertSFIApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 1. / 3.);
+    assertCFIApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 1. / 3.);
+    assertSNSApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.ThisApertureCoverageTest", 0.36);
   }
 
   @Test
   public void complexDerivationTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.04);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.16);
+    assertSFIApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.04);
+    assertCFIApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.04);
+    assertSNSApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.ComplexDerivationTest", 0.36);
   }
 
   @Test
   public void inheritanceTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest", 0.08);
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest1", 0.04);
+    assertSFIApertureCoverage("upt.ac.cti.InheritanceTest", 0.08);
+    assertSFIApertureCoverage("upt.ac.cti.InheritanceTest1", 0.04);
 
-    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest", 0.16);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest1", 0.16);
+    assertCFIApertureCoverage("upt.ac.cti.InheritanceTest", 0.08);
+    assertCFIApertureCoverage("upt.ac.cti.InheritanceTest1", 0.04);
+
+    assertSNSApertureCoverage("upt.ac.cti.InheritanceTest", 0.16);
+    assertSNSApertureCoverage("upt.ac.cti.InheritanceTest1", 0.16);
+
+    assertCNSApertureCoverage("upt.ac.cti.InheritanceTest", 0.36);
+    assertCNSApertureCoverage("upt.ac.cti.InheritanceTest1", 0.36);
   }
 
   @Test
   public void inheritanceTest2() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest2", 0.12);
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.InheritanceTest21", 0.08);
+    assertSFIApertureCoverage("upt.ac.cti.InheritanceTest2", 0.12);
+    assertSFIApertureCoverage("upt.ac.cti.InheritanceTest21", 0.08);
 
-    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest2", 0.16);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.InheritanceTest21", 0.16);
+    assertCFIApertureCoverage("upt.ac.cti.InheritanceTest2", 0.12);
+    assertCFIApertureCoverage("upt.ac.cti.InheritanceTest21", 0.08);
+
+    assertSNSApertureCoverage("upt.ac.cti.InheritanceTest2", 0.16);
+    assertSNSApertureCoverage("upt.ac.cti.InheritanceTest21", 0.16);
+
+    assertCNSApertureCoverage("upt.ac.cti.InheritanceTest2", 0.36);
+    assertCNSApertureCoverage("upt.ac.cti.InheritanceTest21", 0.36);
   }
 
   @Test
   public void constructorParametersTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
+    assertSFIApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
+    assertCFIApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
+    assertSNSApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
+    assertCNSApertureCoverage("upt.ac.cti.ConstructorParametersTest", 1. / 3.);
   }
 
   @Test
   public void partialDerivationTest() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.2);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.16);
+    assertSFIApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.2);
+    assertCFIApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.2);
+    assertSNSApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.PartialDerivationTest", 0.36);
   }
 
   @Test
   public void partialDerivationTest2() {
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.04);
-    assertFlowInsensitiveApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.12);
+    assertSFIApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.04);
+    assertSFIApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.12);
 
-    assertNameSimilarityApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.16);
-    assertNameSimilarityApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.16);
-  }
+    assertCFIApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.04);
+    assertCFIApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.12);
 
-  private void assertFlowInsensitiveApertureCoverage(String className, Double expected) {
-    var mClass = findClass(className);
-    assertNotNull(mClass);
-    assertEquals(expected, mClass.apertureCoverageFlowInsensitive());
-  }
+    assertSNSApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.16);
+    assertSNSApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.16);
 
-  private void assertNameSimilarityApertureCoverage(String className, Double expected) {
-    var mClass = findClass(className);
-    assertNotNull(mClass);
-    assertEquals(expected, mClass.apertureCoverageNameSimilarity());
+    assertCNSApertureCoverage("upt.ac.cti.APartialDerivationTest2", 0.36);
+    assertCNSApertureCoverage("upt.ac.cti.PartialDerivationTest2", 0.36);
   }
 
   @Test
-  public void pairingValidationTest() {
+  public void simpleDerivationTest() {
+    assertSFIApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
+    assertCFIApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
+    assertSNSApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.SimpleDerivationTest", 0.36);
+  }
+
+  @Test
+  public void exceedDepthTest() {
+    assertSFIApertureCoverage("upt.ac.cti.ExceedDepthTest", 0.00);
+    assertCFIApertureCoverage("upt.ac.cti.ExceedDepthTest", 0.08);
+    assertSNSApertureCoverage("upt.ac.cti.ExceedDepthTest", 0.16);
+    assertCNSApertureCoverage("upt.ac.cti.ExceedDepthTest", 0.36);
+  }
+
+  private void assertSFIApertureCoverage(String className, Double expected) {
+    var mClass = findClass(className);
+    assertNotNull(mClass);
+    assertEquals(expected, mClass.sFI_ApertureCoverage());
+  }
+
+
+  private void assertCFIApertureCoverage(String className, Double expected) {
+    var mClass = findClass(className);
+    assertNotNull(mClass);
+    assertEquals(expected, mClass.cFI_ApertureCoverage());
+  }
+
+  private void assertSNSApertureCoverage(String className, Double expected) {
+    var mClass = findClass(className);
+    assertNotNull(mClass);
+    assertEquals(expected, mClass.sNS_ApertureCoverage());
+  }
+
+  private void assertCNSApertureCoverage(String className, Double expected) {
+    var mClass = findClass(className);
+    assertNotNull(mClass);
+    assertEquals(expected, mClass.cNS_ApertureCoverage());
+  }
+
+  @Test
+  public void apairingValidationTest() {
+
     var mClass = findClass("upt.ac.cti.PairingValidationTest");
     assertNotNull(mClass);
 
@@ -172,15 +232,16 @@ public class FPDTests {
             .map(MFieldPair::aperture)
             .toList());
 
-    var fieldCoverageSum = fieldPairs.stream()
-        .map(MFieldPair::coveredTypePairsFlowInsensitive)
+    fieldApertures.sort(Comparator.naturalOrder());
+    assertTrue(fieldAperturesExpected.equals(fieldApertures));
+
+    var sfiFieldCoverageSum = fieldPairs.stream()
+        .map(MFieldPair::sFI_CoveredTypes)
         .collect(Collectors.summingInt(g -> g.getElements().size()));
 
-    assertEquals(0, fieldCoverageSum);
+    assertEquals(0, sfiFieldCoverageSum);
 
-    fieldApertures.sort(Comparator.naturalOrder());
 
-    assertTrue(fieldAperturesExpected.equals(fieldApertures));
 
     var parameterAperturesExpected = List.of(5, 5, 25);
     var parameterPairs = mClass.susceptibleParameterPairs().getElements();
@@ -191,15 +252,14 @@ public class FPDTests {
             .map(MParameterPair::aperture)
             .toList());
 
-    var parameterCoverageSum = parameterPairs.stream()
-        .map(MParameterPair::coveredTypePairsFlowInsensitive)
+    parameterApertures.sort(Comparator.naturalOrder());
+    assertTrue(parameterAperturesExpected.equals(parameterApertures));
+
+    var sfiParameterCoverageSum = parameterPairs.stream()
+        .map(MParameterPair::sFI_CoveredTypes)
         .collect(Collectors.summingInt(g -> g.getElements().size()));
 
-    assertEquals(0, parameterCoverageSum);
-
-    parameterApertures.sort(Comparator.naturalOrder());
-
-    assertTrue(parameterAperturesExpected.equals(parameterApertures));
+    assertEquals(0, sfiParameterCoverageSum);
 
 
 

@@ -21,15 +21,10 @@ import upt.ac.cti.util.validation.IsJavaElementCollection;
 
 public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
 
-  private final CodeParser parser;
-  private final JavaEntitySearcher javaEntitySearcher;
-  private final IsJavaElementCollection<IField> isCollection;
-
-  public FieldWritingsCombiner(CodeParser parser, JavaEntitySearcher javaEntitySearcher) {
-    this.parser = parser;
-    this.javaEntitySearcher = javaEntitySearcher;
-    this.isCollection = new IsJavaElementCollection<>(Dependencies.getFieldTypeBindingResolver());
-  }
+  private final CodeParser parser = Dependencies.codeParser;
+  private final JavaEntitySearcher javaEntitySearcher = Dependencies.javaEntitySearcher;
+  private final IsJavaElementCollection<IField> isCollection =
+      new IsJavaElementCollection<>(Dependencies.fieldTypeBindingResolver);
 
   @Override
   public List<Pair<Writing<IField>, Writing<IField>>> combine(IField field1, IField field2) {

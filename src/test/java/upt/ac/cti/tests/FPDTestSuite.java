@@ -12,7 +12,7 @@ import familypolymorphismdetection.metamodel.entity.MProject;
 import familypolymorphismdetection.metamodel.entity.MWorkingSet;
 import familypolymorphismdetection.metamodel.factory.Factory;
 import upt.ac.cti.config.Config;
-import upt.ac.cti.ui.Startup;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.TestUtil;
 
 @RunWith(Suite.class)
@@ -51,12 +51,6 @@ public class FPDTestSuite {
 
   @BeforeClass
   public static void setUp() {
-    Startup.init();
-    Config.MAX_DEPTH_THRESHOLD = 100;
-    Config.MAX_DEPTH_DIFF = 100;
-    Config.TOKENS_MAX_DIFF = 3;
-    Config.TOKENS_THRESHOLD = 0.5;
-
     TestUtil.importProject(PROJECT_NAME, PROJECT_NAME + ".zip");
     var p = TestUtil.getProjectAndWorkingSet(PROJECT_NAME).get();
     var javaProject = p.getValue0();
@@ -65,6 +59,17 @@ public class FPDTestSuite {
     mProject = Factory.getInstance().createMProject(javaProject);
     familyPolymorphismSusceptibleClasses =
         mProject.familyPolymorphismSusceptibleClasses().getElements();
+  }
+
+  @BeforeClass
+  public static void setTestingConfiguration() {
+    Config.MAX_DEPTH_THRESHOLD = 3;
+    Config.TOKENS_MAX_DIFF = 3;
+    Config.TOKENS_THRESHOLD = 0.5;
+    Config.CLASS_ANALYSIS_PARALLELISM = 8;
+    Config.MIN_HIERARCHY_SIZE = 1;
+
+    Dependencies.init();
   }
 
   @AfterClass

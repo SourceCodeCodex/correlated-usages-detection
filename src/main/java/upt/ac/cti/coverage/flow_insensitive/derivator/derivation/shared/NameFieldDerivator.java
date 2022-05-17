@@ -7,16 +7,10 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDeriva
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.algorithm.FieldDerivatorAlgorithm;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.parsing.CodeParser;
-import upt.ac.cti.util.search.JavaEntitySearcher;
 
 public final class NameFieldDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
 
-  private final FieldDerivatorAlgorithm<J> algorithm;
-
-  public NameFieldDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.algorithm = new FieldDerivatorAlgorithm<>(javaEntitySearcher, codeParser);
-  }
+  private final FieldDerivatorAlgorithm<J> algorithm = new FieldDerivatorAlgorithm<>();
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant) {

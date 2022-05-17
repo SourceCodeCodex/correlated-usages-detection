@@ -21,7 +21,7 @@ import upt.ac.cti.util.report.ReportUtil;
 
 class ExportApertureCoverageJob extends Job {
 
-  private final Logger logger = RLogger.get();
+  private final Logger logger;
 
   private static ForkJoinPool pool = new ForkJoinPool(Config.CLASS_ANALYSIS_PARALLELISM);
 
@@ -39,6 +39,7 @@ class ExportApertureCoverageJob extends Job {
     this.mProject = mProject;
     this.apertureCoverage = apertureCoverage;
     this.coverageStrategy = strategy;
+    logger = RLogger.get(this.getClass().getSimpleName() + "-" + strategy.name);
   }
 
   @Override

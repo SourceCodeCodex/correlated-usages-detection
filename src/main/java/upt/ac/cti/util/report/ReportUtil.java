@@ -93,7 +93,7 @@ public class ReportUtil {
         });
 
         Map<String, String> configs;
-        if (strategy == CoverageStrategy.FLOW_INSENSITIVE) {
+        if (strategy == CoverageStrategy.CONSERVING_FLOW_INSENSITIVE) {
           configs = Config.asStringsFlowInsensitive();
         } else {
           configs = Config.asStringsNameSimilarity();

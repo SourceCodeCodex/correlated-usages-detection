@@ -11,8 +11,6 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.SuperMet
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.logging.RLogger;
-import upt.ac.cti.util.parsing.CodeParser;
-import upt.ac.cti.util.search.JavaEntitySearcher;
 
 final public class SimpleWritingsDerivator<J extends IJavaElement>
     implements IWritingsDerivator<J> {
@@ -29,15 +27,15 @@ final public class SimpleWritingsDerivator<J extends IJavaElement>
 
   private static final Logger logger = RLogger.get();
 
-  public SimpleWritingsDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.fa = new FieldAccessDerivator<>(javaEntitySearcher, codeParser);;
-    this.mi = new MethodInvocationDerivator<>(codeParser);
-    this.sfa = new SuperFieldAccessDerivator<>(javaEntitySearcher, codeParser);
-    this.smi = new SuperMethodInvocationDerivator<>(codeParser);
+  public SimpleWritingsDerivator() {
+    this.fa = new FieldAccessDerivator<>();
+    this.mi = new MethodInvocationDerivator<>();
+    this.sfa = new SuperFieldAccessDerivator<>();
+    this.smi = new SuperMethodInvocationDerivator<>();
     this.a = new AssignmentDerivator<>();
     this.pe = new ParenthesizedExpressionDerivator<>();
     this.ce = new ConditionalExpressionDerivator<>();
-    this.n = new NameDerivator<>(javaEntitySearcher, codeParser);
+    this.n = new NameDerivator<>();
     this.c = new CastDerivator<>();
   }
 

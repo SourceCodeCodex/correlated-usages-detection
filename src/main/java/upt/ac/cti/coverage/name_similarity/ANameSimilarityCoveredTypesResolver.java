@@ -2,7 +2,6 @@ package upt.ac.cti.coverage.name_similarity;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -12,30 +11,28 @@ import upt.ac.cti.config.Config;
 import upt.ac.cti.coverage.ICoveredTypesResolver;
 import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.cache.CacheRegion;
 import upt.ac.cti.util.computation.TokensUtil;
-import upt.ac.cti.util.validation.IsTypeBindingCollection;
 
 abstract class ANameSimilarityCoveredTypesResolver<J extends IJavaElement>
     implements ICoveredTypesResolver<J> {
 
-  private final ABindingResolver<J, ITypeBinding> aBindingResolver;
-  private final AAllTypePairsResolver<J> aAllTypePairsResolver;
+  protected final ABindingResolver<J, ITypeBinding> aBindingResolver;
+  protected final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
-  private static final IsTypeBindingCollection isCollection = new IsTypeBindingCollection();
-
-  private static final int TOKENS_MAX_DIFF = Config.TOKENS_MAX_DIFF;;
-  private static final double TOKENS_THRESHOLD = Config.TOKENS_THRESHOLD;;
-
-  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache =
-      new Cache<>(CacheRegions.COVERED_TYPES_NAME_SIMILARITY);
+  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache;
 
   public ANameSimilarityCoveredTypesResolver(
       ABindingResolver<J, ITypeBinding> aBindingResolver,
-      AAllTypePairsResolver<J> aAllTypePairsResolver) {
+      AAllTypePairsResolver<J> aAllTypePairsResolver,
+      CacheRegion region) {
     this.aBindingResolver = aBindingResolver;
     this.aAllTypePairsResolver = aAllTypePairsResolver;
+    cache = new Cache<>(region);
   }
+
+  protected abstract Optional<Set<Pair<IType, IType>>> computeResult(J javaElement1,
+      J javaElement2);
 
   @Override
   public Optional<Set<Pair<IType, IType>>> resolve(J javaElement1, J javaElement2) {
@@ -51,33 +48,19 @@ abstract class ANameSimilarityCoveredTypesResolver<J extends IJavaElement>
       return Optional.empty();
     }
 
-    var tb1 = typeBinding1O.get();
-    var tb2 = typeBinding2O.get();
-
-    if (isCollection.test(tb1)) {
-      tb1 = tb1.getTypeArguments()[0];
-    }
-
-    if (isCollection.test(tb2)) {
-      tb2 = tb2.getTypeArguments()[0];
-    }
-
-    var result = aAllTypePairsResolver.resolve(javaElement1, javaElement2).parallelStream()
-        .filter(p -> p.getValue0().getPackageFragment().equals(p.getValue1().getPackageFragment()))
-        .filter(p -> areTokensOk(p))
-        .collect(Collectors.toSet());
+    var result = computeResult(javaElement1, javaElement2);
 
 
-    cache.put(Pair.with(javaElement1, javaElement2), Optional.of(result));
-    return Optional.of(result);
+    cache.put(Pair.with(javaElement1, javaElement2), result);
+    return result;
   }
 
-  private final boolean areTokensOk(Pair<IType, IType> sub) {
+  protected final boolean validateTokens(Pair<IType, IType> sub) {
     var s1Tokens = TokensUtil.splitCamelCase(sub.getValue0().getElementName());
     var s2Tokens = TokensUtil.splitCamelCase(sub.getValue1().getElementName());
 
 
-    if (Math.abs(s1Tokens.size() - s2Tokens.size()) > TOKENS_MAX_DIFF) {
+    if (Math.abs(s1Tokens.size() - s2Tokens.size()) > Config.TOKENS_MAX_DIFF) {
       return false;
     }
 
@@ -86,8 +69,9 @@ abstract class ANameSimilarityCoveredTypesResolver<J extends IJavaElement>
     s1Tokens.retainAll(s2Tokens);
 
 
-    return (s1Tokens.size()) / avgNameLength >= TOKENS_THRESHOLD;
+    return (s1Tokens.size()) / avgNameLength >= Config.TOKENS_THRESHOLD;
 
   };
+
 
 }

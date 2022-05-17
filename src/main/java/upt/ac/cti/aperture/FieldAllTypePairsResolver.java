@@ -3,15 +3,14 @@ package upt.ac.cti.aperture;
 import java.util.Set;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.javatuples.Pair;
-import upt.ac.cti.util.binding.FieldTypeBindingResolver;
-import upt.ac.cti.util.hierarchy.HierarchyResolver;
+import upt.ac.cti.util.binding.ABindingResolver;
 
 public class FieldAllTypePairsResolver extends AAllTypePairsResolver<IField> {
 
-  public FieldAllTypePairsResolver(FieldTypeBindingResolver fieldTypeBindingResolver,
-      HierarchyResolver hierarchyResolver) {
-    super(fieldTypeBindingResolver, hierarchyResolver);
+  public FieldAllTypePairsResolver(ABindingResolver<IField, ITypeBinding> aBindingResolver) {
+    super(aBindingResolver);
   }
 
   @Override

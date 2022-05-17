@@ -6,17 +6,11 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.MethodIn
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.SuperMethodInvocationDerivator;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.parsing.CodeParser;
 
 class MDerivator<J extends IJavaElement> implements IEntityDerivator<J> {
 
-  private final MethodInvocationDerivator<J> mi;
-  private final SuperMethodInvocationDerivator<J> smi;
-
-  public MDerivator(CodeParser codeParser) {
-    mi = new MethodInvocationDerivator<>(codeParser);
-    smi = new SuperMethodInvocationDerivator<>(codeParser);
-  }
+  private final MethodInvocationDerivator<J> mi = new MethodInvocationDerivator<>();
+  private final SuperMethodInvocationDerivator<J> smi = new SuperMethodInvocationDerivator<>();
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> w) {

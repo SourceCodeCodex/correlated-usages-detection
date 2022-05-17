@@ -10,18 +10,14 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDeriva
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.visitor.ArgumentMethodInvocationVisitor;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.computation.CartesianProduct;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
 class PPDifferentMethodDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
-  private final JavaEntitySearcher javaEntitySearcher;
-  private final CodeParser codeParser;
-
-  public PPDifferentMethodDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.javaEntitySearcher = javaEntitySearcher;
-    this.codeParser = codeParser;
-  }
+  private final JavaEntitySearcher javaEntitySearcher = Dependencies.javaEntitySearcher;
+  private final CodeParser codeParser = Dependencies.codeParser;
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> w1, Writing<J> w2) {

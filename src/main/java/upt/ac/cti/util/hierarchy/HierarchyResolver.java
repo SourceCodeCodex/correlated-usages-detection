@@ -8,11 +8,11 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.cache.CacheRegion;
 
 public final class HierarchyResolver {
 
-  private final Cache<IType, ITypeHierarchy> cache = new Cache<>(CacheRegions.HIERARCHY);
+  private final Cache<IType, ITypeHierarchy> cache = new Cache<>(CacheRegion.HIERARCHY);
 
   public List<IType> resolveConcrete(IType type) {
     var concrete = resolve(type).stream().filter(it -> {

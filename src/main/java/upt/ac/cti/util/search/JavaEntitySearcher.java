@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.cache.CacheRegion;
 import upt.ac.cti.util.search.requestor.AMatchesResolverRequestor;
 import upt.ac.cti.util.search.requestor.LocalVariableWritingsRequestor;
 import upt.ac.cti.util.search.requestor.MethodInvocationsRequestor;
@@ -27,7 +27,7 @@ import upt.ac.cti.util.search.requestor.FieldWritingsRequestor;
 public final class JavaEntitySearcher {
 
   private final Cache<IJavaElement, List<IJavaElement>> cache =
-      new Cache<>(CacheRegions.SEARCH);
+      new Cache<>(CacheRegion.SEARCH);
 
   public Set<IMethod> searchFieldWritings(IField field) {
     var requestor = new FieldWritingsRequestor();

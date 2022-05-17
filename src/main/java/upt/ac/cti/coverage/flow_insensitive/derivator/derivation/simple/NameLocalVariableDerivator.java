@@ -9,19 +9,16 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDeriva
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.simple.visitor.LocalVariableAssignmentVisitor;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
 final class NameLocalVariableDerivator<J extends IJavaElement>
     implements IWritingsDerivator<J> {
 
-  private final JavaEntitySearcher javaEntitySearcher;
-  private final CodeParser codeParser;
+  private final JavaEntitySearcher javaEntitySearcher = Dependencies.javaEntitySearcher;
+  private final CodeParser codeParser = Dependencies.codeParser;
 
-  public NameLocalVariableDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.javaEntitySearcher = javaEntitySearcher;
-    this.codeParser = codeParser;
-  }
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant) {

@@ -8,25 +8,24 @@ import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.binding.NotLeafBinding;
 import upt.ac.cti.coverage.flow_insensitive.model.binding.ResolvedBinding;
 import upt.ac.cti.coverage.flow_insensitive.model.binding.WritingBinding;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.binding.ABindingResolver;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.cache.CacheRegion;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.validation.IsTypeBindingCollection;
 
 public abstract class AWritingBindingResolver<J extends IJavaElement> {
 
   private final Cache<Writing<? extends IJavaElement>, WritingBinding> cache =
-      new Cache<>(CacheRegions.W_BINDING);
+      new Cache<>(CacheRegion.W_BINDING);
 
-  private final HierarchyResolver hierarchyResolver;
+  private final HierarchyResolver hierarchyResolver = Dependencies.hierarchyResolver;
+  private final IsTypeBindingCollection isTBCollection = Dependencies.isTypeBindingCollection;
+
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
 
-  private static final IsTypeBindingCollection isTBCollection = new IsTypeBindingCollection();
-
-  public AWritingBindingResolver(HierarchyResolver hierarchyResolver,
-      ABindingResolver<J, ITypeBinding> aBindingResolver) {
-    this.hierarchyResolver = hierarchyResolver;
+  public AWritingBindingResolver(ABindingResolver<J, ITypeBinding> aBindingResolver) {
     this.aBindingResolver = aBindingResolver;
   }
 

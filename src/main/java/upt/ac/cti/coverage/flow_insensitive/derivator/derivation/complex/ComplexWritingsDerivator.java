@@ -10,8 +10,6 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDeriva
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.logging.RLogger;
-import upt.ac.cti.util.parsing.CodeParser;
-import upt.ac.cti.util.search.JavaEntitySearcher;
 
 public final class ComplexWritingsDerivator<J extends IJavaElement>
     implements IWritingsDerivator<J> {
@@ -25,13 +23,13 @@ public final class ComplexWritingsDerivator<J extends IJavaElement>
 
   private static final Logger logger = RLogger.get();
 
-  public ComplexWritingsDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.mm = new MMDerivator<>(codeParser);
-    this.ff = new FFDerivator<>(javaEntitySearcher, codeParser);
-    this.fm = new FMDerivator<>(javaEntitySearcher, codeParser);
-    this.fp = new FPDerivator<>(javaEntitySearcher, codeParser);
-    this.mp = new MPDerivator<>(javaEntitySearcher, codeParser);
-    this.pp = new PPDerivator<>(javaEntitySearcher, codeParser);
+  public ComplexWritingsDerivator() {
+    this.mm = new MMDerivator<>();
+    this.ff = new FFDerivator<>();
+    this.fm = new FMDerivator<>();
+    this.fp = new FPDerivator<>();
+    this.mp = new MPDerivator<>();
+    this.pp = new PPDerivator<>();
   }
 
   @Override

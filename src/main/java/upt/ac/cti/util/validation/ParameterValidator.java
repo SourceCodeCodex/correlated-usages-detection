@@ -5,19 +5,16 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.config.Config;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.binding.ParameterTypeBindingResolver;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 
 public final class ParameterValidator implements Predicate<ILocalVariable> {
 
-  private final ParameterTypeBindingResolver parameterTypeBindingResolver;
-  private final HierarchyResolver hierarchyResolver;
+  private final ParameterTypeBindingResolver parameterTypeBindingResolver =
+      Dependencies.parameterTypeBindingResolver;
+  private final HierarchyResolver hierarchyResolver = Dependencies.hierarchyResolver;
 
-  public ParameterValidator(ParameterTypeBindingResolver parameterTypeBindingResolver,
-      HierarchyResolver hierarchyResolver) {
-    this.parameterTypeBindingResolver = parameterTypeBindingResolver;
-    this.hierarchyResolver = hierarchyResolver;
-  }
 
   @Override
   public boolean test(ILocalVariable t) {

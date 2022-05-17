@@ -7,20 +7,12 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.NameFiel
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.SuperFieldAccessDerivator;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.parsing.CodeParser;
-import upt.ac.cti.util.search.JavaEntitySearcher;
 
 class FDerivator<J extends IJavaElement> implements IEntityDerivator<J> {
 
-  private final NameFieldDerivator<J> nf;
-  private final FieldAccessDerivator<J> fa;
-  private final SuperFieldAccessDerivator<J> sfa;
-
-  public FDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    nf = new NameFieldDerivator<>(javaEntitySearcher, codeParser);
-    fa = new FieldAccessDerivator<>(javaEntitySearcher, codeParser);
-    sfa = new SuperFieldAccessDerivator<>(javaEntitySearcher, codeParser);
-  }
+  private final NameFieldDerivator<J> nf = new NameFieldDerivator<>();
+  private final FieldAccessDerivator<J> fa = new FieldAccessDerivator<>();
+  private final SuperFieldAccessDerivator<J> sfa = new SuperFieldAccessDerivator<>();
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> w) {

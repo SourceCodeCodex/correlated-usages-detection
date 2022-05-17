@@ -7,16 +7,11 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDeriva
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.algorithm.InvocationDerivatorAlgorithm;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.parsing.CodeParser;
 
 public final class SuperMethodInvocationDerivator<J extends IJavaElement>
     implements IWritingsDerivator<J> {
 
-  private final InvocationDerivatorAlgorithm<J> algorithm;
-
-  public SuperMethodInvocationDerivator(CodeParser codeParser) {
-    this.algorithm = new InvocationDerivatorAlgorithm<>(codeParser);
-  }
+  private final InvocationDerivatorAlgorithm<J> algorithm = new InvocationDerivatorAlgorithm<>();
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant) {

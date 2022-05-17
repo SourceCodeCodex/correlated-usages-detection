@@ -8,21 +8,12 @@ import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.NameFiel
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.NameParameterDerivator;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.parsing.CodeParser;
-import upt.ac.cti.util.search.JavaEntitySearcher;
 
 final class NameDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
 
-  private final NameParameterDerivator<J> p;
-  private final NameFieldDerivator<J> f;
-  private final NameLocalVariableDerivator<J> lv;
-
-
-  public NameDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.p = new NameParameterDerivator<>(javaEntitySearcher, codeParser);
-    this.f = new NameFieldDerivator<>(javaEntitySearcher, codeParser);
-    this.lv = new NameLocalVariableDerivator<>(javaEntitySearcher, codeParser);
-  }
+  private final NameParameterDerivator<J> p = new NameParameterDerivator<>();
+  private final NameFieldDerivator<J> f = new NameFieldDerivator<>();
+  private final NameLocalVariableDerivator<J> lv = new NameLocalVariableDerivator<>();
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant) {

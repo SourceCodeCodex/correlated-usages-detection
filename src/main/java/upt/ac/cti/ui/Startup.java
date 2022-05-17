@@ -57,11 +57,6 @@ public final class Startup implements IStartup {
       return null;
     });
 
-    init();
-
-  }
-
-  public static void init() {
     CacheConfig.init();
     Config.init();
 
@@ -69,6 +64,9 @@ public final class Startup implements IStartup {
     JCS.setLogSystem(LogManager.LOGSYSTEM_JAVA_UTIL_LOGGING);
 
     Dependencies.init();
+
   }
+
+
 
 }

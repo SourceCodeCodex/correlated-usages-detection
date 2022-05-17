@@ -15,7 +15,7 @@ public final class AllTypePairs implements IRelationBuilder<MTypePair, MParamete
 
   @Override
   public Group<MTypePair> buildGroup(MParameterPair mParamterPair) {
-    var resolver = Dependencies.getParameterAllTypePairsResolver();
+    var resolver = Dependencies.parameterAllTypePairsResolver;
 
     var group = new Group<MTypePair>();
 

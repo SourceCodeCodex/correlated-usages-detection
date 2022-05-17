@@ -6,13 +6,18 @@ import java.util.logging.Logger;
 import familypolymorphismdetection.metamodel.entity.MClass;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
+import upt.ac.cti.coverage.CoverageStrategy;
 import upt.ac.cti.util.computation.ApertureCoverageUtil;
 import upt.ac.cti.util.logging.RLogger;
 import upt.ac.cti.util.time.StopWatch;
 
 abstract class ApertureCoverage {
 
-  private static final Logger logger = RLogger.get();
+  private final Logger logger;
+
+  public ApertureCoverage(CoverageStrategy strategy) {
+    logger = RLogger.get("ApertureCoverage-" + strategy.name);
+  }
 
   public Double compute(MClass mClass) {
     var stopWatch = new StopWatch();

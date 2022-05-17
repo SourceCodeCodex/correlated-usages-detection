@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.cache.CacheRegion;
 import upt.ac.cti.util.parsing.visitor.AASTNodeResolverVisitor;
 import upt.ac.cti.util.parsing.visitor.MethodDeclarationResolverVisitor;
 import upt.ac.cti.util.parsing.visitor.VariableDeclarationFragmentResolverVisitor;
@@ -22,7 +22,7 @@ import upt.ac.cti.util.parsing.visitor.VariableDeclarationFragmentResolverVisito
 
 public final class CodeParser {
 
-  private final Cache<IJavaElement, Optional<ASTNode>> cache = new Cache<>(CacheRegions.PARSER);
+  private final Cache<IJavaElement, Optional<ASTNode>> cache = new Cache<>(CacheRegion.PARSER);
 
   public Optional<CompilationUnit> parse(ICompilationUnit compilationUnit) {
     var cachedCU = cache.get(compilationUnit);

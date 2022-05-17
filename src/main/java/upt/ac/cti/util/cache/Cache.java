@@ -17,7 +17,7 @@ public final class Cache<K, T> implements ICache<K, T> {
     caches = new ArrayList<>();
   }
 
-  public Cache(CacheRegions region) {
+  public Cache(CacheRegion region) {
     cache = JCS.getInstance(region.region);
     caches.add(this);
   }

@@ -14,6 +14,10 @@ public class RLogger {
 
   }
 
+  public static Logger get(String name) {
+    return Logger.getLogger(name);
+  }
+
   @SuppressWarnings("unused")
   public static String format() {
     var ANSI_RESET = "\u001B[0m";

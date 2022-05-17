@@ -53,8 +53,8 @@ public class SusceptibleParameterPairs implements IRelationBuilder<MParameterPai
       parameters = List.of();
     }
 
-    var parameterTypeBindingResolver = Dependencies.getParameterTypeBindingResolver();
-    var validator = Dependencies.getParameterValidator();
+    var parameterTypeBindingResolver = Dependencies.parameterTypeBindingResolver;
+    var validator = Dependencies.parameterValidator;
 
     var validParameters = parameters.stream()
         .filter(parameter -> validator.test(parameter))

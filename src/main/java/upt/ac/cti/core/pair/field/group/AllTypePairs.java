@@ -15,7 +15,7 @@ public final class AllTypePairs implements IRelationBuilder<MTypePair, MFieldPai
 
   @Override
   public Group<MTypePair> buildGroup(MFieldPair mFieldPair) {
-    var resolver = Dependencies.getFieldAllTypePairsResolver();
+    var resolver = Dependencies.fieldAllTypePairsResolver;
 
     var group = new Group<MTypePair>();
 

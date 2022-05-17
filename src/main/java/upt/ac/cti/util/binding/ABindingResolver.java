@@ -11,11 +11,11 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.IBinding;
 import upt.ac.cti.util.binding.visitor.ABindingResolverVisitor;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
+import upt.ac.cti.util.cache.CacheRegion;
 
 public abstract class ABindingResolver<J extends IJavaElement, B extends IBinding> {
 
-  private final Cache<ICompilationUnit, ASTNode> astCache = new Cache<>(CacheRegions.BINDING);
+  private final Cache<ICompilationUnit, ASTNode> astCache = new Cache<>(CacheRegion.BINDING);
 
   public abstract Optional<B> resolve(J member);
 

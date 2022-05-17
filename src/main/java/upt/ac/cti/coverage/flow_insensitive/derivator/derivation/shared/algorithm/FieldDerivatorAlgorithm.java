@@ -9,18 +9,14 @@ import org.javatuples.Pair;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.visitor.FieldAssignmentVisitor;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
 public final class FieldDerivatorAlgorithm<J extends IJavaElement> {
 
-  private final JavaEntitySearcher javaEntitySearcher;
-  private final CodeParser codeParser;
-
-  public FieldDerivatorAlgorithm(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.javaEntitySearcher = javaEntitySearcher;
-    this.codeParser = codeParser;
-  }
+  private final JavaEntitySearcher javaEntitySearcher = Dependencies.javaEntitySearcher;
+  private final CodeParser codeParser = Dependencies.codeParser;
 
   public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant, IField field) {
     var writingMethods = javaEntitySearcher.searchFieldWritings(field);

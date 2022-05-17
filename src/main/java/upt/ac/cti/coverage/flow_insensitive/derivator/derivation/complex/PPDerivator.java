@@ -6,18 +6,11 @@ import org.eclipse.jdt.core.dom.Name;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDerivator;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
-import upt.ac.cti.util.parsing.CodeParser;
-import upt.ac.cti.util.search.JavaEntitySearcher;
 
 class PPDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
 
-  private final PPSameMethodDerivator<J> pps;
-  private final PPDifferentMethodDerivator<J> ppd;
-
-  public PPDerivator(JavaEntitySearcher javaEntitySearcher, CodeParser codeParser) {
-    this.pps = new PPSameMethodDerivator<>(javaEntitySearcher, codeParser);
-    this.ppd = new PPDifferentMethodDerivator<>(javaEntitySearcher, codeParser);
-  }
+  private final PPSameMethodDerivator<J> pps = new PPSameMethodDerivator<>();
+  private final PPDifferentMethodDerivator<J> ppd = new PPDifferentMethodDerivator<>();
 
   @Override
   public NewWritingPairs<J> derive(Writing<J> w1, Writing<J> w2) {

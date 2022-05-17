@@ -7,38 +7,27 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.javatuples.Pair;
-import upt.ac.cti.aperture.AAllTypePairsResolver;
 import upt.ac.cti.coverage.ICoveredTypesResolver;
 import upt.ac.cti.coverage.flow_insensitive.combiner.IWritingsCombiner;
-import upt.ac.cti.coverage.flow_insensitive.derivator.DerivationManager;
-import upt.ac.cti.coverage.flow_insensitive.derivator.util.AWritingBindingResolver;
+import upt.ac.cti.coverage.flow_insensitive.derivator.IDerivationManager;
 import upt.ac.cti.util.cache.Cache;
-import upt.ac.cti.util.cache.CacheRegions;
-import upt.ac.cti.util.parsing.CodeParser;
-import upt.ac.cti.util.search.JavaEntitySearcher;
+import upt.ac.cti.util.cache.CacheRegion;
 
-abstract class AFlowInsensitiveCoveredTypesResolver<J extends IJavaElement> implements ICoveredTypesResolver<J> {
+abstract class AFlowInsensitiveCoveredTypesResolver<J extends IJavaElement>
+    implements ICoveredTypesResolver<J> {
 
-  private final CodeParser codeParser;
-  private final JavaEntitySearcher javaEntitySearcher;
   private final IWritingsCombiner<J> writingsCombiner;
-  private final AWritingBindingResolver<J> aWritingBindingResolver;
-  private final AAllTypePairsResolver<J> aAllTypePairsResolver;
+  private final IDerivationManager<J> derivationManager;
 
-  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache =
-      new Cache<>(CacheRegions.COVERED_TYPES_FLOW_INSENSITIVE);
+  private final Cache<Pair<J, J>, Optional<Set<Pair<IType, IType>>>> cache;
 
   public AFlowInsensitiveCoveredTypesResolver(
       IWritingsCombiner<J> writingsCombiner,
-      CodeParser codeParser,
-      JavaEntitySearcher javaEntitySearcher,
-      AAllTypePairsResolver<J> aAllTypePairsResolver,
-      AWritingBindingResolver<J> aWritingBindingResolver) {
+      IDerivationManager<J> derivationManager,
+      CacheRegion region) {
     this.writingsCombiner = writingsCombiner;
-    this.aWritingBindingResolver = aWritingBindingResolver;
-    this.codeParser = codeParser;
-    this.javaEntitySearcher = javaEntitySearcher;
-    this.aAllTypePairsResolver = aAllTypePairsResolver;
+    this.derivationManager = derivationManager;
+    cache = new Cache<>(region);
   }
 
   @Override
@@ -50,14 +39,7 @@ abstract class AFlowInsensitiveCoveredTypesResolver<J extends IJavaElement> impl
 
     var writingPairs = writingsCombiner.combine(javaElement1, javaElement2);
 
-    var deriver =
-        new DerivationManager<>(
-            aWritingBindingResolver,
-            javaEntitySearcher,
-            codeParser,
-            aAllTypePairsResolver);
-
-    var result = deriver.derive(writingPairs).map(s -> s.stream()
+    var result = derivationManager.derive(writingPairs).map(s -> s.stream()
         .filter(p -> {
           try {
             return !(p.getValue0().isAnonymous() || p.getValue1().isAnonymous());

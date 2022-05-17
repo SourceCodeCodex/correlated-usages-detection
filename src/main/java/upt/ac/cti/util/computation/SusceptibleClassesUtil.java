@@ -44,7 +44,7 @@ public class SusceptibleClassesUtil {
 
 
   public static Stream<MClass> filterClasses(Stream<IType> allTypes) {
-    var typeValidator = Dependencies.getSusceptibleTypeValidator();
+    var typeValidator = Dependencies.typeValidator;
 
     return allTypes.parallel()
         .filter(typeValidator)

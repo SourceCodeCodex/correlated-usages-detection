@@ -7,19 +7,15 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import upt.ac.cti.config.Config;
+import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.binding.FieldTypeBindingResolver;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 
 public final class FieldValidator implements Predicate<IField> {
 
-  private final FieldTypeBindingResolver fieldTypeBindingResolver;
-  private final HierarchyResolver hierarchyResolver;
-
-  public FieldValidator(FieldTypeBindingResolver fieldTypeBindingResolver,
-      HierarchyResolver hierarchyResolver) {
-    this.fieldTypeBindingResolver = fieldTypeBindingResolver;
-    this.hierarchyResolver = hierarchyResolver;
-  }
+  private final FieldTypeBindingResolver fieldTypeBindingResolver =
+      Dependencies.fieldTypeBindingResolver;
+  private final HierarchyResolver hierarchyResolver = Dependencies.hierarchyResolver;
 
   @Override
   public boolean test(IField t) {

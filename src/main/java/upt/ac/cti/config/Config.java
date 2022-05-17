@@ -9,9 +9,8 @@ import java.util.Properties;
 public class Config {
   public static final String JOB_FAMILY = "export";
 
-  public static int MAX_DEPTH_THRESHOLD = 1;
+  public static int MAX_DEPTH_THRESHOLD = 3;
   public static int MIN_HIERARCHY_SIZE = 1;
-  public static int MAX_DEPTH_DIFF = 2;
   public static int CLASS_ANALYSIS_PARALLELISM = 4;
   public static int TOKENS_MAX_DIFF = 3;
   public static double TOKENS_THRESHOLD = 0.5;
@@ -40,9 +39,6 @@ public class Config {
     MIN_HIERARCHY_SIZE =
         Optional.ofNullable(config.getProperty("MIN_HIERARCHY_SIZE")).map(Integer::parseInt)
             .orElse(MIN_HIERARCHY_SIZE);
-    MAX_DEPTH_DIFF =
-        Optional.ofNullable(config.getProperty("MAX_DEPTH_DIFF")).map(Integer::parseInt)
-            .orElse(MAX_DEPTH_DIFF);
     CLASS_ANALYSIS_PARALLELISM =
         Optional.ofNullable(config.getProperty("CLASS_ANALYSIS_PARALLELISM")).map(Integer::parseInt)
             .orElse(CLASS_ANALYSIS_PARALLELISM);
@@ -60,7 +56,6 @@ public class Config {
 
     map.put("MAX_DEPTH_THRESHOLD", "" + MAX_DEPTH_THRESHOLD);
     map.put("MIN_HIERARCHY_SIZE", "" + MIN_HIERARCHY_SIZE);
-    map.put("MAX_DEPTH_DIFF", "" + MAX_DEPTH_DIFF);
     map.put("CLASS_ANALYSIS_PARALLELISM", "" + CLASS_ANALYSIS_PARALLELISM);
 
     return map;
