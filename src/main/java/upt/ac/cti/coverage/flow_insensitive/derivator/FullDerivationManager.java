@@ -54,13 +54,24 @@ class FullDerivationManager<J extends IJavaElement> implements IDerivationManage
 
     var writingPairs = new LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>>();
     var derived = Collections.synchronizedSet(new HashSet<Pair<Writing<J>, Writing<J>>>());
-    var typePairs = Collections.synchronizedSet(new HashSet<Pair<IType, IType>>());;
+    var typePairs = Collections.synchronizedSet(new HashSet<Pair<IType, IType>>());
+
+    var first = input.isEmpty() ? null : input.get(0);
+    var aperture = -1;
+    if (first != null) {
+      aperture = aAllTypePairsResolver
+          .resolve(first.getValue0().element(), first.getValue1().element()).size();
+    }
 
     writingPairs.addAll(input);
 
     while (!writingPairs.isEmpty()) {
 
       preprocessPairsDepth(writingPairs, derived, typePairs);
+
+      if (typePairs.size() == aperture) {
+        return Optional.of(typePairs);
+      }
 
       var results = writingPairs.parallelStream()
           .map(p -> new DerivationJob<>(writingBindingResolver, simpleDerivator, complexDerivator,

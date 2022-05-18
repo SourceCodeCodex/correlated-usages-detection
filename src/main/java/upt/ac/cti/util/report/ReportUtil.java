@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.javatuples.Pair;
 import upt.ac.cti.config.Config;
 import upt.ac.cti.coverage.CoverageStrategy;
-import upt.ac.cti.util.time.StopWatch;
 
 public class ReportUtil {
 
@@ -50,8 +49,6 @@ public class ReportUtil {
     var timestamp = formatter.format(date);
 
     try {
-      var stopWatch = new StopWatch();
-      stopWatch.start();
       var url = Platform.getBundle("FamilyPolymorphismDetection").getEntry("/");
       url = FileLocator.resolve(url);
 
@@ -92,7 +89,7 @@ public class ReportUtil {
       try (var rPrinter = new CSVPrinter(rOut, rFormat);
           var cPrinter = new CSVPrinter(cOut, cFormat)) {
 
-        results.peek(p -> {
+        results.forEach(p -> {
           try {
             var entry = new ArrayList<Object>(p.getValue1().toList());
             entry.add(0, p.getValue0());
@@ -102,7 +99,7 @@ public class ReportUtil {
           } catch (IOException e) {
             e.printStackTrace();
           }
-        }).toList();
+        });
 
         Map<String, String> configs = new HashMap<>();
         if (strategies.contains(CoverageStrategy.CONSERVING_FLOW_INSENSITIVE)
@@ -123,10 +120,6 @@ public class ReportUtil {
                 e1.printStackTrace();
               }
             });
-
-        stopWatch.stop();
-        cPrinter.printRecord("", "");
-        cPrinter.printRecord("DURATION", stopWatch.getDuration().toSeconds() + " seconds");
 
         cPrinter.flush();
         rPrinter.flush();

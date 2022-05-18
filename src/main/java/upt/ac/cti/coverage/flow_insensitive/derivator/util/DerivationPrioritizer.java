@@ -14,6 +14,13 @@ public class DerivationPrioritizer<J extends IJavaElement> {
     var check1 = isOnScopeBoundary(pair.getValue0());
     var check2 = isOnScopeBoundary(pair.getValue1());
 
+    if (!check1 && !check2) {
+      if (pair.getValue0().depth() <= pair.getValue1().depth()) {
+        return DerivationPriority.DERIVATE_FIRST;
+      }
+      return DerivationPriority.DERIVATE_SECOND;
+    }
+
     if (!check1) {
       return DerivationPriority.DERIVATE_FIRST;
     }

@@ -57,17 +57,21 @@ class ExportApertureCoverageJob extends Job {
     try {
       mClassesJob.join();
       var mClasses = mClassesJob.mClasses();
-      var subMonitor = SubMonitor.convert(monitor, mClasses.size());
+      var subMonitor = SubMonitor.convert(monitor, strategies.size() * mClasses.size());
 
       var stream = pool.submit(() -> mClasses.parallelStream()
-          .map(mClass -> Pair.with(mClass.toString(), strategies.stream().map(s -> {
-            try {
-              return s.apertureCoverage.apply(mClass);
-            } catch (Exception e) {
-              e.printStackTrace();
-              return -2.;
-            }
-          }))).peek(l -> subMonitor.split(1))).get();
+          .map(mClass -> {
+
+            var resultsStream = strategies.stream().map(s -> {
+              try {
+                return s.apertureCoverage.apply(mClass);
+              } catch (Exception e) {
+                e.printStackTrace();
+                return -2.;
+              }
+            }).peek(l -> subMonitor.split(1));
+            return Pair.with(mClass.toString(), resultsStream);
+          })).get();
       ReportUtil.createReport(mProject.toString(), strategies, stream);
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
