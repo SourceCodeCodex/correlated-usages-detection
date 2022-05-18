@@ -1,8 +1,8 @@
 package upt.ac.cti.core.project.action;
 
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
-import java.util.function.Function;
 import java.util.logging.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -10,7 +10,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.javatuples.Pair;
-import familypolymorphismdetection.metamodel.entity.MClass;
 import familypolymorphismdetection.metamodel.entity.MProject;
 import upt.ac.cti.config.Config;
 import upt.ac.cti.core.project.group.FamilyPolymorphismSusceptibleClassesJob;
@@ -29,17 +28,19 @@ class ExportApertureCoverageJob extends Job {
 
   private final String jobFamily = Config.JOB_FAMILY;
 
-  private final CoverageStrategy coverageStrategy;
+  private final Set<CoverageStrategy> strategies;
 
-  private final Function<MClass, Double> apertureCoverage;
+  public ExportApertureCoverageJob(
+      MProject mProject,
+      Set<CoverageStrategy> strategies) {
+    super("Export " + mProject + " aperture coverage report - "
+        + String.join("-", strategies.stream().map(s -> s.name).toList()));
 
-  public ExportApertureCoverageJob(MProject mProject, Function<MClass, Double> apertureCoverage,
-      CoverageStrategy strategy) {
-    super("Export " + mProject + " aperture coverage report - " + strategy.name);
+    logger = RLogger.get(this.getClass().getSimpleName() + "-"
+        + String.join("-", strategies.stream().map(s -> s.name).toList()));
+
     this.mProject = mProject;
-    this.apertureCoverage = apertureCoverage;
-    this.coverageStrategy = strategy;
-    logger = RLogger.get(this.getClass().getSimpleName() + "-" + strategy.name);
+    this.strategies = strategies;
   }
 
   @Override
@@ -58,15 +59,16 @@ class ExportApertureCoverageJob extends Job {
       var mClasses = mClassesJob.mClasses();
       var subMonitor = SubMonitor.convert(monitor, mClasses.size());
 
-      var stream = pool.submit(() -> mClasses.stream().map(mClass -> {
-        try {
-          return Pair.with(mClass.toString(), apertureCoverage.apply(mClass));
-        } catch (Exception e) {
-          e.printStackTrace();
-          return Pair.with(mClass.toString(), -2.);
-        }
-      }).peek(l -> subMonitor.split(1))).get();
-      ReportUtil.createReport(mProject.toString(), coverageStrategy, stream);
+      var stream = pool.submit(() -> mClasses.parallelStream()
+          .map(mClass -> Pair.with(mClass.toString(), strategies.stream().map(s -> {
+            try {
+              return s.apertureCoverage.apply(mClass);
+            } catch (Exception e) {
+              e.printStackTrace();
+              return -2.;
+            }
+          }))).peek(l -> subMonitor.split(1))).get();
+      ReportUtil.createReport(mProject.toString(), strategies, stream);
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
     }

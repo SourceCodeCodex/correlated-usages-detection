@@ -22,6 +22,9 @@ public class SquanderingDerivationManager<J extends IJavaElement> extends FullDe
       LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>> writingPairs,
       Set<Pair<Writing<J>, Writing<J>>> derived,
       Set<Pair<IType, IType>> typePairs) {
-    writingPairs.removeIf(this::isAboveThreshold);
+    var allExceeded = writingPairs.stream().filter(this::isAboveThreshold).toList();
+
+    writingPairs.removeAll(allExceeded);
+    derived.addAll(allExceeded);
   }
 }

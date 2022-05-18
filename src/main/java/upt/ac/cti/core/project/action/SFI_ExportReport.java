@@ -1,7 +1,6 @@
 package upt.ac.cti.core.project.action;
 
-import java.util.function.Function;
-import familypolymorphismdetection.metamodel.entity.MClass;
+import java.util.Set;
 import familypolymorphismdetection.metamodel.entity.MProject;
 import ro.lrg.xcore.metametamodel.ActionPerformer;
 import ro.lrg.xcore.metametamodel.HListEmpty;
@@ -13,13 +12,8 @@ public class SFI_ExportReport extends ExportReport
     implements IActionPerformer<Void, MProject, HListEmpty> {
 
   @Override
-  protected Function<MClass, Double> apertureCoverage() {
-    return MClass::sFI_ApertureCoverage;
-  }
-
-  @Override
-  protected CoverageStrategy strategyName() {
-    return CoverageStrategy.SQUANDERING_FLOW_INSENSITIVE;
+  protected Set<CoverageStrategy> strategies() {
+    return Set.of(CoverageStrategy.SQUANDERING_FLOW_INSENSITIVE);
   }
 
 }

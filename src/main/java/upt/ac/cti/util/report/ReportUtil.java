@@ -6,9 +6,12 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -38,8 +41,10 @@ public class ReportUtil {
 
   public static final MutexRule MUTEX_RULE = new MutexRule();
 
-  public static void createReport(String projectName, CoverageStrategy strategy,
-      Stream<Pair<String, Double>> results) {
+  public static void createReport(
+      String projectName,
+      Set<CoverageStrategy> strategies,
+      Stream<Pair<String, Stream<Double>>> results) {
     var formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
     var date = new Date();
     var timestamp = formatter.format(date);
@@ -54,7 +59,9 @@ public class ReportUtil {
       var dir = new File(dirPath);
       dir.mkdirs();
 
-      var reportsPathFragment = dirPath + projectName + "-" + strategy.name + "-" + timestamp;
+      var reportsPathFragment = dirPath + projectName + "-"
+          + String.join("-", strategies.stream().map(s -> s.name).toList())
+          + "-" + timestamp;
       var resultsPath = reportsPathFragment + "-results.csv";
       var configPath = reportsPathFragment + "-config.csv";
       var zipPath = reportsPathFragment + ".zip";
@@ -68,8 +75,11 @@ public class ReportUtil {
       var rOut = new FileWriter(rFile);
       var cOut = new FileWriter(cFile);
 
+      var rHeader = new ArrayList<>(strategies.stream().map(s -> s.name).toList());
+      rHeader.add(0, "Class");
+
       var rFormat = CSVFormat.Builder.create()
-          .setHeader("Class", "Aperture Coverage")
+          .setHeader(rHeader.toArray(new String[rHeader.size()]))
           .setSkipHeaderRecord(false)
           .build();
 
@@ -82,21 +92,27 @@ public class ReportUtil {
       try (var rPrinter = new CSVPrinter(rOut, rFormat);
           var cPrinter = new CSVPrinter(cOut, cFormat)) {
 
-        results.forEach(p -> {
+        results.peek(p -> {
           try {
+            var entry = new ArrayList<Object>(p.getValue1().toList());
+            entry.add(0, p.getValue0());
             synchronized (rPrinter) {
-              rPrinter.printRecord(p.getValue0(), p.getValue1());
+              rPrinter.printRecord(entry);
             }
           } catch (IOException e) {
             e.printStackTrace();
           }
-        });
+        }).toList();
 
-        Map<String, String> configs;
-        if (strategy == CoverageStrategy.CONSERVING_FLOW_INSENSITIVE) {
-          configs = Config.asStringsFlowInsensitive();
-        } else {
-          configs = Config.asStringsNameSimilarity();
+        Map<String, String> configs = new HashMap<>();
+        if (strategies.contains(CoverageStrategy.CONSERVING_FLOW_INSENSITIVE)
+            || strategies.contains(CoverageStrategy.SQUANDERING_FLOW_INSENSITIVE)) {
+          configs.putAll(Config.asStringsFlowInsensitive());
+        }
+
+        if (strategies.contains(CoverageStrategy.CONSERVING_NAME_SIMILARITY)
+            || strategies.contains(CoverageStrategy.SQUANDERING_NAME_SIMILARITY)) {
+          configs.putAll(Config.asStringsNameSimilarity());
         }
 
         configs.entrySet().stream()

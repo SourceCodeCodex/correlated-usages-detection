@@ -39,7 +39,7 @@ public class SusceptibleClassesUtil {
       e.printStackTrace();
     }
 
-    return allTypes.parallelStream().distinct().toList();
+    return allTypes.stream().distinct().toList();
   }
 
 

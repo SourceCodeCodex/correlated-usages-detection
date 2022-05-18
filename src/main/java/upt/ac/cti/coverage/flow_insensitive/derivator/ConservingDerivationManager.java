@@ -38,13 +38,15 @@ public class ConservingDerivationManager<J extends IJavaElement> extends FullDer
     var allExceeded = writingPairs.stream().filter(this::isAboveThreshold).toList();
 
     writingPairs.removeAll(allExceeded);
+    derived.addAll(allExceeded);
 
-    var conserved = allExceeded.parallelStream()
+    var conserved = allExceeded.stream()
         .flatMap(p -> CartesianProduct
             .product(possibleTypes(p.getValue0()), possibleTypes(p.getValue1())).stream())
         .toList();
 
     typePairs.addAll(conserved);
+
 
   }
 

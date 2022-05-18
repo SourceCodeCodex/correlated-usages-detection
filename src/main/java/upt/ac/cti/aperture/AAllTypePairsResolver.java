@@ -32,7 +32,7 @@ public abstract class AAllTypePairsResolver<J extends IJavaElement> {
     var cached1 = cache.get(javaElement1);
     var cached2 = cache.get(javaElement2);
 
-    var types1 = (cached1.isPresent() ? cached1.get() : resolve(javaElement1)).parallelStream()
+    var types1 = (cached1.isPresent() ? cached1.get() : resolve(javaElement1)).stream()
         .filter(this::isNotAnonymous).toList();
 
     if (cached1.isEmpty()) {
@@ -40,7 +40,7 @@ public abstract class AAllTypePairsResolver<J extends IJavaElement> {
     }
 
     var types2 =
-        (cached2.isPresent() ? cached2.get() : resolve(javaElement2)).parallelStream()
+        (cached2.isPresent() ? cached2.get() : resolve(javaElement2)).stream()
             .filter(this::isNotAnonymous).toList();
 
     if (cached2.isEmpty()) {

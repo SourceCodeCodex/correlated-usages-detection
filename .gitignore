@@ -120,6 +120,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# End of https://www.gitignore.io/api/java,macos,eclipse
 src/main/metamodel/
 src/test/metamodel/
+# End of https://www.gitignore.io/api/java,macos,eclipse
