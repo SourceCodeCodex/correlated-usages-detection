@@ -14,24 +14,24 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.util.logging.RLogger;
 
 public class FieldAssignmentVisitor<J extends IJavaElement> extends ASTVisitor {
 
-  private final Writing<J> deriver;
+  private final DerivableWriting<J> deriver;
   private final IField field;
 
-  private final List<Writing<J>> derivations = new ArrayList<>();
+  private final List<DerivableWriting<J>> derivations = new ArrayList<>();
 
   private static final Logger logger = RLogger.get();
 
-  public FieldAssignmentVisitor(Writing<J> deriver, IField field) {
+  public FieldAssignmentVisitor(DerivableWriting<J> deriver, IField field) {
     this.deriver = deriver;
     this.field = field;
   }
 
-  public List<Writing<J>> derivations() {
+  public List<DerivableWriting<J>> derivations() {
     return derivations;
   }
 

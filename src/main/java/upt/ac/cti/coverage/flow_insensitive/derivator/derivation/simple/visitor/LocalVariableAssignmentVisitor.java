@@ -11,21 +11,21 @@ import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 
 public class LocalVariableAssignmentVisitor<J extends IJavaElement> extends ASTVisitor {
 
-  private final Writing<J> deriver;
+  private final DerivableWriting<J> deriver;
   private final ILocalVariable localVar;
 
-  private final List<Writing<J>> derivations = new ArrayList<>();
+  private final List<DerivableWriting<J>> derivations = new ArrayList<>();
 
-  public LocalVariableAssignmentVisitor(Writing<J> deriver, ILocalVariable localVar) {
+  public LocalVariableAssignmentVisitor(DerivableWriting<J> deriver, ILocalVariable localVar) {
     this.deriver = deriver;
     this.localVar = localVar;
   }
 
-  public List<Writing<J>> derivations() {
+  public List<DerivableWriting<J>> derivations() {
     return derivations;
   }
 

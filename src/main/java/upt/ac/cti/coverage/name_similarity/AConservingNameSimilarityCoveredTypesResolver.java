@@ -23,6 +23,9 @@ abstract class AConservingNameSimilarityCoveredTypesResolver<J extends IJavaElem
 
   @Override
   protected Optional<Set<Pair<IType, IType>>> computeResult(J javaElement1, J javaElement2) {
+
+    var rootTokens = rootTokens(javaElement1, javaElement2);
+
     var t1Types = aAllTypePairsResolver.resolve(javaElement1);
     final var t2Types = aAllTypePairsResolver.resolve(javaElement2);
 
@@ -31,7 +34,7 @@ abstract class AConservingNameSimilarityCoveredTypesResolver<J extends IJavaElem
           var comaptible =
               t2Types.stream()
                   .map(t2 -> Pair.with(t1, t2))
-                  .filter(this::validateTokens).toList();
+                  .filter(p -> validateTokens(p, rootTokens)).toList();
 
           if (!comaptible.isEmpty()) {
             return comaptible.stream();

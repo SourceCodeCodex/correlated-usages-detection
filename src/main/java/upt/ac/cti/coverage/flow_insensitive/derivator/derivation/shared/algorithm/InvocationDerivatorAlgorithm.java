@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.visitor.MethodReturnVisitor;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.dependency.Dependencies;
@@ -13,7 +14,8 @@ public class InvocationDerivatorAlgorithm<J extends IJavaElement> {
 
   private final CodeParser codeParser = Dependencies.codeParser;
 
-  public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant, IMethod method) {
+  public NewWritingPairs<J> derive(DerivableWriting<J> deriver, Writing<J> constant,
+      IMethod method) {
     var node = codeParser.parse(method);
     if (node.isEmpty()) {
       return NewWritingPairs.NULL();
@@ -22,9 +24,13 @@ public class InvocationDerivatorAlgorithm<J extends IJavaElement> {
     node.get().accept(visitor);
 
     var newWritingPairs = visitor.derivations().stream()
-        .map(Writing::increaseDepth)
+        .map(DerivableWriting::increaseDepth)
         .map(derivation -> Pair.with(derivation, constant))
-        .toList();;
+        .toList();
+
+    if (newWritingPairs.isEmpty()) {
+      return NewWritingPairs.of(Pair.with(deriver.toUnderivableWriting(), constant));
+    }
 
     return new NewWritingPairs<>(newWritingPairs);
   }

@@ -66,7 +66,6 @@ public class FPDTestSuite {
     Config.MAX_DEPTH_THRESHOLD = 3;
     Config.TOKENS_MAX_DIFF = 3;
     Config.TOKENS_THRESHOLD = 0.5;
-    Config.CLASS_ANALYSIS_PARALLELISM = 8;
     Config.MIN_HIERARCHY_SIZE = 1;
 
     Dependencies.init();

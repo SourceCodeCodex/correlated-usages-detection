@@ -5,7 +5,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.FieldAccessDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.NameFieldDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.SuperFieldAccessDerivator;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 
 class FDerivator<J extends IJavaElement> implements IEntityDerivator<J> {
@@ -15,7 +15,7 @@ class FDerivator<J extends IJavaElement> implements IEntityDerivator<J> {
   private final SuperFieldAccessDerivator<J> sfa = new SuperFieldAccessDerivator<>();
 
   @Override
-  public NewWritingPairs<J> derive(Writing<J> w) {
+  public NewWritingPairs<J> derive(DerivableWriting<J> w) {
     var writeType = w.writingExpression().getNodeType();
     if (writeType == ASTNode.FIELD_ACCESS) {
       return fa.derive(w, null);

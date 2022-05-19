@@ -19,7 +19,16 @@ public final class ConservingFlowInsensitiveFieldCoveredTypesResolver
 
   @Override
   public Optional<Set<Pair<IType, IType>>> resolve(IField field1, IField field2) {
-    return super.resolve(field1, field2);
+    var r = super.resolve(field1, field2);
+    if (r.isEmpty()) {
+      return r;
+    }
+
+    var s = r.get();
+    if (s.isEmpty()) {
+      return Optional.of(Dependencies.fieldAllTypePairsResolver.resolve(field1, field2));
+    }
+    return r;
   }
 
 }

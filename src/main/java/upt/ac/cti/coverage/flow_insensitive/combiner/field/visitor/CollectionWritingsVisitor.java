@@ -4,7 +4,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.util.computation.Either;
 
 public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
@@ -23,7 +23,7 @@ public class CollectionWritingsVisitor extends AFieldWritingsVisitor {
         case "add":
         case "addAll": {
           var fieldWrite =
-              new Writing<>(field, (Expression) node.arguments().get(0),
+              new DerivableWriting<>(field, (Expression) node.arguments().get(0),
                   Either.left(field.getDeclaringType()));
           result.add(fieldWrite);
         }

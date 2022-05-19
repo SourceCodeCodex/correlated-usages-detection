@@ -3,17 +3,18 @@ package upt.ac.cti.coverage.flow_insensitive.derivator.derivation.simple;
 import java.util.logging.Logger;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.ASTNode;
-import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDerivator;
+import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.ISimpleWritingsDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.FieldAccessDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.MethodInvocationDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.SuperFieldAccessDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.SuperMethodInvocationDerivator;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.logging.RLogger;
 
 final public class SimpleWritingsDerivator<J extends IJavaElement>
-    implements IWritingsDerivator<J> {
+    implements ISimpleWritingsDerivator<J> {
 
   private final FieldAccessDerivator<J> fa;
   private final MethodInvocationDerivator<J> mi;
@@ -42,7 +43,7 @@ final public class SimpleWritingsDerivator<J extends IJavaElement>
 
 
   @Override
-  public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant) {
+  public NewWritingPairs<J> derive(DerivableWriting<J> deriver, Writing<J> constant) {
     var expressionType = deriver.writingExpression().getNodeType();
     switch (expressionType) {
       case ASTNode.FIELD_ACCESS: {

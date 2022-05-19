@@ -4,7 +4,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.binding.NotLeafBinding;
 import upt.ac.cti.coverage.flow_insensitive.model.binding.ResolvedBinding;
 import upt.ac.cti.coverage.flow_insensitive.model.binding.WritingBinding;
@@ -15,9 +15,9 @@ import upt.ac.cti.util.cache.CacheRegion;
 import upt.ac.cti.util.hierarchy.HierarchyResolver;
 import upt.ac.cti.util.validation.IsTypeBindingCollection;
 
-public abstract class AWritingBindingResolver<J extends IJavaElement> {
+public abstract class ADerivableWritingBindingResolver<J extends IJavaElement> {
 
-  private final Cache<Writing<? extends IJavaElement>, WritingBinding> cache =
+  private final Cache<DerivableWriting<? extends IJavaElement>, WritingBinding> cache =
       new Cache<>(CacheRegion.W_BINDING);
 
   private final HierarchyResolver hierarchyResolver = Dependencies.hierarchyResolver;
@@ -25,27 +25,29 @@ public abstract class AWritingBindingResolver<J extends IJavaElement> {
 
   private final ABindingResolver<J, ITypeBinding> aBindingResolver;
 
-  public AWritingBindingResolver(ABindingResolver<J, ITypeBinding> aBindingResolver) {
+  public ADerivableWritingBindingResolver(ABindingResolver<J, ITypeBinding> aBindingResolver) {
     this.aBindingResolver = aBindingResolver;
   }
 
-  public WritingBinding resolveBinding(Writing<J> writing) {
+  public WritingBinding resolveBinding(DerivableWriting<J> writing) {
     var cached = cache.get(writing);
     if (cached.isPresent()) {
       return cached.get();
     }
 
-    if (writing.writingExpression().getNodeType() == ASTNode.NULL_LITERAL) {
+    var writingExpression = writing.writingExpression();
+
+    if (writingExpression.getNodeType() == ASTNode.NULL_LITERAL) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
       return WritingBinding.INCONCLUSIVE;
     }
 
-    if (writing.writingExpression().getNodeType() == ASTNode.ARRAY_ACCESS) {
+    if (writingExpression.getNodeType() == ASTNode.ARRAY_ACCESS) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
       return WritingBinding.INCONCLUSIVE;
     }
 
-    var writingExpressionBinding = writing.writingExpression().resolveTypeBinding();
+    var writingExpressionBinding = writingExpression.resolveTypeBinding();
 
     if (writingExpressionBinding == null) {
       cache.put(writing, WritingBinding.INCONCLUSIVE);
@@ -66,13 +68,13 @@ public abstract class AWritingBindingResolver<J extends IJavaElement> {
 
     var expressionType = (IType) writingExpressionBinding.getJavaElement();
 
-    if (writing.writingExpression().getNodeType() == ASTNode.CLASS_INSTANCE_CREATION) {
+    if (writingExpression.getNodeType() == ASTNode.CLASS_INSTANCE_CREATION) {
       var resolved = new ResolvedBinding(writingExpressionBinding);
       cache.put(writing, resolved);
       return resolved;
     }
 
-    if (writing.writingExpression().getNodeType() == ASTNode.THIS_EXPRESSION) {
+    if (writingExpression.getNodeType() == ASTNode.THIS_EXPRESSION) {
       var resolved = new ResolvedBinding(writingExpressionBinding);
       cache.put(writing, resolved);
       return resolved;

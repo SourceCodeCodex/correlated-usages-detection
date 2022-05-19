@@ -6,13 +6,13 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Name;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDerivator;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IComplexWritingsDerivator;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.logging.RLogger;
 
 public final class ComplexWritingsDerivator<J extends IJavaElement>
-    implements IWritingsDerivator<J> {
+    implements IComplexWritingsDerivator<J> {
 
   private final MMDerivator<J> mm;
   private final FFDerivator<J> ff;
@@ -33,7 +33,7 @@ public final class ComplexWritingsDerivator<J extends IJavaElement>
   }
 
   @Override
-  public NewWritingPairs<J> derive(Writing<J> w1, Writing<J> w2) {
+  public NewWritingPairs<J> derive(DerivableWriting<J> w1, DerivableWriting<J> w2) {
     if (isMethodInvocation(w1) && isMethodInvocation(w2)) {
       return mm.derive(w1, w2);
     }
@@ -81,12 +81,12 @@ public final class ComplexWritingsDerivator<J extends IJavaElement>
         .toList());
   }
 
-  private boolean isMethodInvocation(Writing<J> w) {
+  private boolean isMethodInvocation(DerivableWriting<J> w) {
     var nodeType = w.writingExpression().getNodeType();
     return nodeType == ASTNode.METHOD_INVOCATION || nodeType == ASTNode.SUPER_METHOD_INVOCATION;
   }
 
-  private boolean isField(Writing<J> w) {
+  private boolean isField(DerivableWriting<J> w) {
     var nodeType = w.writingExpression().getNodeType();
     if (nodeType == ASTNode.FIELD_ACCESS || nodeType == ASTNode.SUPER_FIELD_ACCESS) {
       return true;
@@ -103,7 +103,7 @@ public final class ComplexWritingsDerivator<J extends IJavaElement>
 
   }
 
-  private boolean isParameter(Writing<J> w) {
+  private boolean isParameter(DerivableWriting<J> w) {
     var nodeType = w.writingExpression().getNodeType();
     if (nodeType == ASTNode.SIMPLE_NAME || nodeType == ASTNode.QUALIFIED_NAME) {
       var name = (Name) w.writingExpression();

@@ -7,13 +7,13 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Expression;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 
 public class SameAccessExpressionValidator<J extends IJavaElement>
-    implements Predicate<Pair<Writing<J>, Writing<J>>> {
+    implements Predicate<Pair<DerivableWriting<J>, DerivableWriting<J>>> {
 
   @Override
-  public boolean test(Pair<Writing<J>, Writing<J>> pair) {
+  public boolean test(Pair<DerivableWriting<J>, DerivableWriting<J>> pair) {
 
     var accessExpr1 = pair.getValue0().accessExpression();
     var accessExpr2 = pair.getValue1().accessExpression();

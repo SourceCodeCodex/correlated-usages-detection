@@ -1,25 +1,52 @@
 package upt.ac.cti.core.type.property;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import familypolymorphismdetection.metamodel.entity.MClass;
 import familypolymorphismdetection.metamodel.entity.MFieldPair;
 import familypolymorphismdetection.metamodel.entity.MParameterPair;
+import upt.ac.cti.config.Config;
 import upt.ac.cti.coverage.CoverageStrategy;
 import upt.ac.cti.util.computation.ApertureCoverageUtil;
 import upt.ac.cti.util.logging.RLogger;
+import upt.ac.cti.util.pool.Pools;
 import upt.ac.cti.util.time.StopWatch;
 
 abstract class ApertureCoverage {
 
   private final Logger logger;
 
+  private final CoverageStrategy strategy;
+
   public ApertureCoverage(CoverageStrategy strategy) {
+    this.strategy = strategy;
     logger = RLogger.get("ApertureCoverage-" + strategy.name);
   }
 
   public Double compute(MClass mClass) {
+
+    Future<Double> apertureCoverageFuture =
+        Pools.instance().getStrategyPool().submit(() -> computeInternal(mClass));
+
+    try {
+      return apertureCoverageFuture.get(Config.STRATEGY_TIMEOUT_SECOUNDS, TimeUnit.SECONDS);
+    } catch (TimeoutException e) {
+      logger.info("Timeout: Strategy: " + strategy.name + " Class: " + mClass);
+      return -2.;
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
+      return -3.;
+    } finally {
+      apertureCoverageFuture.cancel(true);
+    }
+  }
+
+  public Double computeInternal(MClass mClass) {
     var stopWatch = new StopWatch();
 
     stopWatch.start();
@@ -41,6 +68,7 @@ abstract class ApertureCoverage {
 
     logResult(apertureCoverage, fieldApertureCoverage, parameterApertureCoverage, mClass,
         stopWatch);
+
     return apertureCoverage;
   }
 

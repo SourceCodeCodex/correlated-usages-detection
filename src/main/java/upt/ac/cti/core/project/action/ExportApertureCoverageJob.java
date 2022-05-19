@@ -2,7 +2,6 @@ package upt.ac.cti.core.project.action;
 
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
 import java.util.logging.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -16,13 +15,12 @@ import upt.ac.cti.core.project.group.FamilyPolymorphismSusceptibleClassesJob;
 import upt.ac.cti.coverage.CoverageStrategy;
 import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.logging.RLogger;
+import upt.ac.cti.util.pool.Pools;
 import upt.ac.cti.util.report.ReportUtil;
 
 class ExportApertureCoverageJob extends Job {
 
   private final Logger logger;
-
-  private static ForkJoinPool pool = new ForkJoinPool(Config.CLASS_ANALYSIS_PARALLELISM);
 
   private final MProject mProject;
 
@@ -59,19 +57,16 @@ class ExportApertureCoverageJob extends Job {
       var mClasses = mClassesJob.mClasses();
       var subMonitor = SubMonitor.convert(monitor, strategies.size() * mClasses.size());
 
-      var stream = pool.submit(() -> mClasses.parallelStream()
+      var stream = Pools.instance().getClassPool().submit(() -> mClasses.parallelStream()
           .map(mClass -> {
 
-            var resultsStream = strategies.stream().map(s -> {
-              try {
-                return s.apertureCoverage.apply(mClass);
-              } catch (Exception e) {
-                e.printStackTrace();
-                return -2.;
-              }
-            }).peek(l -> subMonitor.split(1));
+            var resultsStream = strategies.stream()
+                .map(s -> s.apertureCoverage.apply(mClass))
+                .peek(l -> subMonitor.split(1));
+
             return Pair.with(mClass.toString(), resultsStream);
           })).get();
+
       ReportUtil.createReport(mProject.toString(), strategies, stream);
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();

@@ -12,22 +12,22 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.util.computation.Either;
 
 public class ArgumentMethodInvocationVisitor<J extends IJavaElement> extends ASTVisitor {
 
-  private final Writing<J> deriver;
+  private final DerivableWriting<J> deriver;
   private final ILocalVariable localVar;
 
-  private final List<Writing<J>> derivations = new ArrayList<>();
+  private final List<DerivableWriting<J>> derivations = new ArrayList<>();
 
-  public ArgumentMethodInvocationVisitor(Writing<J> deriver, ILocalVariable localVar) {
+  public ArgumentMethodInvocationVisitor(DerivableWriting<J> deriver, ILocalVariable localVar) {
     this.deriver = deriver;
     this.localVar = localVar;
   }
 
-  public List<Writing<J>> derivations() {
+  public List<DerivableWriting<J>> derivations() {
     return derivations;
   }
 

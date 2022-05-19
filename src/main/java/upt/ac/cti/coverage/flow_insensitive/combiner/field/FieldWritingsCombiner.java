@@ -12,7 +12,7 @@ import upt.ac.cti.coverage.flow_insensitive.combiner.IWritingsCombiner;
 import upt.ac.cti.coverage.flow_insensitive.combiner.field.visitor.AFieldWritingsVisitor;
 import upt.ac.cti.coverage.flow_insensitive.combiner.field.visitor.CollectionWritingsVisitor;
 import upt.ac.cti.coverage.flow_insensitive.combiner.field.visitor.ReferenceWritingsVisitor;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.computation.Either;
 import upt.ac.cti.util.parsing.CodeParser;
@@ -27,7 +27,7 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
       new IsJavaElementCollection<>(Dependencies.fieldTypeBindingResolver);
 
   @Override
-  public List<Pair<Writing<IField>, Writing<IField>>> combine(IField field1, IField field2) {
+  public List<Pair<DerivableWriting<IField>, DerivableWriting<IField>>> combine(IField field1, IField field2) {
 
     Set<IMethod> f1WritingMethods, f2WritingMethods;
 
@@ -46,11 +46,11 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
     var writingBoth = new HashSet<>(f1WritingMethods);
     writingBoth.retainAll(f2WritingMethods);
 
-    var result = new LinkedList<Pair<Writing<IField>, Writing<IField>>>();
+    var result = new LinkedList<Pair<DerivableWriting<IField>, DerivableWriting<IField>>>();
 
     writingBoth.forEach(it -> {
-      for (Writing<IField> w1 : getWritings(it, field1)) {
-        for (Writing<IField> w2 : getWritings(it, field2)) {
+      for (DerivableWriting<IField> w1 : getWritings(it, field1)) {
+        for (DerivableWriting<IField> w2 : getWritings(it, field2)) {
           result.add(Pair.with(w1, w2));
         }
       }
@@ -66,8 +66,8 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
         .flatMap(it -> getWritings(it, field2).stream()).toList();
 
 
-    for (Writing<IField> w1 : f1Writings) {
-      for (Writing<IField> w2 : f2Writings) {
+    for (DerivableWriting<IField> w1 : f1Writings) {
+      for (DerivableWriting<IField> w2 : f2Writings) {
         result.add(Pair.with(w1, w2));
       }
     }
@@ -82,7 +82,7 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
     return result;
   }
 
-  private List<Writing<IField>> getWritings(IMethod method, IField field) {
+  private List<DerivableWriting<IField>> getWritings(IMethod method, IField field) {
     AFieldWritingsVisitor visitor;
 
     if (!isCollection.test(field)) {
@@ -102,12 +102,12 @@ public class FieldWritingsCombiner implements IWritingsCombiner<IField> {
     return List.of();
   }
 
-  private Optional<Writing<IField>> getFieldInitialization(IField field) {
+  private Optional<DerivableWriting<IField>> getFieldInitialization(IField field) {
     if (!isCollection.test(field)) {
       var variableDeclarationFragmentOpt = parser.parse(field);
       return variableDeclarationFragmentOpt
           .flatMap(vdf -> Optional.ofNullable(vdf.getInitializer()))
-          .map(initializer -> new Writing<>(field, initializer,
+          .map(initializer -> new DerivableWriting<>(field, initializer,
               Either.left(field.getDeclaringType())));
     }
     return Optional.empty();

@@ -13,16 +13,16 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.util.computation.Either;
 
 public class BothArgumentsInvocationVisitor extends ASTVisitor {
   private final ILocalVariable p1, p2;
 
-  private final List<Pair<Writing<ILocalVariable>, Writing<ILocalVariable>>> newPairings =
+  private final List<Pair<DerivableWriting<ILocalVariable>, DerivableWriting<ILocalVariable>>> newPairings =
       new ArrayList<>();
 
-  public List<Pair<Writing<ILocalVariable>, Writing<ILocalVariable>>> newPairings() {
+  public List<Pair<DerivableWriting<ILocalVariable>, DerivableWriting<ILocalVariable>>> newPairings() {
     return newPairings;
   }
 
@@ -49,8 +49,8 @@ public class BothArgumentsInvocationVisitor extends ASTVisitor {
           var arg1 = (Expression) node.arguments().get(index1);
           var arg2 = (Expression) node.arguments().get(index2);
 
-          var derivation1 = new Writing<>(p1, arg1, Either.right(node));
-          var derivation2 = new Writing<>(p2, arg2, Either.right(node));
+          var derivation1 = new DerivableWriting<>(p1, arg1, Either.right(node));
+          var derivation2 = new DerivableWriting<>(p2, arg2, Either.right(node));
 
           newPairings.add(Pair.with(derivation1, derivation2));
         }
@@ -84,8 +84,8 @@ public class BothArgumentsInvocationVisitor extends ASTVisitor {
               node.getExpression() != null ? Either.right(node.getExpression())
                   : Either.left(method.getDeclaringType());
 
-          var derivation1 = new Writing<>(p1, arg1, accesExpression);
-          var derivation2 = new Writing<>(p2, arg2, accesExpression);
+          var derivation1 = new DerivableWriting<>(p1, arg1, accesExpression);
+          var derivation2 = new DerivableWriting<>(p2, arg2, accesExpression);
 
           newPairings.add(Pair.with(derivation1, derivation2));
         }
@@ -115,8 +115,8 @@ public class BothArgumentsInvocationVisitor extends ASTVisitor {
           var arg1 = (Expression) node.arguments().get(index1);
           var arg2 = (Expression) node.arguments().get(index2);
 
-          var derivation1 = new Writing<>(p1, arg1, Either.left(method.getDeclaringType()));
-          var derivation2 = new Writing<>(p2, arg2, Either.left(method.getDeclaringType()));
+          var derivation1 = new DerivableWriting<>(p1, arg1, Either.left(method.getDeclaringType()));
+          var derivation2 = new DerivableWriting<>(p2, arg2, Either.left(method.getDeclaringType()));
 
           newPairings.add(Pair.with(derivation1, derivation2));
         }

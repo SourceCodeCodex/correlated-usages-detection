@@ -6,19 +6,19 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.ReturnStatement;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 
 public class MethodReturnVisitor<J extends IJavaElement> extends ASTVisitor {
 
-  private final Writing<J> deriver;
+  private final DerivableWriting<J> deriver;
 
-  private final List<Writing<J>> derivations = new ArrayList<>();
+  private final List<DerivableWriting<J>> derivations = new ArrayList<>();
 
-  public MethodReturnVisitor(Writing<J> deriver) {
+  public MethodReturnVisitor(DerivableWriting<J> deriver) {
     this.deriver = deriver;
   }
 
-  public List<Writing<J>> derivations() {
+  public List<DerivableWriting<J>> derivations() {
     return derivations;
   }
 

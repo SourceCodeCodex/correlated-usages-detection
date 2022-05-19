@@ -1,5 +1,7 @@
 package upt.ac.cti.coverage.name_similarity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jdt.core.IJavaElement;
@@ -48,16 +50,45 @@ abstract class ANameSimilarityCoveredTypesResolver<J extends IJavaElement>
       return Optional.empty();
     }
 
-    var result = computeResult(javaElement1, javaElement2);
+    if (typeBinding1O.get() == null
+        || !(typeBinding1O.get().getJavaElement() instanceof IType)
+        || typeBinding2O.get() == null
+        || !(typeBinding2O.get().getJavaElement() instanceof IType)) {
+      return Optional.empty();
+    }
 
+    var result = computeResult(javaElement1, javaElement2);
 
     cache.put(Pair.with(javaElement1, javaElement2), result);
     return result;
   }
 
-  protected final boolean validateTokens(Pair<IType, IType> sub) {
+  protected Pair<List<String>, List<String>> rootTokens(J javaElement1, J javaElement2) {
+    var typeBinding1O = aBindingResolver.resolve(javaElement1);
+    var typeBinding2O = aBindingResolver.resolve(javaElement2);
+
+    var root1 = (IType) typeBinding1O.get().getJavaElement();
+    var root2 = (IType) typeBinding2O.get().getJavaElement();
+
+    var r1Tokens = TokensUtil.splitCamelCase(root1.getElementName());
+    var r2Tokens = TokensUtil.splitCamelCase(root2.getElementName());
+
+    return Pair.with(r1Tokens, r2Tokens);
+  }
+
+  protected boolean validateTokens(Pair<IType, IType> sub,
+      Pair<List<String>, List<String>> hierarchyRootsTokens) {
+    var root1Tokens = hierarchyRootsTokens.getValue0();
+    var root2Tokens = hierarchyRootsTokens.getValue1();
+
+    var commonRoot = new ArrayList<>(root1Tokens);
+    commonRoot.removeAll(root2Tokens);
+
     var s1Tokens = TokensUtil.splitCamelCase(sub.getValue0().getElementName());
     var s2Tokens = TokensUtil.splitCamelCase(sub.getValue1().getElementName());
+
+    s1Tokens.removeAll(commonRoot);
+    s2Tokens.removeAll(commonRoot);
 
 
     if (Math.abs(s1Tokens.size() - s2Tokens.size()) > Config.TOKENS_MAX_DIFF) {

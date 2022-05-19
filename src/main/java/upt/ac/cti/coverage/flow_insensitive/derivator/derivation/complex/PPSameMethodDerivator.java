@@ -5,24 +5,27 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.Name;
-import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDerivator;
+import org.javatuples.Pair;
+import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IComplexWritingsDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.complex.visitor.BothArgumentsInvocationVisitor;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
 
-class PPSameMethodDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
+class PPSameMethodDerivator<J extends IJavaElement> implements IComplexWritingsDerivator<J> {
 
   private final JavaEntitySearcher javaEntitySearcher = Dependencies.javaEntitySearcher;
   private final CodeParser codeParser = Dependencies.codeParser;
 
 
   @Override
-  public NewWritingPairs<J> derive(Writing<J> w1, Writing<J> w2) {
-    var p1 = (ILocalVariable) ((Name) w1.writingExpression()).resolveBinding().getJavaElement();
-    var p2 = (ILocalVariable) ((Name) w2.writingExpression()).resolveBinding().getJavaElement();
+  public NewWritingPairs<J> derive(DerivableWriting<J> w1, DerivableWriting<J> w2) {
+    var p1 =
+        (ILocalVariable) ((Name) w1.writingExpression()).resolveBinding().getJavaElement();
+    var p2 =
+        (ILocalVariable) ((Name) w2.writingExpression()).resolveBinding().getJavaElement();
 
     var invocations =
         javaEntitySearcher.searchMethodInvocations((IMethod) p1.getDeclaringMember());
@@ -40,6 +43,10 @@ class PPSameMethodDerivator<J extends IJavaElement> implements IWritingsDerivato
       }).orElse(Stream.empty());
     }).toList();
 
+    if (newWritingPairs.isEmpty()) {
+      return NewWritingPairs
+          .of(Pair.with(w1.toUnderivableWriting(), w2.toUnderivableWriting()));
+    }
 
     return new NewWritingPairs<>(newWritingPairs);
   }

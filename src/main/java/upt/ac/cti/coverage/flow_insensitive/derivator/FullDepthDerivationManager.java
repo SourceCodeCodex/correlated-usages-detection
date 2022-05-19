@@ -13,22 +13,23 @@ import upt.ac.cti.aperture.AAllTypePairsResolver;
 import upt.ac.cti.config.Config;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.complex.ComplexWritingsDerivator;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.simple.SimpleWritingsDerivator;
-import upt.ac.cti.coverage.flow_insensitive.derivator.util.AWritingBindingResolver;
+import upt.ac.cti.coverage.flow_insensitive.derivator.util.ADerivableWritingBindingResolver;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.DerivationResult;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.Inconclusive;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.ResolvedTypePairs;
 
-class FullDerivationManager<J extends IJavaElement> implements IDerivationManager<J> {
+class FullDepthDerivationManager<J extends IJavaElement> implements IDerivationManager<J> {
 
-  private final AWritingBindingResolver<J> writingBindingResolver;
+  private final ADerivableWritingBindingResolver<J> writingBindingResolver;
   private final AAllTypePairsResolver<J> aAllTypePairsResolver;
 
   private final SimpleWritingsDerivator<J> simpleDerivator;
   private final ComplexWritingsDerivator<J> complexDerivator;
 
-  public FullDerivationManager(AWritingBindingResolver<J> writingBindingResolver,
+  public FullDepthDerivationManager(ADerivableWritingBindingResolver<J> writingBindingResolver,
       AAllTypePairsResolver<J> aAllTypePairsResolver) {
     this.writingBindingResolver = writingBindingResolver;
     this.aAllTypePairsResolver = aAllTypePairsResolver;
@@ -36,32 +37,36 @@ class FullDerivationManager<J extends IJavaElement> implements IDerivationManage
     this.complexDerivator = new ComplexWritingsDerivator<>();
   }
 
-  protected boolean isAboveThreshold(Pair<Writing<J>, Writing<J>> p) {
+  protected boolean isAboveThreshold(Pair<? extends Writing<J>, ? extends Writing<J>> p) {
     return p.getValue0().depth() > Config.MAX_DEPTH_THRESHOLD
         || p.getValue1().depth() > Config.MAX_DEPTH_THRESHOLD;
   }
 
   protected void preprocessPairsDepth(
-      LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>> writingPairs,
-      Set<Pair<Writing<J>, Writing<J>>> derived,
+      LinkedBlockingQueue<Pair<? extends Writing<J>, ? extends Writing<J>>> writingPairs,
+      Set<Pair<? extends Writing<J>, ? extends Writing<J>>> derived,
       Set<Pair<IType, IType>> typePairs) {
     // do nothing
     // can be used if depth optimization is not required
   }
 
   @Override
-  public Optional<Set<Pair<IType, IType>>> derive(List<Pair<Writing<J>, Writing<J>>> input) {
+  public Optional<Set<Pair<IType, IType>>> derive(
+      List<Pair<DerivableWriting<J>, DerivableWriting<J>>> input) {
 
-    var writingPairs = new LinkedBlockingQueue<Pair<Writing<J>, Writing<J>>>();
-    var derived = Collections.synchronizedSet(new HashSet<Pair<Writing<J>, Writing<J>>>());
+    if (input.isEmpty()) {
+      return Optional.of(new HashSet<Pair<IType, IType>>());
+    }
+
+    var writingPairs = new LinkedBlockingQueue<Pair<? extends Writing<J>, ? extends Writing<J>>>();
+    var derived =
+        Collections
+            .synchronizedSet(new HashSet<Pair<? extends Writing<J>, ? extends Writing<J>>>());
     var typePairs = Collections.synchronizedSet(new HashSet<Pair<IType, IType>>());
 
-    var first = input.isEmpty() ? null : input.get(0);
-    var aperture = -1;
-    if (first != null) {
-      aperture = aAllTypePairsResolver
-          .resolve(first.getValue0().element(), first.getValue1().element()).size();
-    }
+    var first = input.get(0);
+    var aperture = aAllTypePairsResolver
+        .resolve(first.getValue0().element(), first.getValue1().element()).size();
 
     writingPairs.addAll(input);
 

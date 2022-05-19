@@ -5,11 +5,11 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Name;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.priority.DerivationPriority;
 
 public class DerivationPrioritizer<J extends IJavaElement> {
-  public DerivationPriority prioritize(Pair<Writing<J>, Writing<J>> pair) {
+  public DerivationPriority prioritize(Pair<DerivableWriting<J>, DerivableWriting<J>> pair) {
 
     var check1 = isOnScopeBoundary(pair.getValue0());
     var check2 = isOnScopeBoundary(pair.getValue1());
@@ -32,7 +32,7 @@ public class DerivationPrioritizer<J extends IJavaElement> {
     return DerivationPriority.COMPLEX_PRIORITY;
   }
 
-  private boolean isOnScopeBoundary(Writing<J> w) {
+  private boolean isOnScopeBoundary(DerivableWriting<J> w) {
     var expressionType = w.writingExpression().getNodeType();
     switch (expressionType) {
       case ASTNode.FIELD_ACCESS: {

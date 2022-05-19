@@ -9,7 +9,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.util.computation.Either;
 import upt.ac.cti.util.logging.RLogger;
 
@@ -32,7 +32,7 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
         if (binding instanceof IVariableBinding varBinding) {
           if (field.equals(varBinding.getJavaElement())) {
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(),
+                new DerivableWriting<>(field, node.getRightHandSide(),
                     Either.left(field.getDeclaringType()));
             result.add(fieldWrite);
           }
@@ -46,7 +46,7 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
         if (binding instanceof IVariableBinding varBinding) {
           if (field.equals(varBinding.getJavaElement())) {
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(), Either.right(qualifier));
+                new DerivableWriting<>(field, node.getRightHandSide(), Either.right(qualifier));
             result.add(fieldWrite);
           }
         }
@@ -57,7 +57,7 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
         var binding = ((SuperFieldAccess) left).resolveFieldBinding();
         if (field.equals(binding.getJavaElement())) {
           var fieldWrite =
-              new Writing<>(field, node.getRightHandSide(), Either.left(field.getDeclaringType()));
+              new DerivableWriting<>(field, node.getRightHandSide(), Either.left(field.getDeclaringType()));
           result.add(fieldWrite);
         }
         break;
@@ -70,12 +70,12 @@ public class ReferenceWritingsVisitor extends AFieldWritingsVisitor {
           var accessExpression = ((FieldAccess) left).getExpression();
           if (accessExpression.getNodeType() == ASTNode.THIS_EXPRESSION) {
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(),
+                new DerivableWriting<>(field, node.getRightHandSide(),
                     Either.left(field.getDeclaringType()));
             result.add(fieldWrite);
           } else {
             var fieldWrite =
-                new Writing<>(field, node.getRightHandSide(), Either.right(accessExpression));
+                new DerivableWriting<>(field, node.getRightHandSide(), Either.right(accessExpression));
             result.add(fieldWrite);
           }
         }

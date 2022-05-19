@@ -23,8 +23,9 @@ abstract class ASquanderingNameSimilarityCoveredTypesResolver<J extends IJavaEle
 
   @Override
   protected Optional<Set<Pair<IType, IType>>> computeResult(J javaElement1, J javaElement2) {
+    var rootTokens = rootTokens(javaElement1, javaElement2);
     return Optional.of(aAllTypePairsResolver.resolve(javaElement1, javaElement2).parallelStream()
-        .filter(this::validateTokens)
+        .filter(p -> validateTokens(p, rootTokens))
         .collect(Collectors.toSet()));
   }
 

@@ -14,20 +14,20 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.util.computation.Either;
 
 public class BothArgumentsInvocationVisitor<J extends IJavaElement> extends ASTVisitor {
-  private final Writing<J> w1, w2;
+  private final DerivableWriting<J> w1, w2;
   private final ILocalVariable p1, p2;
 
-  private final List<Pair<Writing<J>, Writing<J>>> newPairings = new ArrayList<>();
+  private final List<Pair<DerivableWriting<J>, DerivableWriting<J>>> newPairings = new ArrayList<>();
 
-  public List<Pair<Writing<J>, Writing<J>>> newPairings() {
+  public List<Pair<DerivableWriting<J>, DerivableWriting<J>>> newPairings() {
     return newPairings;
   }
 
-  public BothArgumentsInvocationVisitor(Writing<J> w1, Writing<J> w2, ILocalVariable p1,
+  public BothArgumentsInvocationVisitor(DerivableWriting<J> w1, DerivableWriting<J> w2, ILocalVariable p1,
       ILocalVariable p2) {
     this.w1 = w1;
     this.w2 = w2;

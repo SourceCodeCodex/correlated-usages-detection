@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.flow_insensitive.combiner.IWritingsCombiner;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.dependency.Dependencies;
 import upt.ac.cti.util.parsing.CodeParser;
 import upt.ac.cti.util.search.JavaEntitySearcher;
@@ -17,7 +17,7 @@ public class ParameterWritingsCombiner implements IWritingsCombiner<ILocalVariab
   private final JavaEntitySearcher javaEntitySearcher = Dependencies.javaEntitySearcher;
 
   @Override
-  public List<Pair<Writing<ILocalVariable>, Writing<ILocalVariable>>> combine(ILocalVariable param1,
+  public List<Pair<DerivableWriting<ILocalVariable>, DerivableWriting<ILocalVariable>>> combine(ILocalVariable param1,
       ILocalVariable param2) {
 
     if (!param1.getDeclaringMember().equals(param2.getDeclaringMember())) {

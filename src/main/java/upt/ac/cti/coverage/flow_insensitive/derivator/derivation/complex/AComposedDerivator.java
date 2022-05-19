@@ -2,12 +2,12 @@ package upt.ac.cti.coverage.flow_insensitive.derivator.derivation.complex;
 
 import org.eclipse.jdt.core.IJavaElement;
 import org.javatuples.Pair;
-import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IWritingsDerivator;
-import upt.ac.cti.coverage.flow_insensitive.model.Writing;
+import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.IComplexWritingsDerivator;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.util.computation.CartesianProduct;
 
-abstract class AComposedDerivator<J extends IJavaElement> implements IWritingsDerivator<J> {
+abstract class AComposedDerivator<J extends IJavaElement> implements IComplexWritingsDerivator<J> {
 
   private final IEntityDerivator<J> ed1;
   private final IEntityDerivator<J> ed2;
@@ -19,7 +19,7 @@ abstract class AComposedDerivator<J extends IJavaElement> implements IWritingsDe
 
 
   @Override
-  public NewWritingPairs<J> derive(Writing<J> w1, Writing<J> w2) {
+  public NewWritingPairs<J> derive(DerivableWriting<J> w1, DerivableWriting<J> w2) {
 
     var w1Derivations = ed1.derive(w1).writingPairs().stream()
         .map(Pair::getValue0)
@@ -28,7 +28,7 @@ abstract class AComposedDerivator<J extends IJavaElement> implements IWritingsDe
         .map(Pair::getValue0)
         .toList();
 
-    var complexDerivation = CartesianProduct.product(w1Derivations, w2Derivations);
+    var complexDerivation = CartesianProduct.productE(w1Derivations, w2Derivations);
 
     return new NewWritingPairs<>(complexDerivation);
   }

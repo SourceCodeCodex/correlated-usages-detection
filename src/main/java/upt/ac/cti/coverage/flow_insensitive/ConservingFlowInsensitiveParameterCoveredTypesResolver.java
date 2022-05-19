@@ -19,7 +19,16 @@ public final class ConservingFlowInsensitiveParameterCoveredTypesResolver
 
   @Override
   public Optional<Set<Pair<IType, IType>>> resolve(ILocalVariable param1, ILocalVariable param2) {
-    return super.resolve(param1, param2);
+    var r = super.resolve(param1, param2);
+    if (r.isEmpty()) {
+      return r;
+    }
+
+    var s = r.get();
+    if (s.isEmpty()) {
+      return Optional.of(Dependencies.parameterAllTypePairsResolver.resolve(param1, param2));
+    }
+    return r;
   }
 
 }

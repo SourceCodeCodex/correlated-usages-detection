@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.javatuples.Pair;
 import upt.ac.cti.coverage.flow_insensitive.derivator.derivation.shared.visitor.FieldAssignmentVisitor;
+import upt.ac.cti.coverage.flow_insensitive.model.DerivableWriting;
 import upt.ac.cti.coverage.flow_insensitive.model.Writing;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.dependency.Dependencies;
@@ -18,7 +19,8 @@ public final class FieldDerivatorAlgorithm<J extends IJavaElement> {
   private final JavaEntitySearcher javaEntitySearcher = Dependencies.javaEntitySearcher;
   private final CodeParser codeParser = Dependencies.codeParser;
 
-  public NewWritingPairs<J> derive(Writing<J> deriver, Writing<J> constant, IField field) {
+  public NewWritingPairs<J> derive(DerivableWriting<J> deriver, Writing<J> constant,
+      IField field) {
     var writingMethods = javaEntitySearcher.searchFieldWritings(field);
 
 
@@ -29,7 +31,7 @@ public final class FieldDerivatorAlgorithm<J extends IJavaElement> {
         .flatMap(node -> {
           var visitor = new FieldAssignmentVisitor<>(deriver, field);
           node.accept(visitor);
-          return visitor.derivations().stream().map(Writing::increaseDepth);
+          return visitor.derivations().stream().map(DerivableWriting::increaseDepth);
         });
 
     var derivations = new LinkedList<>(derivationsStream.toList());
@@ -42,7 +44,11 @@ public final class FieldDerivatorAlgorithm<J extends IJavaElement> {
 
     var newWritingPairs = derivations.stream()
         .map(derivation -> Pair.with(derivation, constant))
-        .toList();;
+        .toList();
+
+    if (newWritingPairs.isEmpty()) {
+      return NewWritingPairs.of(Pair.with(deriver.toUnderivableWriting(), constant));
+    }
 
     return new NewWritingPairs<>(newWritingPairs);
   }
