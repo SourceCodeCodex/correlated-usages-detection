@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkingSet;
 import org.javatuples.Pair;
+
 import familypolymorphismdetection.metamodel.factory.Factory;
 import ro.lrg.insider.view.ToolRegistration;
 import upt.ac.cti.config.CacheConfig;
@@ -18,55 +19,45 @@ import upt.ac.cti.util.logging.RLogger;
 
 public final class Startup implements IStartup {
 
-  @Override
-  public void earlyStartup() {
-    System.setProperty("java.util.logging.SimpleFormatter.format",
-        RLogger.format());
-    ToolRegistration.getInstance().registerXEntityConverter(element -> {
-      if (element instanceof IWorkingSet) {
-        return Factory.getInstance().createMWorkingSet(element);
-      }
-      if (element instanceof IJavaProject) {
-        return Factory.getInstance().createMProject(element);
-      }
-      if (element instanceof IType) {
-        return Factory.getInstance().createMClass(element);
-      }
-      if (element instanceof Pair<?, ?> p) {
-        if (p.getValue0() instanceof IType t1
-            && p.getValue1() instanceof IType t2
-            && !t1.equals(t2)) {
-          return Factory.getInstance().createMTypePair(element);
-        }
+	@Override
+	public void earlyStartup() {
+		System.setProperty("java.util.logging.SimpleFormatter.format", RLogger.format());
+		ToolRegistration.getInstance().registerXEntityConverter(element -> {
+			if (element instanceof IWorkingSet) {
+				return Factory.getInstance().createMWorkingSet(element);
+			}
+			if (element instanceof IJavaProject) {
+				return Factory.getInstance().createMProject(element);
+			}
+			if (element instanceof IType) {
+				return Factory.getInstance().createMClass(element);
+			}
+			if (element instanceof Pair<?, ?> p) {
+				if (p.getValue0() instanceof IType t1 && p.getValue1() instanceof IType t2 && !t1.equals(t2)) {
+					return Factory.getInstance().createMTypePair(element);
+				}
 
-        if (p.getValue0() instanceof IField f1
-            && p.getValue1() instanceof IField f2
-            && !f1.equals(f2)) {
-          return Factory.getInstance().createMFieldPair(element);
-        }
+				if (p.getValue0() instanceof IField f1 && p.getValue1() instanceof IField f2 && !f1.equals(f2)) {
+					return Factory.getInstance().createMFieldPair(element);
+				}
 
-        if (p.getValue0() instanceof ILocalVariable l1
-            && p.getValue1() instanceof ILocalVariable l2
-            && l1.isParameter()
-            && l2.isParameter()
-            && l1.getDeclaringMember().equals(l2.getDeclaringMember())
-            && !l1.equals(l2)) {
-          return Factory.getInstance().createMParameterPair(element);
-        }
-      }
-      return null;
-    });
+				if (p.getValue0() instanceof ILocalVariable l1 && p.getValue1() instanceof ILocalVariable l2
+						&& l1.isParameter() && l2.isParameter()
+						&& l1.getDeclaringMember().equals(l2.getDeclaringMember()) && !l1.equals(l2)) {
+					return Factory.getInstance().createMParameterPair(element);
+				}
+			}
+			return null;
+		});
 
-    CacheConfig.init();
-    Config.init();
+		CacheConfig.init();
+		Config.init();
 
-    JCS.setConfigProperties(CacheConfig.getProperties());
-    JCS.setLogSystem(LogManager.LOGSYSTEM_JAVA_UTIL_LOGGING);
+		JCS.setConfigProperties(CacheConfig.getProperties());
+		JCS.setLogSystem(LogManager.LOGSYSTEM_JAVA_UTIL_LOGGING);
 
-    Dependencies.init();
+		Dependencies.init();
 
-  }
-
-
+	}
 
 }

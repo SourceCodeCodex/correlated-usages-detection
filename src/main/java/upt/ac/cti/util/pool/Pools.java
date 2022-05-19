@@ -1,46 +1,50 @@
 package upt.ac.cti.util.pool;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+
 import upt.ac.cti.config.Config;
 
 public class Pools {
 
-  private ForkJoinPool classPool = null;
-  private ForkJoinPool apertuteCoveragePool = null;
-  private ForkJoinPool derivationPool = null;
+	public static final ConcurrentHashMap<String, ForkJoinTask<Double>> apertureCoverageTasks = new ConcurrentHashMap<>();
 
-  private static volatile Pools instance = null;
+	private ForkJoinPool classPool = null;
+	private ForkJoinPool apertuteCoveragePool = null;
+	private ForkJoinPool derivationPool = null;
 
-  private Pools() {
-    classPool = new ForkJoinPool(Config.CLASS_ANALYSIS_POOL_SIZE);
-    apertuteCoveragePool = new ForkJoinPool(Config.CLASS_ANALYSIS_POOL_SIZE);
-    derivationPool = new ForkJoinPool(Config.DERIVATION_POOL_SIZE);
-  }
+	private static volatile Pools instance = null;
 
-  public ForkJoinPool getClassPool() {
-    return classPool;
-  }
+	private Pools() {
+		classPool = new ForkJoinPool(Config.CLASS_ANALYSIS_POOL_SIZE);
+		apertuteCoveragePool = new ForkJoinPool(Config.CLASS_ANALYSIS_POOL_SIZE);
+		derivationPool = new ForkJoinPool(Config.DERIVATION_POOL_SIZE);
+	}
 
-  public ForkJoinPool getDerivationPool() {
-    return derivationPool;
-  }
+	public ForkJoinPool getClassPool() {
+		return classPool;
+	}
 
-  public ForkJoinPool getApertuteCoveragePool() {
-    return apertuteCoveragePool;
-  }
+	public ForkJoinPool getDerivationPool() {
+		return derivationPool;
+	}
 
-  public static Pools instance() {
-    var local = instance;
-    if (local == null) {
-      synchronized (Pools.class) {
-        local = instance;
-        if (local == null) {
-          instance = local = new Pools();
-        }
-      }
-    }
-    return local;
-  }
+	public ForkJoinPool getApertuteCoveragePool() {
+		return apertuteCoveragePool;
+	}
 
+	public static Pools instance() {
+		var local = instance;
+		if (local == null) {
+			synchronized (Pools.class) {
+				local = instance;
+				if (local == null) {
+					instance = local = new Pools();
+				}
+			}
+		}
+		return local;
+	}
 
 }
