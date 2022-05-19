@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -20,6 +21,7 @@ import upt.ac.cti.coverage.flow_insensitive.model.derivation.DerivationResult;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.Inconclusive;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.NewWritingPairs;
 import upt.ac.cti.coverage.flow_insensitive.model.derivation.ResolvedTypePairs;
+import upt.ac.cti.util.pool.Pools;
 
 class FullDepthDerivationManager<J extends IJavaElement> implements IDerivationManager<J> {
 
@@ -78,10 +80,15 @@ class FullDepthDerivationManager<J extends IJavaElement> implements IDerivationM
         return Optional.of(typePairs);
       }
 
-      var results = writingPairs.parallelStream()
-          .map(p -> new DerivationJob<>(writingBindingResolver, simpleDerivator, complexDerivator,
-              aAllTypePairsResolver, p))
-          .map(DerivationJob::derive).toList();
+      List<DerivationResult<J>> results = List.of();
+      try {
+        results = Pools.instance().getDerivationPool().submit(() -> writingPairs.parallelStream()
+            .map(p -> new DerivationJob<>(writingBindingResolver, simpleDerivator, complexDerivator,
+                aAllTypePairsResolver, p))
+            .map(DerivationJob::derive).toList()).get();
+      } catch (InterruptedException | ExecutionException e) {
+        e.printStackTrace();
+      }
 
       var anyIsInconclusive = results.stream().anyMatch(r -> r instanceof Inconclusive<J>);
 

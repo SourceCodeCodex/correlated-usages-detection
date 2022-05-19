@@ -11,10 +11,9 @@ public class Config {
 
   public static int MAX_DEPTH_THRESHOLD = 3;
   public static int MIN_HIERARCHY_SIZE = 1;
-  public static int STRATEGY_TIMEOUT_SECOUNDS = 180;
-  public static int CLASS_ANALYSIS_POOL_SIZE = 4;
-  public static int STRATEGY_POOL_SIZE = 4;
-  public static int APERTURE_COVERAGE_POOL_SIZE = 8;
+  public static int APERTURE_COVERAGE_TIMEOUT_SECOUNDS = 180;
+  public static int CLASS_ANALYSIS_POOL_SIZE = 8;
+  public static int DERIVATION_POOL_SIZE = 16;
   public static int TOKENS_MAX_DIFF = 3;
   public static double TOKENS_THRESHOLD = 0.5;
 
@@ -42,19 +41,16 @@ public class Config {
     MIN_HIERARCHY_SIZE =
         Optional.ofNullable(config.getProperty("MIN_HIERARCHY_SIZE")).map(Integer::parseInt)
             .orElse(MIN_HIERARCHY_SIZE);
-    STRATEGY_TIMEOUT_SECOUNDS =
-        Optional.ofNullable(config.getProperty("STRATEGY_TIMEOUT_SECOUNDS")).map(Integer::parseInt)
-            .orElse(STRATEGY_TIMEOUT_SECOUNDS);
+    APERTURE_COVERAGE_TIMEOUT_SECOUNDS =
+        Optional.ofNullable(config.getProperty("APERTURE_COVERAGE_TIMEOUT_SECOUNDS"))
+            .map(Integer::parseInt)
+            .orElse(APERTURE_COVERAGE_TIMEOUT_SECOUNDS);
     CLASS_ANALYSIS_POOL_SIZE =
         Optional.ofNullable(config.getProperty("CLASS_ANALYSIS_POOL_SIZE")).map(Integer::parseInt)
             .orElse(CLASS_ANALYSIS_POOL_SIZE);
-    STRATEGY_POOL_SIZE =
-        Optional.ofNullable(config.getProperty("STRATEGY_POOL_SIZE")).map(Integer::parseInt)
-            .orElse(STRATEGY_POOL_SIZE);
-    APERTURE_COVERAGE_POOL_SIZE =
-        Optional.ofNullable(config.getProperty("APERTURE_COVERAGE_POOL_SIZE"))
-            .map(Integer::parseInt)
-            .orElse(APERTURE_COVERAGE_POOL_SIZE);
+    DERIVATION_POOL_SIZE =
+        Optional.ofNullable(config.getProperty("DERIVATION_POOL_SIZE")).map(Integer::parseInt)
+            .orElse(DERIVATION_POOL_SIZE);
     TOKENS_MAX_DIFF =
         Optional.ofNullable(config.getProperty("TOKENS_MAX_DIFF")).map(Integer::parseInt)
             .orElse(TOKENS_MAX_DIFF);
@@ -66,6 +62,7 @@ public class Config {
 
   private static void addCommon(Map<String, String> map) {
     map.put("MIN_HIERARCHY_SIZE", "" + MIN_HIERARCHY_SIZE);
+    map.put("APERTURE_COVERAGE_TIMEOUT_SECOUNDS", "" + APERTURE_COVERAGE_TIMEOUT_SECOUNDS);
   }
 
   public static Map<String, String> asStringsFlowInsensitive() {

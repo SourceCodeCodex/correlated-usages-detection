@@ -31,10 +31,11 @@ abstract class ApertureCoverage {
   public Double compute(MClass mClass) {
 
     Future<Double> apertureCoverageFuture =
-        Pools.instance().getStrategyPool().submit(() -> computeInternal(mClass));
+        Pools.instance().getApertuteCoveragePool().submit(() -> computeInternal(mClass));
 
     try {
-      return apertureCoverageFuture.get(Config.STRATEGY_TIMEOUT_SECOUNDS, TimeUnit.SECONDS);
+      return apertureCoverageFuture.get(Config.APERTURE_COVERAGE_TIMEOUT_SECOUNDS,
+          TimeUnit.SECONDS);
     } catch (TimeoutException e) {
       logger.info("Timeout: Strategy: " + strategy.name + " Class: " + mClass);
       return -2.;
